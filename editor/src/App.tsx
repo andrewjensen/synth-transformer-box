@@ -1,26 +1,42 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {
+  Switch,
+  Route,
+  Redirect
+} from 'react-router-dom';
+import styled from 'styled-components';
 
-function App() {
+import TopBar from './topbar/TopBar';
+import Controllers from './controllers/Controllers';
+import Synths from './synths/Synths';
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppContainer>
+      <TopBar />
+      <BodyContainer>
+        <Switch>
+          <Route path="/controllers">
+            <Controllers />
+          </Route>
+          <Route path="/synths">
+            <Synths />
+          </Route>
+          <Route exact path="/">
+            <Redirect to="/controllers" />
+          </Route>
+        </Switch>
+      </BodyContainer>
+    </AppContainer>
   );
 }
 
 export default App;
+
+const AppContainer = styled.div`
+
+`;
+
+const BodyContainer = styled.div`
+
+`;
