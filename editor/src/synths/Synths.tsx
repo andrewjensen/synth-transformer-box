@@ -3,25 +3,14 @@ import styled from 'styled-components';
 
 import { DeviceMenu, DeviceMenuItem } from '../common/components/DeviceMenu';
 import KnobSetting from './KnobSetting';
-
-const MOCK_SYNTHS = [
-  {
-    title: 'Roland Juno 60'
-  },
-  {
-    title: 'Akai AX80'
-  },
-  {
-    title: 'DSI Prophet REV2'
-  }
-];
+import { SYNTHS } from '../common/config/synths';
 
 const Synths = () => {
   return (
     <Container>
       <Sidebar>
         <DeviceMenu>
-          {MOCK_SYNTHS.map(synth => (
+          {SYNTHS.map(synth => (
             <DeviceMenuItem title={synth.title} key={synth.title} />
           ))}
         </DeviceMenu>

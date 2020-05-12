@@ -1,0 +1,291 @@
+[
+  {
+    "id": "dsi_prophet_rev2",
+    "manufacturer": "DSI",
+    "title": "Prophet REV2",
+    "subtitle": null,
+    "parameters": [
+      {
+        "cc": 1,
+        "title": "Mod Wheel"
+      },
+      {
+        "cc": 3,
+        "title": "FX Type"
+      },
+      {
+        "cc": 5,
+        "title": "Glide Mode"
+      },
+      {
+        "cc": 7,
+        "title": "Master Volume"
+      },
+      {
+        "cc": 8,
+        "title": "Sub Oscillator"
+      },
+      {
+        "cc": 9,
+        "title": "Oscillator Slop"
+      },
+      {
+        "cc": 10,
+        "title": "Pan Mod Mode"
+      },
+      {
+        "cc": 12,
+        "title": "FX Param 1"
+      },
+      {
+        "cc": 13,
+        "title": "FX Param 2"
+      },
+      {
+        "cc": 14,
+        "title": "BPM"
+      },
+      {
+        "cc": 15,
+        "title": "Clock Divide"
+      },
+      {
+        "cc": 16,
+        "title": "FX On/Off"
+      },
+      {
+        "cc": 17,
+        "title": "FX Mix"
+      },
+      {
+        "cc": 18,
+        "title": "A/B Mode"
+      },
+      {
+        "cc": 19,
+        "title": "Sequencer Type"
+      },
+      {
+        "cc": 17,
+        "title": "FX Mix"
+      },
+      {
+        "cc": 17,
+        "title": "FX Mix"
+      },
+      {
+        "cc": 20,
+        "title": "Osc 1 Frequency"
+      },
+      {
+        "cc": 21,
+        "title": "Osc 1 Fine Tune"
+      },
+      {
+        "cc": 22,
+        "title": "Osc 1 Shape"
+      },
+      {
+        "cc": 23,
+        "title": "Osc 1 Glide Rate/Time"
+      },
+      {
+        "cc": 24,
+        "title": "Osc 2 Frequency"
+      },
+      {
+        "cc": 25,
+        "title": "Osc 2 Fine Tune"
+      },
+      {
+        "cc": 26,
+        "title": "Osc 2 Shape"
+      },
+      {
+        "cc": 27,
+        "title": "Osc 2 Glide Rate/Time"
+      },
+      {
+        "cc": 28,
+        "title": "Osc Mix"
+      },
+      {
+        "cc": 29,
+        "title": "Noise Level"
+      },
+      {
+        "cc": 30,
+        "title": "Osc 1 Shape Mod"
+      },
+      {
+        "cc": 31,
+        "title": "Osc 2 Shape Mod"
+      },
+      {
+        "cc": 33,
+        "title": "Arp On/Off"
+      },
+      {
+        "cc": 34,
+        "title": "Arp Mode"
+      },
+      {
+        "cc": 35,
+        "title": "Arp Range"
+      },
+      {
+        "cc": 36,
+        "title": "Arp Repeats"
+      },
+      {
+        "cc": 37,
+        "title": "Voice Volume"
+      },
+      {
+        "cc": 39,
+        "title": "Split Point"
+      },
+      {
+        "cc": 64,
+        "title": "Sustain Pedal"
+      },
+      {
+        "cc": 65,
+        "title": "Glide On/Off"
+      },
+      {
+        "cc": 75,
+        "title": "Amp Sustain"
+      },
+      {
+        "cc": 76,
+        "title": "Amp Release"
+      },
+      {
+        "cc": 77,
+        "title": "Env 3 Sustain"
+      },
+      {
+        "cc": 78,
+        "title": "Env 3 Release"
+      },
+      {
+        "cc": 85,
+        "title": "Env 3 Destination"
+      },
+      {
+        "cc": 86,
+        "title": "Env 3 Amount"
+      },
+      {
+        "cc": 87,
+        "title": "Env 3 Velocity"
+      },
+      {
+        "cc": 88,
+        "title": "Env 3 Delay"
+      },
+      {
+        "cc": 89,
+        "title": "Env 3 Attack"
+      },
+      {
+        "cc": 90,
+        "title": "Env 3 Decay"
+      },
+      {
+        "cc": 102,
+        "title": "Filter Frequency"
+      },
+      {
+        "cc": 103,
+        "title": "Resonance"
+      },
+      {
+        "cc": 104,
+        "title": "Filter Key Amount"
+      },
+      {
+        "cc": 105,
+        "title": "Filter Audio Mod"
+      },
+      {
+        "cc": 106,
+        "title": "Filter Env. Amount"
+      },
+      {
+        "cc": 107,
+        "title": "Filter Env. Velocity"
+      },
+      {
+        "cc": 108,
+        "title": "Filter Delay"
+      },
+      {
+        "cc": 109,
+        "title": "Filter Attack"
+      },
+      {
+        "cc": 110,
+        "title": "Filter Decay"
+      },
+      {
+        "cc": 111,
+        "title": "Filter Sustain"
+      },
+      {
+        "cc": 112,
+        "title": "Filter Release"
+      },
+      {
+        "cc": 113,
+        "title": "VCA Level"
+      },
+      {
+        "cc": 114,
+        "title": "Pan Spread"
+      },
+      {
+        "cc": 115,
+        "title": "Amp Env. Amount"
+      },
+      {
+        "cc": 116,
+        "title": "Amp Env. Velocity"
+      },
+      {
+        "cc": 117,
+        "title": "Amp Delay"
+      },
+      {
+        "cc": 118,
+        "title": "Amp Attack"
+      },
+      {
+        "cc": 119,
+        "title": "Amp Decay"
+      }
+    ]
+  },
+  {
+    "id": "roland_juno_60_minerva",
+    "manufacturer": "Roland",
+    "title": "Juno 60",
+    "subtitle": "with Minerva upgrade",
+    "parameters": []
+  },
+  {
+    "id": "roland_jupiter_6_europa",
+    "manufacturer": "Roland",
+    "title": "Jupiter 6",
+    "subtitle": "with Europa upgrade",
+    "parameters": []
+  },
+  {
+    "id": "akai_ax80_tauntek",
+    "manufacturer": "Akai",
+    "title": "AX80",
+    "subtitle": "with Tauntek upgrade",
+    "parameters": []
+  }
+]
