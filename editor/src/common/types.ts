@@ -10,3 +10,8 @@ export interface Parameter {
   cc: number
   title: string
 }
+
+export interface ControllerMapping {
+  in: number
+  out: number
+}
