@@ -23,7 +23,7 @@ const App = () => {
             <Synths />
           </Route>
           <Route exact path="/">
-            <Redirect to="/controllers" />
+            <Redirect to="/synths" />
           </Route>
         </Switch>
       </BodyContainer>
