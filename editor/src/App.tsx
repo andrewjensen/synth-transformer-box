@@ -4,7 +4,7 @@ import {
   Route,
   Redirect
 } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import TopBar from './topbar/TopBar';
 import Controllers from './controllers/Controllers';

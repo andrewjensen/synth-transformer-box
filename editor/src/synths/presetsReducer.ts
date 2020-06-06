@@ -8,6 +8,7 @@ export interface PresetsState {
   presets: Preset[]
   currentPresetIdx: number | null
   addingPreset: boolean
+  exporting: boolean
 }
 
 export type PresetsAction =
@@ -16,12 +17,14 @@ export type PresetsAction =
   | { type: 'SELECT_PRESET', presetIdx: number }
   | { type: 'CHANGE_MAPPING', mapping: ControllerMapping, mappingIdx: number }
   | { type: 'CHANGE_CHANNEL', channel: number }
-  | { type: 'DELETE' };
+  | { type: 'DELETE' }
+  | { type: 'TOGGLE_EXPORTING' };
 
 export const INITIAL_STATE: PresetsState = {
   presets: [],
   currentPresetIdx: null,
-  addingPreset: false
+  addingPreset: false,
+  exporting: false
 };
 
 export function presetsReducer(state: PresetsState, action: PresetsAction): PresetsState {
@@ -69,6 +72,11 @@ export function presetsReducer(state: PresetsState, action: PresetsAction): Pres
           idx !== state.currentPresetIdx
         ),
         currentPresetIdx: null
+      };
+    case 'TOGGLE_EXPORTING':
+      return {
+        ...state,
+        exporting: !state.exporting
       };
     default:
       return state;

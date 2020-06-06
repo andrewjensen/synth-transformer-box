@@ -10,6 +10,7 @@ import {
 } from './presetsReducer';
 import CurrentPreset from './CurrentPreset';
 import AddPreset from './AddPreset';
+import ExportSettings from './ExportSettings';
 
 const Synths = () => {
   const [state, dispatch] = useReducer(presetsReducer, INITIAL_STATE);
@@ -26,16 +27,26 @@ const Synths = () => {
     presetIdx
   });
 
-  let mainContent = null;
+  const handleExport = () => dispatch({
+    type: 'TOGGLE_EXPORTING'
+  });
 
-  if (state.addingPreset) {
-    mainContent = (
-      <AddPreset dispatch={dispatch} />
-    );
-  } else if (currentPreset) {
-    mainContent = (
-      <CurrentPreset preset={currentPreset} dispatch={dispatch} />
-    );
+  const renderMainContent = () => {
+    if (state.addingPreset) {
+      return (
+        <AddPreset dispatch={dispatch} />
+      );
+    } else if (state.exporting) {
+      return (
+        <ExportSettings state={state} dispatch={dispatch} />
+      );
+    } else if (currentPreset) {
+      return (
+        <CurrentPreset preset={currentPreset} dispatch={dispatch} />
+      );
+    } else {
+      return null;
+    }
   }
 
   return (
@@ -54,9 +65,12 @@ const Synths = () => {
         <AddPresetContainer>
           <button onClick={handleAddPreset}>Add preset</button>
         </AddPresetContainer>
+        <ExportButtonContainer>
+          <button onClick={handleExport}>Export settings</button>
+        </ExportButtonContainer>
       </Sidebar>
       <Main>
-        {mainContent}
+        {renderMainContent()}
       </Main>
     </Container>
   );
@@ -81,5 +95,9 @@ const Main = styled.div`
 
 const AddPresetContainer = styled.div`
   margin: 1rem;
+  text-align: center;
+`;
+
+const ExportButtonContainer = styled.div`
   text-align: center;
 `;

@@ -1,20 +1,14 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { Link, useRouteMatch } from 'react-router-dom';
 
 const TopBar: React.FC = () => {
-
-  const handleExport = () => {
-    alert("TODO: handle export");
-  };
-
   return (
     <Container>
       <Tabs>
         <Tab title="Controllers" link="/controllers" />
         <Tab title="Synths" link="/synths" />
       </Tabs>
-      <ExportButton onClick={handleExport}>Export</ExportButton>
     </Container>
   );
 }
@@ -72,14 +66,4 @@ const TabLink = styled(Link)`
   color: white;
   text-decoration: none;
   font-weight: bold;
-`;
-
-const ExportButton = styled.div`
-  padding: 10px;
-  font-weight: bold;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #333;
-  }
 `;
