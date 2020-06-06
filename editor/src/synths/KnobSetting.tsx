@@ -2,8 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Parameter, ControllerMapping } from '../common/types';
+import { range } from '../common/helpers';
 import { SYNTHS } from '../common/config/synths';
 import Knob from '../common/components/Knob';
+import FormElement from '../common/components/form/FormElement';
 
 const MOCK_PARAMETERS = SYNTHS[0].parameters;
 
@@ -35,8 +37,7 @@ const KnobSetting: React.FC<KnobSettingProps> = ({ mapping, onChangeMapping }) =
   return (
     <Container>
       <Knob value={127} />
-      <FormElement>
-        <div>In: {mapping.in}</div>
+      <FormElement title="Input">
         <select
           value={mapping.in}
           onChange={handleChangeInput}
@@ -50,8 +51,7 @@ const KnobSetting: React.FC<KnobSettingProps> = ({ mapping, onChangeMapping }) =
         </select>
       </FormElement>
 
-      <FormElement>
-        <div>Out: {mapping.out}</div>
+      <FormElement title="Output">
         <select
           value={mapping.out}
           onChange={handleChangeOutput}
@@ -73,26 +73,6 @@ export default KnobSetting;
 const Container = styled.div`
 `;
 
-const FormElement = styled.div`
-  margin-bottom: 1rem;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-
-  > select {
-    width: 100%;
-  }
-`;
-
 function printParameter(parameter: Parameter): string {
   return `${parameter.title} (CC #${parameter.cc})`;
-}
-
-function range(min: number, max: number): number[] {
-  const results = [];
-  for (let i = min; i < max; i++) {
-    results.push(i);
-  }
-  return results;
 }

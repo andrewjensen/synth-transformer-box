@@ -1,112 +1,68 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useReducer } from 'react';
+import styled from 'styled-components/macro';
 
-import { ControllerMapping } from '../common/types';
+import { Preset } from '../common/types';
 import { DeviceMenu, DeviceMenuItem } from '../common/components/DeviceMenu';
-import KnobSetting from './KnobSetting';
-import { SYNTHS } from '../common/config/synths';
-
-const MOCK_MAPPING: ControllerMapping[] = [
-  {
-    in: 1,
-    out: 1
-  },
-  {
-    in: 3,
-    out: 3
-  },
-  {
-    in: 5,
-    out: 5
-  },
-  {
-    in: 7,
-    out: 7
-  },
-  {
-    in: 8,
-    out: 8
-  },
-  {
-    in: 9,
-    out: 9
-  },
-  {
-    in: 10,
-    out: 10
-  },
-  {
-    in: 12,
-    out: 12
-  },
-];
+import { printSynthTitle } from '../common/config/synths';
+import {
+  presetsReducer,
+  INITIAL_STATE,
+} from './presetsReducer';
+import CurrentPreset from './CurrentPreset';
+import AddPreset from './AddPreset';
 
 const Synths = () => {
-  const [mappings, setMappings] = useState<ControllerMapping[]>(MOCK_MAPPING);
+  const [state, dispatch] = useReducer(presetsReducer, INITIAL_STATE);
 
-  const mappingChunks = chunkEvery(mappings, 4);
+  const currentPreset: Preset | null =
+    state.currentPresetIdx === null
+      ? null
+      : state.presets[state.currentPresetIdx];
 
-  const handleChangeMapping = (changedMapping: ControllerMapping, mappingIdx: number) => {
-    const newMappings = mappings.map((mapping, idx) => {
-      return idx === mappingIdx ? changedMapping : mapping;
-    });
-    setMappings(newMappings);
-  };
+  const handleAddPreset = () => dispatch({ type: 'ADD_PRESET'});
+
+  const handleSelectPreset = (presetIdx: number) => dispatch({
+    type: 'SELECT_PRESET',
+    presetIdx
+  });
+
+  let mainContent = null;
+
+  if (state.addingPreset) {
+    mainContent = (
+      <AddPreset dispatch={dispatch} />
+    );
+  } else if (currentPreset) {
+    mainContent = (
+      <CurrentPreset preset={currentPreset} dispatch={dispatch} />
+    );
+  }
 
   return (
     <Container>
       <Sidebar>
         <DeviceMenu>
-          {SYNTHS.map(synth => (
+          {state.presets.map((preset, idx) => (
             <DeviceMenuItem
-              key={synth.title}
-              title={synth.title}
+              key={`index${idx}synth${preset.synthId}`}
+              title={printSynthTitle(preset.synthId)}
+              active={idx === state.currentPresetIdx}
+              onSelect={() => handleSelectPreset(idx)}
             />
           ))}
         </DeviceMenu>
+        <AddPresetContainer>
+          <button onClick={handleAddPreset}>Add preset</button>
+        </AddPresetContainer>
       </Sidebar>
       <Main>
-        <Header>
-          <Title>Roland Juno 60</Title>
-          <HeaderControls>
-            <Button>MIDI Learn</Button>
-          </HeaderControls>
-        </Header>
-        <ControlSurface>
-          {mappingChunks.map((chunk, chunkIdx) => (
-            <ControlRow key={chunkIdx}>
-              {chunk.map((mapping, idx) => (
-                <ControlMappingContainer key={idx}>
-                  <KnobSetting
-                    mapping={mapping}
-                    onChangeMapping={(changedMapping) => handleChangeMapping(changedMapping, idx)}
-                  />
-                </ControlMappingContainer>
-              ))}
-            </ControlRow>
-          ))}
-        </ControlSurface>
+        {mainContent}
       </Main>
     </Container>
   );
 }
 
 export default Synths;
-
-function chunkEvery<T>(arr: T[], chunkSize: number): T[][] {
-  const results = [];
-
-  for (let i = 0; i < arr.length; i++) {
-    const last = results[results.length - 1];
-    if (!last || last.length === chunkSize) {
-      results.push([arr[i]]);
-    } else {
-      last.push(arr[i]);
-    }
-  }
-
-  return results;
-}
 
 const Container = styled.div`
   height: 100%;
@@ -123,37 +79,7 @@ const Main = styled.div`
   margin: 2rem;
 `;
 
-const Header = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const HeaderControls = styled.div``;
-
-const Title = styled.div`
-  font-size: 24px;
-  flex-grow: 1;
-  margin: 0 0 2rem;
-`;
-
-const Button = styled.button`
-`;
-
-const ControlSurface = styled.div`
-`;
-
-const ControlRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 1rem;
-`;
-
-const ControlMappingContainer = styled.div`
-  margin-right: 1rem;
-  padding: 1rem;
-  border: 1px solid #ccc;
-
-  &:last-child {
-    margin-right: 0;
-  }
+const AddPresetContainer = styled.div`
+  margin: 1rem;
+  text-align: center;
 `;

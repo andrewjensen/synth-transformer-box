@@ -9,7 +9,6 @@ const Knob: React.FC<KnobProps> = ({ value }) => {
   return (
     <Container>
       <Graphic>🎚</Graphic>
-      <Value>({value})</Value>
     </Container>
   );
 }
@@ -23,5 +22,3 @@ const Container = styled.div`
 const Graphic = styled.div`
   font-size: 72px;
 `;
-
-const Value = styled.div``;
