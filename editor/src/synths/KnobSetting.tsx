@@ -1,20 +1,20 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components/macro';
 
 import { Parameter, ControllerMapping } from '../common/types';
 import { range } from '../common/helpers';
-import { SYNTHS } from '../common/config/synths';
+import { getSynthById } from '../common/config/synths';
 import Knob from '../common/components/Knob';
 import FormElement from '../common/components/form/FormElement';
 
-const MOCK_PARAMETERS = SYNTHS[0].parameters;
-
 interface KnobSettingProps {
+  synthId: string
   mapping: ControllerMapping
   onChangeMapping: (mapping: ControllerMapping) => void
 }
 
-const KnobSetting: React.FC<KnobSettingProps> = ({ mapping, onChangeMapping }) => {
+const KnobSetting: React.FC<KnobSettingProps> = ({ synthId, mapping, onChangeMapping }) => {
+  const synth = useMemo(() => getSynthById(synthId), [synthId]);
 
   const handleChangeInput = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const valueStr = event.target.value;
@@ -56,7 +56,7 @@ const KnobSetting: React.FC<KnobSettingProps> = ({ mapping, onChangeMapping }) =
           value={mapping.out}
           onChange={handleChangeOutput}
         >
-          {MOCK_PARAMETERS.map(param => (
+          {synth.parameters.map(param => (
             <option
               key={param.cc}
               value={param.cc}

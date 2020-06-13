@@ -58,6 +58,7 @@ const CurrentPreset: React.FC<CurrentPresetProps> = ({ preset, dispatch }) => {
             {chunk.map((mapping, idx) => (
               <ControlMappingContainer key={idx}>
                 <KnobSetting
+                  synthId={preset.synthId}
                   mapping={mapping}
                   onChangeMapping={(changedMapping) => handleChangeMapping(changedMapping, idx)}
                 />
