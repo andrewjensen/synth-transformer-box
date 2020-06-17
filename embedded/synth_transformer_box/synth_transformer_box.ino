@@ -37,6 +37,9 @@ void setup() {
 
   MIDI.begin();
 
+  // Wait for the serial monitor during development
+  delay(500);
+
   Serial.println("Starting up!");
 
   // Serial.println("EEPROM contents:");

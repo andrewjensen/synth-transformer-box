@@ -10,7 +10,7 @@ class Preset {
 
 public:
   Preset() {
-    mappings = new byte[256];
+    mappings = new byte[128];
   }
 
   void setPresetId(byte inPresetId) {
@@ -39,12 +39,24 @@ public:
     Serial.print("    channel: ");
     Serial.println(channel);
 
+    Serial.println("    mappings: {");
+    for (int inputCC = 1; inputCC < 128; inputCC++) {
+      byte outputCC = mappings[inputCC];
+      if (outputCC != 0) {
+        Serial.print("      ");
+        Serial.print(inputCC);
+        Serial.print(" => ");
+        Serial.println(outputCC);
+      }
+    }
+    Serial.println("    }");
+
     Serial.println("  }");
   }
 };
 
 class Settings {
-  byte _presetCount;
+  byte presetCount;
   Preset* presets;
 
 public:
@@ -61,10 +73,7 @@ public:
       return false;
     }
 
-    byte presetCount = EEPROM.read(address);
-
-    // TODO: implement properly!
-    _presetCount = 2;
+    presetCount = EEPROM.read(address);
     address++;
 
     Serial.print("Preset count:");
@@ -115,7 +124,7 @@ public:
 
   void printState() {
     Serial.println("Settings {");
-    for (uint presetIdx = 0; presetIdx < _presetCount; presetIdx++) {
+    for (uint presetIdx = 0; presetIdx < presetCount; presetIdx++) {
       presets[presetIdx].printState();
     }
     Serial.println("}");
