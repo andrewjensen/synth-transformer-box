@@ -8,16 +8,16 @@
 #include <MIDI.h>
 #include <EEPROM.h>
 
+// From this project
+#include "Settings.h"
+
 #define PIN_BUTTON 20
 #define PIN_LED 13
-
-const byte PROTOCOL_VERSION = 0x01;
-const byte COMMAND_ID_SAVE_SETTINGS_V1 = 0x10;
-const byte COMMAND_ID_SAVE_SETTINGS_SUCCESSFUL_V1 = 0x11;
 
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDI);
 const int MIDI_OUTPUT_CHANNEL = 1;
 
+Settings settings;
 Bounce buttonDebouncer = Bounce();
 
 bool transpose = false;
@@ -46,12 +46,15 @@ void setup() {
   // Serial.println("...");
 
   Serial.println("Initializing from memory...");
-  bool success = initializeFromMemory();
+  bool success = settings.initializeFromMemory();
   if (success) {
     Serial.println("Successfully initialized.");
   } else {
     Serial.println("ERROR DURING INITIALIZATION!");
   }
+
+  Serial.println("Current settings state in memory:");
+  settings.printState();
 }
 
 void loop() {
@@ -67,59 +70,6 @@ void loop() {
   if (Serial.available()) {
     handleSerialCommand();
   }
-}
-
-bool initializeFromMemory() {
-  int address = 0;
-
-  byte version_number = EEPROM.read(address);
-  address++;
-  if (version_number != PROTOCOL_VERSION) {
-    Serial.println("Error: Protocol version does not match expected");
-    return false;
-  }
-
-  byte presetCount = EEPROM.read(address);
-  address++;
-
-  Serial.print("Preset count:");
-  Serial.println(presetCount);
-
-  for (int presetIdx = 0; presetIdx < presetCount; presetIdx++) {
-    byte presetId = EEPROM.read(address);
-    address++;
-    Serial.print("  Preset ID:");
-    Serial.println(presetId);
-
-    byte synthId = EEPROM.read(address);
-    address++;
-    Serial.print("  Synth ID:");
-    Serial.println(synthId);
-
-    byte channel = EEPROM.read(address);
-    address++;
-    Serial.print("  Output MIDI channel:");
-    Serial.println(channel);
-
-    byte mappingCount = EEPROM.read(address);
-    address++;
-    Serial.print("  Mapping count:");
-    Serial.println(mappingCount);
-
-    for (int mappingIdx = 0; mappingIdx < mappingCount; mappingIdx++) {
-      byte mappingInput = EEPROM.read(address);
-      address++;
-      byte mappingOutput = EEPROM.read(address);
-      address++;
-      Serial.print("    Mapping: input ");
-      Serial.print(mappingInput);
-      Serial.print(" output ");
-      Serial.print(mappingOutput);
-      Serial.println();
-    }
-  }
-
-  return true;
 }
 
 // Handling commands over serial
@@ -147,7 +97,7 @@ void handleSaveSettingsCommand() {
     address++;
   }
 
-  initializeFromMemory();
+  settings.initializeFromMemory();
 
   sendSaveSettingsSuccessful();
 }
