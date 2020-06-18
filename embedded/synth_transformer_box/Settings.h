@@ -53,10 +53,20 @@ public:
 
     Serial.println("  }");
   }
+
+  byte translateCC(byte inputCC) {
+    byte outputCC = mappings[inputCC];
+    if (outputCC) {
+      return outputCC;
+    } else {
+      return inputCC;
+    }
+  }
 };
 
 class Settings {
   byte presetCount;
+  byte activePresetIdx;
   Preset* presets;
 
 public:
@@ -80,6 +90,7 @@ public:
     Serial.println(presetCount);
 
     presets = new Preset[presetCount];
+    activePresetIdx = 0;
 
     for (int presetIdx = 0; presetIdx < presetCount; presetIdx++) {
       byte presetId = EEPROM.read(address);
@@ -128,5 +139,9 @@ public:
       presets[presetIdx].printState();
     }
     Serial.println("}");
+  }
+
+  byte translateCC(byte inputCC) {
+    return presets[activePresetIdx].translateCC(inputCC);
   }
 };

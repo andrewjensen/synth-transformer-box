@@ -34,11 +34,12 @@ void setup() {
 
   usbMIDI.setHandleNoteOn(onNoteOn);
   usbMIDI.setHandleNoteOff(onNoteOff);
+  usbMIDI.setHandleControlChange(onControlChange);
 
   MIDI.begin();
 
   // Wait for the serial monitor during development
-  delay(500);
+  delay(100);
 
   Serial.println("Starting up!");
 
@@ -123,6 +124,17 @@ void onNoteOff(byte channel, byte note, byte velocity) {
   MIDI.sendNoteOff(outputNote, velocity, MIDI_OUTPUT_CHANNEL);
 
   lightOff();
+}
+
+void onControlChange(byte channel, byte inputCC, byte value) {
+  // Serial.print("Received CC ");
+  // Serial.print(inputCC);
+  // Serial.print(", value ");
+  // Serial.println(value);
+
+  byte outputCC = settings.translateCC(inputCC);
+
+  MIDI.sendControlChange(outputCC, value, MIDI_OUTPUT_CHANNEL);
 }
 
 // GPIO helpers
