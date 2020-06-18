@@ -9,11 +9,15 @@ import { PresetsAction } from './presetsReducer';
 
 interface CurrentPresetProps {
   preset: Preset
+  allPresets: Preset[]
   dispatch: React.Dispatch<PresetsAction>
 }
 
-const CurrentPreset: React.FC<CurrentPresetProps> = ({ preset, dispatch }) => {
+const CurrentPreset: React.FC<CurrentPresetProps> = ({ preset, allPresets, dispatch }) => {
   const mappingChunks = chunkEvery(preset.mappings, 4);
+
+  const isFirstPreset = preset === allPresets[0];
+  const isLastPreset = preset === allPresets[allPresets.length - 1];
 
   const handleChangeMapping = (mapping: ControllerMapping, mappingIdx: number) => dispatch({
     type: 'CHANGE_MAPPING',
@@ -24,6 +28,14 @@ const CurrentPreset: React.FC<CurrentPresetProps> = ({ preset, dispatch }) => {
   const handleChangeChannel = (channel: number) => dispatch({
     type: 'CHANGE_CHANNEL',
     channel
+  });
+
+  const handleMoveUp = () => dispatch({
+    type: 'REORDER_PRESET_UP'
+  });
+
+  const handleMoveDown = () => dispatch({
+    type: 'REORDER_PRESET_DOWN'
   });
 
   const handleMidiLearn = () => {
@@ -48,6 +60,14 @@ const CurrentPreset: React.FC<CurrentPresetProps> = ({ preset, dispatch }) => {
             channel={preset.channel}
             onChangeChannel={handleChangeChannel}
           />
+          <Button
+            disabled={isFirstPreset}
+            onClick={handleMoveUp}
+          >Move preset up</Button>
+          <Button
+            disabled={isLastPreset}
+            onClick={handleMoveDown}
+          >Move preset down</Button>
           <Button onClick={handleMidiLearn}>MIDI Learn</Button>
           <Button onClick={handleConfirmDelete}>Delete Preset</Button>
         </HeaderControls>

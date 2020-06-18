@@ -42,7 +42,7 @@ const Synths = () => {
       );
     } else if (currentPreset) {
       return (
-        <CurrentPreset preset={currentPreset} dispatch={dispatch} />
+        <CurrentPreset preset={currentPreset} allPresets={state.presets} dispatch={dispatch} />
       );
     } else {
       return null;

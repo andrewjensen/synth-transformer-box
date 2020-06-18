@@ -17,6 +17,8 @@ export type PresetsAction =
   | { type: 'SELECT_PRESET', presetIdx: number }
   | { type: 'CHANGE_MAPPING', mapping: ControllerMapping, mappingIdx: number }
   | { type: 'CHANGE_CHANNEL', channel: number }
+  | { type: 'REORDER_PRESET_UP' }
+  | { type: 'REORDER_PRESET_DOWN' }
   | { type: 'DELETE' }
   | { type: 'TOGGLE_EXPORTING' };
 
@@ -65,6 +67,18 @@ export function presetsReducer(state: PresetsState, action: PresetsAction): Pres
         ...preset,
         channel: action.channel
       }));
+    case 'REORDER_PRESET_UP':
+      return {
+        ...state,
+        currentPresetIdx: state.currentPresetIdx! - 1,
+        presets: reorderPresets(state.presets, state.currentPresetIdx!, state.currentPresetIdx! - 1)
+      };
+    case 'REORDER_PRESET_DOWN':
+      return {
+        ...state,
+        currentPresetIdx: state.currentPresetIdx! + 1,
+        presets: reorderPresets(state.presets, state.currentPresetIdx!, state.currentPresetIdx! + 1)
+      };
     case 'DELETE':
       return {
         ...state,
@@ -124,4 +138,13 @@ function createInitialMappings(synth: Synth): ControllerMapping[] {
         out: outputCC
       };
     });
+}
+
+function reorderPresets(presets: Preset[], idxA: number, idxB: number): Preset[] {
+  const updatedPresets = [...presets];
+  const thisPreset = presets[idxA];
+  updatedPresets[idxA] = updatedPresets[idxB];
+  updatedPresets[idxB] = thisPreset;
+
+  return updatedPresets;
 }
