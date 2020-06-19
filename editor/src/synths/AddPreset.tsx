@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SYNTHS } from '../common/config/synths';
 import FormElement from '../common/components/form/FormElement';
 import SynthSetting from './SynthSetting';
