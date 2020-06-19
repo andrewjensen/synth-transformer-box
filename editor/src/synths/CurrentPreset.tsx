@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { chunkEvery } from '../common/helpers';
 import { Preset, ControllerMapping } from '../common/types';
 import { printSynthTitle } from '../common/config/synths';

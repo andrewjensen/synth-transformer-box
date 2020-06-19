@@ -1,6 +1,5 @@
 import React from 'react';
-import styled from 'styled-components/macro';
-import { Link, useRouteMatch } from 'react-router-dom';
+import styled from 'styled-components';
 
 const TopBar: React.FC = () => {
   return (
@@ -21,14 +20,11 @@ interface TabProps {
 }
 
 const Tab: React.FC<TabProps> = ({ title, link }) => {
-  const routeMatch = useRouteMatch({
-    path: link,
-    exact: true
-  });
+  const routeMatch = false;
 
   return (
     <TabContainer linkActive={!!routeMatch}>
-      <TabLink to={link}>{title}</TabLink>
+      <TabLink>{title}</TabLink>
     </TabContainer>
   );
 }
@@ -60,7 +56,7 @@ const TabContainer = styled.div<TabContainerProps>`
   `}
 `;
 
-const TabLink = styled(Link)`
+const TabLink = styled.div`
   display: block;
   padding: 10px;
   color: white;

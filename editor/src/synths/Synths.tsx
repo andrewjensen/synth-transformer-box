@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 import { Preset } from '../common/types';
 import { DeviceMenu, DeviceMenuItem } from '../common/components/DeviceMenu';

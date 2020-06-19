@@ -1,31 +1,19 @@
 import React from 'react';
-import {
-  Switch,
-  Route,
-  Redirect
-} from 'react-router-dom';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 import TopBar from './topbar/TopBar';
 import Controllers from './controllers/Controllers';
 import Synths from './synths/Synths';
+
+// TODO: Manage routing from this component
+// TODO: add Controllers back in!
 
 const App = () => {
   return (
     <AppContainer>
       <TopBar />
       <BodyContainer>
-        <Switch>
-          <Route path="/controllers">
-            <Controllers />
-          </Route>
-          <Route path="/synths">
-            <Synths />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/synths" />
-          </Route>
-        </Switch>
+        <Synths />
       </BodyContainer>
     </AppContainer>
   );
