@@ -26,6 +26,25 @@
  * ```
  */
 
+import React from 'react';
+import ReactDOM from 'react-dom';
+// import { BrowserRouter as Router } from 'react-router-dom';
+// import './index.css';
+// import App from './App';
+
 import './index.css';
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
+
+const TestComponent: React.FC = () => {
+  return (
+    <div>Test!!!</div>
+  );
+};
+
+ReactDOM.render(
+  <React.StrictMode>
+    <TestComponent />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
