@@ -1,12 +1,27 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const TopBar: React.FC = () => {
+import { AppTab } from '../App';
+
+interface TopBarProps {
+  activeTab: AppTab
+  onChangeTab: (tab: AppTab) => void
+}
+
+const TopBar: React.FC<TopBarProps> = ({ activeTab, onChangeTab }) => {
   return (
     <Container>
       <Tabs>
-        <Tab title="Controllers" link="/controllers" />
-        <Tab title="Synths" link="/synths" />
+        <Tab
+          title="Controllers"
+          active={activeTab === AppTab.Controllers}
+          onClick={() => onChangeTab(AppTab.Controllers)}
+          />
+        <Tab
+          title="Synths"
+          active={activeTab === AppTab.Synths}
+          onClick={() => onChangeTab(AppTab.Synths)}
+        />
       </Tabs>
     </Container>
   );
@@ -16,15 +31,14 @@ export default TopBar;
 
 interface TabProps {
   title: string
-  link: string
+  active: boolean
+  onClick: () => void
 }
 
-const Tab: React.FC<TabProps> = ({ title, link }) => {
-  const routeMatch = false;
-
+const Tab: React.FC<TabProps> = ({ title, active, onClick }) => {
   return (
-    <TabContainer linkActive={!!routeMatch}>
-      <TabLink>{title}</TabLink>
+    <TabContainer linkActive={active}>
+      <TabLink onClick={onClick}>{title}</TabLink>
     </TabContainer>
   );
 }
@@ -47,6 +61,8 @@ interface TabContainerProps {
 }
 
 const TabContainer = styled.div<TabContainerProps>`
+  cursor: pointer;
+
   &:hover {
     background-color: #333;
   }
