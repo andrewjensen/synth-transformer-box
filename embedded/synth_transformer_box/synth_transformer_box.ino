@@ -10,9 +10,27 @@
 
 // From this project
 #include "Settings.h"
+#include "SegmentDisplay.h"
 
-#define PIN_BUTTON 20
+#define PIN_BUTTON 3
 #define PIN_LED 13
+#define PIN_DISPLAY_A 14
+#define PIN_DISPLAY_B 15
+#define PIN_DISPLAY_C 16
+#define PIN_DISPLAY_D 17
+#define PIN_DISPLAY_E 18
+#define PIN_DISPLAY_F 19
+#define PIN_DISPLAY_G 20
+
+SegmentDisplay display = SegmentDisplay(
+  PIN_DISPLAY_A,
+  PIN_DISPLAY_B,
+  PIN_DISPLAY_C,
+  PIN_DISPLAY_D,
+  PIN_DISPLAY_E,
+  PIN_DISPLAY_F,
+  PIN_DISPLAY_G
+);
 
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDI);
 const int MIDI_OUTPUT_CHANNEL = 1;
@@ -20,7 +38,7 @@ const int MIDI_OUTPUT_CHANNEL = 1;
 Settings settings;
 Bounce buttonDebouncer = Bounce();
 
-bool transpose = false;
+int displayedDigit = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -59,6 +77,8 @@ void setup() {
 
   Serial.println("Current settings state in memory:");
   settings.printState();
+
+  display.showDigit(displayedDigit);
 }
 
 void loop() {
@@ -68,7 +88,9 @@ void loop() {
 
   if (buttonDebouncer.fell()) {
     Serial.println("You pressed the button!");
-    transpose = !transpose;
+
+    displayedDigit = (displayedDigit + 1) % 10;
+    display.showDigit(displayedDigit);
   }
 
   if (Serial.available()) {
@@ -113,15 +135,13 @@ void sendSaveSettingsSuccessful() {
 // MIDI
 
 void onNoteOn(byte channel, byte note, byte velocity) {
-  byte outputNote = transpose ? note + 5 : note;
-  MIDI.sendNoteOn(outputNote, velocity, MIDI_OUTPUT_CHANNEL);
+  MIDI.sendNoteOn(note, velocity, MIDI_OUTPUT_CHANNEL);
 
   lightOn();
 }
 
 void onNoteOff(byte channel, byte note, byte velocity) {
-  byte outputNote = transpose ? note + 5 : note;
-  MIDI.sendNoteOff(outputNote, velocity, MIDI_OUTPUT_CHANNEL);
+  MIDI.sendNoteOff(note, velocity, MIDI_OUTPUT_CHANNEL);
 
   lightOff();
 }
