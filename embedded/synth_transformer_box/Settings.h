@@ -33,6 +33,10 @@ public:
     return presetId;
   }
 
+  byte getChannel() {
+    return channel;
+  }
+
   void printState() {
     Serial.println("  Preset {");
 
@@ -145,15 +149,19 @@ public:
     return presets[activePresetIdx].getPresetId();
   }
 
+  byte getChannel() {
+    return presets[activePresetIdx].getChannel();
+  }
+
+  byte translateCC(byte inputCC) {
+    return presets[activePresetIdx].translateCC(inputCC);
+  }
+
   void printState() {
     Serial.println("Settings {");
     for (uint presetIdx = 0; presetIdx < presetCount; presetIdx++) {
       presets[presetIdx].printState();
     }
     Serial.println("}");
-  }
-
-  byte translateCC(byte inputCC) {
-    return presets[activePresetIdx].translateCC(inputCC);
   }
 };

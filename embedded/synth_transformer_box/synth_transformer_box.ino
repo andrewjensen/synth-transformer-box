@@ -33,7 +33,6 @@ SegmentDisplay display = SegmentDisplay(
 );
 
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDI);
-const int MIDI_OUTPUT_CHANNEL = 1;
 
 Settings settings;
 Bounce buttonDebouncer = Bounce();
@@ -138,13 +137,15 @@ void sendSaveSettingsSuccessful() {
 // MIDI
 
 void onNoteOn(byte channel, byte note, byte velocity) {
-  MIDI.sendNoteOn(note, velocity, MIDI_OUTPUT_CHANNEL);
+  byte outputChannel = settings.getChannel();
+  MIDI.sendNoteOn(note, velocity, outputChannel);
 
   lightOn();
 }
 
 void onNoteOff(byte channel, byte note, byte velocity) {
-  MIDI.sendNoteOff(note, velocity, MIDI_OUTPUT_CHANNEL);
+  byte outputChannel = settings.getChannel();
+  MIDI.sendNoteOff(note, velocity, outputChannel);
 
   lightOff();
 }
@@ -155,9 +156,10 @@ void onControlChange(byte channel, byte inputCC, byte value) {
   // Serial.print(", value ");
   // Serial.println(value);
 
+  byte outputChannel = settings.getChannel();
   byte outputCC = settings.translateCC(inputCC);
 
-  MIDI.sendControlChange(outputCC, value, MIDI_OUTPUT_CHANNEL);
+  MIDI.sendControlChange(outputCC, value, outputChannel);
 }
 
 // GPIO helpers
