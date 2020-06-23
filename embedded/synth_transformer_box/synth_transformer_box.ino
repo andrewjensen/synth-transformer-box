@@ -38,8 +38,6 @@ const int MIDI_OUTPUT_CHANNEL = 1;
 Settings settings;
 Bounce buttonDebouncer = Bounce();
 
-int displayedDigit = 0;
-
 void setup() {
   Serial.begin(9600);
 
@@ -78,7 +76,7 @@ void setup() {
   Serial.println("Current settings state in memory:");
   settings.printState();
 
-  display.showDigit(displayedDigit);
+  display.showDigit(settings.getCurrentPresetId());
 }
 
 void loop() {
@@ -87,10 +85,13 @@ void loop() {
   buttonDebouncer.update();
 
   if (buttonDebouncer.fell()) {
-    Serial.println("You pressed the button!");
+    settings.triggerNextPreset();
 
-    displayedDigit = (displayedDigit + 1) % 10;
-    display.showDigit(displayedDigit);
+    byte presetId = settings.getCurrentPresetId();
+
+    display.showDigit(presetId);
+    Serial.print("Switched to preset ");
+    Serial.println(presetId);
   }
 
   if (Serial.available()) {
@@ -124,6 +125,8 @@ void handleSaveSettingsCommand() {
   }
 
   settings.initializeFromMemory();
+
+  display.showDigit(settings.getCurrentPresetId());
 
   sendSaveSettingsSuccessful();
 }

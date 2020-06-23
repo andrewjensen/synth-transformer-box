@@ -29,6 +29,10 @@ public:
     mappings[inputCC] = outputCC;
   }
 
+  byte getPresetId() {
+    return presetId;
+  }
+
   void printState() {
     Serial.println("  Preset {");
 
@@ -131,6 +135,14 @@ public:
     }
 
     return true;
+  }
+
+  void triggerNextPreset() {
+    activePresetIdx = (activePresetIdx + 1) % presetCount;
+  }
+
+  byte getCurrentPresetId() {
+    return presets[activePresetIdx].getPresetId();
   }
 
   void printState() {
