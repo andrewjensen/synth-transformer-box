@@ -1,7 +1,8 @@
 import React, { useReducer } from 'react';
 import styled from 'styled-components';
+import { ipcRenderer } from 'electron';
 
-import { Preset } from '../common/types';
+import { Settings, Preset } from '../common/types';
 import { DeviceMenu, DeviceMenuItem } from '../common/components/DeviceMenu';
 import { printSynthTitle } from '../common/config/synths';
 import {
@@ -27,9 +28,19 @@ const Synths = () => {
     presetIdx
   });
 
-  const handleExport = () => dispatch({
-    type: 'TOGGLE_EXPORTING'
-  });
+  // const handleExport = () => dispatch({
+  //   type: 'TOGGLE_EXPORTING'
+  // });
+
+  const handleExport = async () => {
+    console.log('Saving settings...');
+    const settings: Settings = {
+      presets: state.presets
+    };
+
+    const result = await ipcRenderer.invoke('save-settings', settings);
+    console.log('Result:', result);
+  };
 
   const renderMainContent = () => {
     if (state.addingPreset) {
