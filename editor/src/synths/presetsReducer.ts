@@ -13,7 +13,7 @@ export interface PresetsState {
 
 export type PresetsAction =
   | { type: 'ADD_PRESET' }
-  | { type: 'SUBMIT_NEW_PRESET', synthId: string, channel: number }
+  | { type: 'SUBMIT_NEW_PRESET', synthId: number, channel: number }
   | { type: 'SELECT_PRESET', presetIdx: number }
   | { type: 'CHANGE_MAPPING', mapping: ControllerMapping, mappingIdx: number }
   | { type: 'CHANGE_CHANNEL', channel: number }
@@ -111,7 +111,7 @@ function editCurrentPreset(state: PresetsState, editFn: PresetEditFn): PresetsSt
   };
 }
 
-function createPreset(synthId: string, channel: number): Preset {
+function createPreset(synthId: number, channel: number): Preset {
   const synth = getSynthById(synthId);
 
   return {

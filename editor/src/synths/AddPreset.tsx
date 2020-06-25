@@ -11,7 +11,7 @@ interface AddPresetProps {
 }
 
 const AddPreset: React.FC<AddPresetProps> = ({ dispatch }) => {
-  const [synthId, setSynthId] = useState<string>(SYNTHS[0].id);
+  const [synthId, setSynthId] = useState<number>(SYNTHS[0].id);
   const [channel, setChannel] = useState<number>(1);
 
   const handleSubmit = () => dispatch({

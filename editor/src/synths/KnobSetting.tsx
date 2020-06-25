@@ -8,7 +8,7 @@ import Knob from '../common/components/Knob';
 import FormElement from '../common/components/form/FormElement';
 
 interface KnobSettingProps {
-  synthId: string
+  synthId: number
   mapping: ControllerMapping
   onChangeMapping: (mapping: ControllerMapping) => void
 }

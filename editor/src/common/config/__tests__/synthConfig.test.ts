@@ -13,7 +13,8 @@ describe('synths config', () => {
     for (let synth of SYNTHS) {
       debug(`Validating synth ${synth.title}...`);
 
-      expect(typeof synth.id).toBe('string');
+      expect(typeof synth.id).toBe('number');
+      expect(typeof synth.slug).toBe('string');
       expect(typeof synth.manufacturer).toBe('string');
       expect(typeof synth.title).toBe('string');
       if (synth.subtitle !== null && typeof synth.subtitle !== 'string') {

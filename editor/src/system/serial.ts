@@ -4,9 +4,6 @@ import { Settings } from '../common/types';
 
 const COMMAND_ID_SAVE_SETTINGS_V1 = 0x10;
 
-// TODO: use actual numeric synth IDs
-const MOCK_SYNTH_ID = 0x55;
-
 let portInstance: SerialPort | null = null;
 
 export async function saveSettings(settings: Settings): Promise<string> {
@@ -36,7 +33,7 @@ function serializeSaveCommand(settings: Settings): Buffer {
     const presetNumber = idx + 1;
 
     bytes.push(presetNumber);
-    bytes.push(MOCK_SYNTH_ID);
+    bytes.push(preset.synthId);
     bytes.push(preset.channel);
     bytes.push(preset.mappings.length);
 

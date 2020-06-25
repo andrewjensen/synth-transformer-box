@@ -3,14 +3,14 @@ export interface Settings {
 }
 
 export interface Preset {
-  synthId: string
+  synthId: number
   channel: number
   mappings: ControllerMapping[]
 }
 
 export interface Synth {
-  // TODO: split id (number) and slug (string)
-  id: string
+  id: number
+  slug: string
   manufacturer: string
   title: string
   subtitle: string | null

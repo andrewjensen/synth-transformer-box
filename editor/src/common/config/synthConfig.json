@@ -1,6 +1,7 @@
 [
   {
-    "id": "dsi_prophet_rev2",
+    "id": 1,
+    "slug": "dsi_prophet_rev2",
     "manufacturer": "DSI",
     "title": "Prophet REV2",
     "subtitle": null,
@@ -260,28 +261,32 @@
     ]
   },
   {
-    "id": "roland_juno_60_minerva",
+    "id": 2,
+    "slug": "roland_juno_60_minerva",
     "manufacturer": "Roland",
     "title": "Juno 60",
     "subtitle": "with Minerva upgrade",
     "parameters": []
   },
   {
-    "id": "roland_jupiter_6_europa",
+    "id": 3,
+    "slug": "roland_jupiter_6_europa",
     "manufacturer": "Roland",
     "title": "Jupiter 6",
     "subtitle": "with Europa upgrade",
     "parameters": []
   },
   {
-    "id": "akai_ax80_tauntek",
+    "id": 4,
+    "slug": "akai_ax80_tauntek",
     "manufacturer": "Akai",
     "title": "AX80",
     "subtitle": "with Tauntek upgrade",
     "parameters": []
   },
   {
-    "id": "roland_ju_06",
+    "id": 5,
+    "slug": "roland_ju_06",
     "manufacturer": "Roland",
     "title": "JU-06",
     "subtitle": null,

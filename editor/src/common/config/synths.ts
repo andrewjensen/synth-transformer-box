@@ -2,7 +2,7 @@ import { Synth } from '../types';
 
 export const SYNTHS: Synth[] = require("./synthConfig.json");
 
-export function getSynthById(synthId: string): Synth {
+export function getSynthById(synthId: number): Synth {
   const synth = SYNTHS.find(s => s.id === synthId);
   if (!synth) {
     throw new Error(`No synth with id: ${synthId}`);
@@ -10,7 +10,7 @@ export function getSynthById(synthId: string): Synth {
   return synth;
 }
 
-export function printSynthTitle(synthId: string): string {
+export function printSynthTitle(synthId: number): string {
   const synth = getSynthById(synthId);
   return `${synth.manufacturer} ${synth.title}`;
 }
