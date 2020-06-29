@@ -118,6 +118,9 @@ const Container = styled.div`
 `;
 
 const Sidebar = styled.div`
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 15rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
