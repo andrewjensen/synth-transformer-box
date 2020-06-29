@@ -7,6 +7,8 @@ import ChannelSetting from './ChannelSetting';
 import KnobSetting from './KnobSetting';
 import { PresetsAction } from './presetsReducer';
 
+const CHUNK_SIZE = 4;
+
 interface CurrentPresetProps {
   preset: Preset
   allPresets: Preset[]
@@ -14,7 +16,7 @@ interface CurrentPresetProps {
 }
 
 const CurrentPreset: React.FC<CurrentPresetProps> = ({ preset, allPresets, dispatch }) => {
-  const mappingChunks = chunkEvery(preset.mappings, 4);
+  const mappingChunks = chunkEvery(preset.mappings, CHUNK_SIZE);
 
   const isFirstPreset = preset === allPresets[0];
   const isLastPreset = preset === allPresets[allPresets.length - 1];
@@ -76,11 +78,14 @@ const CurrentPreset: React.FC<CurrentPresetProps> = ({ preset, allPresets, dispa
         {mappingChunks.map((chunk, chunkIdx) => (
           <ControlRow key={`mappingChunk${chunkIdx}`}>
             {chunk.map((mapping, idx) => (
-              <ControlMappingContainer key={idx}>
+              <ControlMappingContainer key={`mappingChunk${chunkIdx}controller${idx}`}>
                 <KnobSetting
                   synthId={preset.synthId}
                   mapping={mapping}
-                  onChangeMapping={(changedMapping) => handleChangeMapping(changedMapping, idx)}
+                  onChangeMapping={(changedMapping) => {
+                    const unchunkedIdx = (chunkIdx * CHUNK_SIZE) + idx;
+                    handleChangeMapping(changedMapping, unchunkedIdx);
+                  }}
                 />
               </ControlMappingContainer>
             ))}
