@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { SYNTHS } from '../common/config/synths';
+
 import FormElement from '../common/components/form/FormElement';
 import SynthSetting from './SynthSetting';
 import ChannelSetting from './ChannelSetting';
@@ -11,7 +11,7 @@ interface AddPresetProps {
 }
 
 const AddPreset: React.FC<AddPresetProps> = ({ dispatch }) => {
-  const [synthId, setSynthId] = useState<number>(SYNTHS[0].id);
+  const [synthId, setSynthId] = useState<number>(0);
   const [channel, setChannel] = useState<number>(1);
 
   const handleSubmit = () => dispatch({
@@ -43,7 +43,7 @@ const AddPreset: React.FC<AddPresetProps> = ({ dispatch }) => {
       </SelectionContainer>
 
       <ControlsContainer>
-        <button onClick={handleSubmit}>Submit</button>
+        <button disabled={synthId === 0} onClick={handleSubmit}>Submit</button>
       </ControlsContainer>
     </Container>
   );
