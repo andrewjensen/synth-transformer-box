@@ -4,7 +4,6 @@ import { ipcRenderer } from 'electron';
 
 import { Settings, Preset } from '../common/types';
 import { DeviceMenu, DeviceMenuItem } from '../common/components/DeviceMenu';
-import { printSynthTitle } from '../common/config/synths';
 import {
   presetsReducer,
   INITIAL_STATE,
@@ -81,7 +80,7 @@ const Synths = () => {
             {state.presets.map((preset, idx) => (
               <DeviceMenuItem
                 key={`index${idx}synth${preset.synthId}`}
-                title={printSynthTitle(preset.synthId)}
+                synthId={preset.synthId}
                 active={idx === state.currentPresetIdx}
                 onSelect={() => handleSelectPreset(idx)}
               />
@@ -120,7 +119,7 @@ const Container = styled.div`
 const Sidebar = styled.div`
   flex-grow: 0;
   flex-shrink: 0;
-  width: 15rem;
+  width: 12rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
