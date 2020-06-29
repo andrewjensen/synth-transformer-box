@@ -32,6 +32,18 @@ const Synths = () => {
   //   type: 'TOGGLE_EXPORTING'
   // });
 
+  const handleImport = async () => {
+    console.log('Loading settings...');
+
+    const settings: Settings = await ipcRenderer.invoke('load-settings');
+    console.log('Got settings:', settings);
+
+    dispatch({
+      type: 'IMPORT_SETTINGS',
+      settings
+    });
+  };
+
   const handleExport = async () => {
     console.log('Saving settings...');
     const settings: Settings = {
@@ -63,22 +75,32 @@ const Synths = () => {
   return (
     <Container>
       <Sidebar>
-        <DeviceMenu>
-          {state.presets.map((preset, idx) => (
-            <DeviceMenuItem
-              key={`index${idx}synth${preset.synthId}`}
-              title={printSynthTitle(preset.synthId)}
-              active={idx === state.currentPresetIdx}
-              onSelect={() => handleSelectPreset(idx)}
-            />
-          ))}
-        </DeviceMenu>
-        <AddPresetContainer>
-          <button onClick={handleAddPreset}>Add preset</button>
-        </AddPresetContainer>
-        <ExportButtonContainer>
-          <button onClick={handleExport}>Export settings</button>
-        </ExportButtonContainer>
+
+        <PresetsContainer>
+          <DeviceMenu>
+            {state.presets.map((preset, idx) => (
+              <DeviceMenuItem
+                key={`index${idx}synth${preset.synthId}`}
+                title={printSynthTitle(preset.synthId)}
+                active={idx === state.currentPresetIdx}
+                onSelect={() => handleSelectPreset(idx)}
+              />
+            ))}
+          </DeviceMenu>
+          <AddPresetContainer>
+            <button onClick={handleAddPreset}>Add preset</button>
+          </AddPresetContainer>
+        </PresetsContainer>
+
+        <SerialControlsContainer>
+          <SerialControl>
+            <button onClick={handleImport}>Import settings</button>
+          </SerialControl>
+          <SerialControl>
+            <button onClick={handleExport}>Export settings</button>
+          </SerialControl>
+        </SerialControlsContainer>
+
       </Sidebar>
       <Main>
         {renderMainContent()}
@@ -96,6 +118,9 @@ const Container = styled.div`
 `;
 
 const Sidebar = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background-color: #f0f0f0;
 `;
 
@@ -109,6 +134,13 @@ const AddPresetContainer = styled.div`
   text-align: center;
 `;
 
-const ExportButtonContainer = styled.div`
+const PresetsContainer = styled.div`
+`;
+
+const SerialControlsContainer = styled.div`
   text-align: center;
+`;
+
+const SerialControl = styled.div`
+  margin: 1rem;
 `;

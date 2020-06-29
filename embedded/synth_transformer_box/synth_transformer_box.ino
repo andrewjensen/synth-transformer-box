@@ -9,6 +9,7 @@
 #include <EEPROM.h>
 
 // From this project
+#include "constants.h"
 #include "Settings.h"
 #include "SegmentDisplay.h"
 
@@ -56,25 +57,32 @@ void setup() {
   // Wait for the serial monitor during development
   delay(100);
 
-  Serial.println("Starting up!");
+  if (DEBUG_SERIAL) {
+    Serial.println("Starting up!");
 
-  // Serial.println("EEPROM contents:");
-  // for (int address = 0; address < 100; address++) {
-  //   Serial.println(EEPROM.read(address));
-  // }
-  // Serial.println("...");
+    // Serial.println("EEPROM contents:");
+    // for (int address = 0; address < 100; address++) {
+    //   Serial.println(EEPROM.read(address));
+    // }
+    // Serial.println("...");
 
-  Serial.println("Initializing from memory...");
-  bool success = settings.initializeFromMemory();
-  if (success) {
-    Serial.println("Successfully initialized.");
-  } else {
-    Serial.println("ERROR DURING INITIALIZATION!");
+    Serial.println("Initializing from memory...");
   }
 
-  Serial.println("Current settings state in memory:");
-  settings.printState();
+  bool success = settings.initializeFromMemory();
 
+  if (DEBUG_SERIAL) {
+    if (success) {
+      Serial.println("Successfully initialized.");
+    } else {
+      Serial.println("ERROR DURING INITIALIZATION!");
+    }
+
+    Serial.println("Current settings state in memory:");
+    settings.printState();
+  }
+
+  display.flashDigit(settings.getPresetCount());
   display.showDigit(settings.getCurrentPresetId());
 }
 
@@ -89,8 +97,11 @@ void loop() {
     byte presetId = settings.getCurrentPresetId();
 
     display.showDigit(presetId);
-    Serial.print("Switched to preset ");
-    Serial.println(presetId);
+
+    if (DEBUG_SERIAL) {
+      Serial.print("Switched to preset ");
+      Serial.println(presetId);
+    }
   }
 
   if (Serial.available()) {
@@ -107,6 +118,8 @@ void handleSerialCommand() {
 
   if (commandId == COMMAND_ID_SAVE_SETTINGS_V1) {
     handleSaveSettingsCommand();
+  } else if (commandId == COMMAND_ID_REQUEST_LOAD_SETTINGS_V1) {
+    handleRequestLoadSettingsCommand();
   }
 
   lightOff();
@@ -122,16 +135,46 @@ void handleSaveSettingsCommand() {
     EEPROM.write(address, received);
     address++;
   }
+  storeTerminatingSignal(address);
 
   settings.initializeFromMemory();
 
+  display.flashDigit(settings.getPresetCount());
   display.showDigit(settings.getCurrentPresetId());
 
   sendSaveSettingsSuccessful();
 }
 
+void handleRequestLoadSettingsCommand() {
+  Serial.write(COMMAND_ID_LOAD_SETTINGS_V1);
+
+  // TODO: check stored protocol version first
+
+  int address = 1;
+  int nullBytes = 0;
+
+  // Stop when we see four null bytes in a row
+  while (nullBytes < 4 && address < 1000) {
+    byte storedByte = EEPROM.read(address);
+    Serial.write(storedByte);
+    address++;
+
+    if (storedByte == 0x00) {
+      nullBytes++;
+    } else {
+      nullBytes = 0;
+    }
+  }
+}
+
 void sendSaveSettingsSuccessful() {
-  Serial.print(COMMAND_ID_SAVE_SETTINGS_SUCCESSFUL_V1);
+  Serial.write(COMMAND_ID_SAVE_SETTINGS_SUCCESSFUL_V1);
+}
+
+void storeTerminatingSignal(int address) {
+  for (int i = 0; i < 4; i++) {
+    EEPROM.write(address + i, 0x00);
+  }
 }
 
 // MIDI

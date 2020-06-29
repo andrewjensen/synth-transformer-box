@@ -1,5 +1,8 @@
 // Inspired by https://github.com/dgduncan/SevenSegment
 
+const int FLASH_TIMES = 3;
+const int FLASH_DURATION = 300;
+
 byte digitsToSegments[] = {
   B11000000, //  0
   B11111001, //  1
@@ -54,6 +57,15 @@ public:
   void allOff() {
     for (int i = 0; i < 7; i++) {
       digitalWrite(pins[i], HIGH);
+    }
+  }
+
+  void flashDigit(int digit) {
+    for (int i = 0; i < FLASH_TIMES; i++) {
+      showDigit(digit);
+      delay(FLASH_DURATION);
+      allOff();
+      delay(FLASH_DURATION);
     }
   }
 

@@ -1,4 +1,4 @@
-import { Synth, Preset, ControllerMapping } from '../common/types';
+import { Synth, Preset, ControllerMapping, Settings } from '../common/types';
 import { getSynthById } from '../common/config/synths';
 import { range } from '../common/helpers';
 
@@ -20,6 +20,7 @@ export type PresetsAction =
   | { type: 'REORDER_PRESET_UP' }
   | { type: 'REORDER_PRESET_DOWN' }
   | { type: 'DELETE' }
+  | { type: 'IMPORT_SETTINGS', settings: Settings }
   | { type: 'TOGGLE_EXPORTING' };
 
 export const INITIAL_STATE: PresetsState = {
@@ -86,6 +87,13 @@ export function presetsReducer(state: PresetsState, action: PresetsAction): Pres
           idx !== state.currentPresetIdx
         ),
         currentPresetIdx: null
+      };
+    case 'IMPORT_SETTINGS':
+      return {
+        presets: action.settings.presets,
+        currentPresetIdx: action.settings.presets.length ? 0 : null,
+        addingPreset: false,
+        exporting: false
       };
     case 'TOGGLE_EXPORTING':
       return {

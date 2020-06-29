@@ -1,6 +1,10 @@
 # Wire Protocol
 
-Version 1
+## Constants
+
+Protocol version: 1 (`0x01`)
+
+Terminating signal: four null bytes in a row (`[0x00 0x00 0x00 0x00]`)
 
 ## EEPROM Storage
 
@@ -81,3 +85,4 @@ Contents:
   - For each mapping:
     - Input CC number (byte)
     - Output CC number (byte)
+- Terminating signal (4 bytes)
