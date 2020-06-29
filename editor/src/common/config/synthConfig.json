@@ -282,7 +282,188 @@
     "manufacturer": "Akai",
     "title": "AX80",
     "subtitle": "with Tauntek upgrade",
-    "parameters": []
+    "parameters": [
+      {
+        "title": "Osc 1 Frequency Range",
+        "cc": 65
+      },
+      {
+        "title": "Osc 1 Wave",
+        "cc": 66
+      },
+      {
+        "title": "Osc 1 PW",
+        "cc": 67
+      },
+      {
+        "title": "Osc 1 PWM Speed",
+        "cc": 68
+      },
+      {
+        "title": "Osc 1 Sub Osc Off/On",
+        "cc": 69
+      },
+      {
+        "title": "Osc 1 Level",
+        "cc": 70
+      },
+      {
+        "title": "Osc 2 Frequency Range",
+        "cc": 71
+      },
+      {
+        "title": "Osc 2 Detune",
+        "cc": 72
+      },
+      {
+        "title": "Osc 2 Wave",
+        "cc": 73
+      },
+      {
+        "title": "Osc 2 Crossmod",
+        "cc": 74
+      },
+      {
+        "title": "Osc 2 EG Depth",
+        "cc": 75
+      },
+      {
+        "title": "Osc 2 EG Select (VCF/VCA)",
+        "cc": 76
+      },
+      {
+        "title": "Osc 2 Level",
+        "cc": 77
+      },
+      {
+        "title": "VCF Cutoff Frequency",
+        "cc": 78
+      },
+      {
+        "title": "VCF Resonance",
+        "cc": 79
+      },
+      {
+        "title": "VCF EG Depth",
+        "cc": 80
+      },
+      {
+        "title": "VCF Key Follow",
+        "cc": 81
+      },
+      {
+        "title": "VCF Key Velocity",
+        "cc": 82
+      },
+      {
+        "title": "HPF Cutoff",
+        "cc": 83
+      },
+      {
+        "title": "LFO Osc 1 Depth",
+        "cc": 84
+      },
+      {
+        "title": "LFO Osc 1 Speed",
+        "cc": 85
+      },
+      {
+        "title": "LFO Osc 1 Delay",
+        "cc": 86
+      },
+      {
+        "title": "LFO Osc 1 Wave",
+        "cc": 87
+      },
+      {
+        "title": "LFO Select (Osc 1, Osc 2, VCF)",
+        "cc": 88
+      },
+      {
+        "title": "VCA EG Attack",
+        "cc": 89
+      },
+      {
+        "title": "VCA EG Decay",
+        "cc": 90
+      },
+      {
+        "title": "VCA EG Sustain",
+        "cc": 91
+      },
+      {
+        "title": "VCA EG Release",
+        "cc": 92
+      },
+      {
+        "title": "VCA EG Key Follow",
+        "cc": 93
+      },
+      {
+        "title": "EG Select (VCA, VCA + VCF, VCF)",
+        "cc": 94
+      },
+      {
+        "title": "VCA Key Velocity",
+        "cc": 95
+      },
+      {
+        "title": "VCA Level",
+        "cc": 96
+      },
+      {
+        "title": "LFO Osc 2 Depth",
+        "cc": 97
+      },
+      {
+        "title": "LFO Osc 2 Speed",
+        "cc": 98
+      },
+      {
+        "title": "LFO Osc 2 Delay",
+        "cc": 99
+      },
+      {
+        "title": "LFO Osc 2 Wave",
+        "cc": 100
+      },
+      {
+        "title": "LFO VCF Depth",
+        "cc": 101
+      },
+      {
+        "title": "LFO VCF Speed",
+        "cc": 102
+      },
+      {
+        "title": "LFO VCF Delay",
+        "cc": 103
+      },
+      {
+        "title": "LFO VCF Wave",
+        "cc": 104
+      },
+      {
+        "title": "VCF EG Attack",
+        "cc": 105
+      },
+      {
+        "title": "VCF EG Decay",
+        "cc": 106
+      },
+      {
+        "title": "VCF EG Sustain",
+        "cc": 107
+      },
+      {
+        "title": "VCF EG Release",
+        "cc": 108
+      },
+      {
+        "title": "VCF EG Key Follow",
+        "cc": 109
+      }
+    ]
   },
   {
     "id": 5,
