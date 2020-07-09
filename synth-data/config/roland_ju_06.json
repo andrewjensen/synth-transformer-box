@@ -1,0 +1,145 @@
+{
+  "id": 5,
+  "slug": "roland_ju_06",
+  "manufacturer": "Roland",
+  "title": "JU-06",
+  "subtitle": null,
+  "parameters": [
+    {
+      "cc": 1,
+      "title": "Modulation"
+    },
+    {
+      "cc": 3,
+      "title": "LFO Rate"
+    },
+    {
+      "cc": 5,
+      "title": "Portamento Time"
+    },
+    {
+      "cc": 9,
+      "title": "LFO Delay Time"
+    },
+    {
+      "cc": 11,
+      "title": "Expression Pedal"
+    },
+    {
+      "cc": 12,
+      "title": "DCO Range"
+    },
+    {
+      "cc": 13,
+      "title": "DCO LFO Depth"
+    },
+    {
+      "cc": 14,
+      "title": "DCO PWM Level"
+    },
+    {
+      "cc": 15,
+      "title": "DCO PWM Source"
+    },
+    {
+      "cc": 16,
+      "title": "DCO PWM SW"
+    },
+    {
+      "cc": 17,
+      "title": "DCO SAW SW"
+    },
+    {
+      "cc": 18,
+      "title": "DCO SUB Level"
+    },
+    {
+      "cc": 19,
+      "title": "DCO Noise Level"
+    },
+    {
+      "cc": 20,
+      "title": "HPF Cutoff"
+    },
+    {
+      "cc": 21,
+      "title": "VCF ENV Polarity"
+    },
+    {
+      "cc": 22,
+      "title": "VCF ENV Depth"
+    },
+    {
+      "cc": 23,
+      "title": "VCF LFO Depth"
+    },
+    {
+      "cc": 24,
+      "title": "VCF Key Follow"
+    },
+    {
+      "cc": 25,
+      "title": "VCA ENV SW"
+    },
+    {
+      "cc": 26,
+      "title": "VCA Level"
+    },
+    {
+      "cc": 27,
+      "title": "ENV Sustain"
+    },
+    {
+      "cc": 64,
+      "title": "Hold"
+    },
+    {
+      "cc": 65,
+      "title": "Portamento"
+    },
+    {
+      "cc": 71,
+      "title": "VCF Resonance"
+    },
+    {
+      "cc": 72,
+      "title": "ENV Release"
+    },
+    {
+      "cc": 73,
+      "title": "ENV Attack"
+    },
+    {
+      "cc": 74,
+      "title": "VCF Cutoff"
+    },
+    {
+      "cc": 75,
+      "title": "ENV Decay"
+    },
+    {
+      "cc": 82,
+      "title": "Delay Time"
+    },
+    {
+      "cc": 83,
+      "title": "Delay Feedback"
+    },
+    {
+      "cc": 86,
+      "title": "Assign Mode"
+    },
+    {
+      "cc": 87,
+      "title": "Bend Range"
+    },
+    {
+      "cc": 91,
+      "title": "Delay Level"
+    },
+    {
+      "cc": 93,
+      "title": "Chorus SW"
+    }
+  ]
+}

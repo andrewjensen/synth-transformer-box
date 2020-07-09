@@ -1,0 +1,37 @@
+{
+  "id": 8,
+  "slug": "vermona_mono_lancet",
+  "manufacturer": "Vermona",
+  "title": "Mono Lancet",
+  "subtitle": null,
+  "parameters": [
+    {
+      "title": "Pitch Bend",
+      "cc": 84
+    },
+    {
+      "title": "Modulation Wheel",
+      "cc": 85
+    },
+    {
+      "title": "Aftertouch",
+      "cc": 86
+    },
+    {
+      "title": "Velocity",
+      "cc": 87
+    },
+    {
+      "title": "Filter Velocity",
+      "cc": 88
+    },
+    {
+      "title": "Auto-Glide",
+      "cc": 89
+    },
+    {
+      "title": "Legato",
+      "cc": 90
+    }
+  ]
+}

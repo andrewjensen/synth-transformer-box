@@ -1,0 +1,169 @@
+{
+  "id": 9,
+  "slug": "dsi_prophet_8",
+  "manufacturer": "DSI",
+  "title": "Prophet 8",
+  "subtitle": null,
+  "parameters": [
+    {
+      "title": "Osc 1 Frequecy",
+      "cc": 20
+    },
+    {
+      "title": "Osc 1 Frequecy Fine",
+      "cc": 21
+    },
+    {
+      "title": "Osc 1 Shape",
+      "cc": 22
+    },
+    {
+      "title": "Glide 1",
+      "cc": 23
+    },
+    {
+      "title": "Osc 2 Frequecy",
+      "cc": 24
+    },
+    {
+      "title": "Osc 2 Frequecy",
+      "cc": 25
+    },
+    {
+      "title": "Osc 2 Shape",
+      "cc": 26
+    },
+    {
+      "title": "Glide 2",
+      "cc": 27
+    },
+    {
+      "title": "Osc Mix",
+      "cc": 28
+    },
+    {
+      "title": "Noise Level",
+      "cc": 29
+    },
+    {
+      "title": "Filter Frequecy",
+      "cc": 102
+    },
+    {
+      "title": "Resonance",
+      "cc": 103
+    },
+    {
+      "title": "Filter Key Amount",
+      "cc": 104
+    },
+    {
+      "title": "Filter Audio Mod",
+      "cc": 105
+    },
+    {
+      "title": "Filter Env Amount",
+      "cc": 106
+    },
+    {
+      "title": "Filter Env Velocity Amount",
+      "cc": 107
+    },
+    {
+      "title": "Filter Delay",
+      "cc": 108
+    },
+    {
+      "title": "Filter Attack",
+      "cc": 109
+    },
+    {
+      "title": "Filter Decay",
+      "cc": 110
+    },
+    {
+      "title": "Filter Sustain",
+      "cc": 111
+    },
+    {
+      "title": "Filter Release",
+      "cc": 112
+    },
+    {
+      "title": "VCA Level",
+      "cc": 113
+    },
+    {
+      "title": "Pan Spread",
+      "cc": 114
+    },
+    {
+      "title": "Amp Env Amount",
+      "cc": 115
+    },
+    {
+      "title": "Amp Velocity Amount",
+      "cc": 116
+    },
+    {
+      "title": "Amp Delay",
+      "cc": 117
+    },
+    {
+      "title": "Amp Attack",
+      "cc": 118
+    },
+    {
+      "title": "Amp Decay",
+      "cc": 119
+    },
+    {
+      "title": "Amp Sustain",
+      "cc": 75
+    },
+    {
+      "title": "Amp Release",
+      "cc": 76
+    },
+    {
+      "title": "Env 3 Destination",
+      "cc": 85
+    },
+    {
+      "title": "Env 3 Amount",
+      "cc": 86
+    },
+    {
+      "title": "Env 3 Velocity Amount",
+      "cc": 87
+    },
+    {
+      "title": "Env 3 Delay",
+      "cc": 88
+    },
+    {
+      "title": "Env 3 Attack",
+      "cc": 89
+    },
+    {
+      "title": "Env 3 Decay",
+      "cc": 90
+    },
+    {
+      "title": "Env 3 Sustain",
+      "cc": 77
+    },
+    {
+      "title": "Env 3 Release",
+      "cc": 78
+    },
+    {
+      "title": "BPM",
+      "cc": 14
+    },
+    {
+      "title": "Clock Divide",
+      "cc": 15
+    }
+  ]
+}

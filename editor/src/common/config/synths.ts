@@ -1,6 +1,6 @@
 import { Synth } from '../types';
 
-export const SYNTHS: Synth[] = require("./synthConfig.json");
+export const SYNTHS: Synth[] = require("../../../../synth-data/output/synths.json");
 
 export function getSynthById(synthId: number): Synth {
   const synth = SYNTHS.find(s => s.id === synthId);
