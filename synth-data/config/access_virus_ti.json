@@ -1,0 +1,361 @@
+{
+  "id": 10,
+  "slug": "access_virus_ti",
+  "manufacturer": "Access",
+  "title": "Virus TI",
+  "subtitle": null,
+  "parameters": [
+    {
+      "title": "Mod Wheel",
+      "cc": 1
+    },
+    {
+      "title": "Breath Wheel",
+      "cc": 2
+    },
+    {
+      "title": "Portamento Time",
+      "cc": 5
+    },
+    {
+      "title": "Volume",
+      "cc": 7
+    },
+    {
+      "title": "Pan",
+      "cc": 10
+    },
+    {
+      "title": "Osc 1 Shape",
+      "cc": 17
+    },
+    {
+      "title": "Osc 1 Wave SEL / PW",
+      "cc": 18
+    },
+    {
+      "title": "Osc 1 Wave",
+      "cc": 19
+    },
+    {
+      "title": "Osc 1 Semitone",
+      "cc": 20
+    },
+    {
+      "title": "Osc 1 Keyfollow",
+      "cc": 21
+    },
+    {
+      "title": "Osc 2 Shape",
+      "cc": 22
+    },
+    {
+      "title": "Osc 2 Wave SEL / PW",
+      "cc": 23
+    },
+    {
+      "title": "Osc 2 Wave",
+      "cc": 24
+    },
+    {
+      "title": "Osc 2 Semitone",
+      "cc": 25
+    },
+    {
+      "title": "Oscillators Detune 2/3",
+      "cc": 26
+    },
+    {
+      "title": "Oscillators FM Amount",
+      "cc": 27
+    },
+    {
+      "title": "Oscillators Sync",
+      "cc": 28
+    },
+    {
+      "title": "Oscillators 2 Flt Env-Pitch",
+      "cc": 29
+    },
+    {
+      "title": "Oscialltors 2 Flt Env-F",
+      "cc": 30
+    },
+    {
+      "title": "Oscillators 2 Keyfollow",
+      "cc": 31
+    },
+    {
+      "title": "Bank Select",
+      "cc": 32
+    },
+    {
+      "title": "Mix Osc Bal",
+      "cc": 33
+    },
+    {
+      "title": "Mix Sub Osc",
+      "cc": 34
+    },
+    {
+      "title": "Sub Osc Shape",
+      "cc": 35
+    },
+    {
+      "title": "Mix Osc Vol (Saturation)",
+      "cc": 36
+    },
+    {
+      "title": "Mix Noise",
+      "cc": 37
+    },
+    {
+      "title": "Mix Ring Mod",
+      "cc": 38
+    },
+    {
+      "title": "Noise Color",
+      "cc": 39
+    },
+    {
+      "title": "Filter Cutoff 1",
+      "cc": 40
+    },
+    {
+      "title": "Filter Cutoff 2",
+      "cc": 41
+    },
+    {
+      "title": "Filter Resonance 1",
+      "cc": 42
+    },
+    {
+      "title": "Filter Resonance 2",
+      "cc": 43
+    },
+    {
+      "title": "Filter Env Amount 1",
+      "cc": 44
+    },
+    {
+      "title": "Filter Env Amount 2",
+      "cc": 45
+    },
+    {
+      "title": "Filter Keyfollow 1",
+      "cc": 46
+    },
+    {
+      "title": "Filter Keyfollow 2",
+      "cc": 47
+    },
+    {
+      "title": "Filter Balance",
+      "cc": 48
+    },
+    {
+      "title": "Filter Saturation Curve",
+      "cc": 49
+    },
+    {
+      "title": "Filter 1 Mode",
+      "cc": 51
+    },
+    {
+      "title": "Filter 2 Mode",
+      "cc": 52
+    },
+    {
+      "title": "Filter Routing",
+      "cc": 53
+    },
+    {
+      "title": "Filter Env Attack",
+      "cc": 54
+    },
+    {
+      "title": "Filter Env Decay",
+      "cc": 55
+    },
+    {
+      "title": "Filter Env Sustain",
+      "cc": 56
+    },
+    {
+      "title": "Filter Env Time",
+      "cc": 57
+    },
+    {
+      "title": "Filter Env Release",
+      "cc": 58
+    },
+    {
+      "title": "Amp Env Attack",
+      "cc": 59
+    },
+    {
+      "title": "Amp Env Decay",
+      "cc": 60
+    },
+    {
+      "title": "Amp Env Sustain",
+      "cc": 61
+    },
+    {
+      "title": "Amp Env Time",
+      "cc": 62
+    },
+    {
+      "title": "Amp Env Release",
+      "cc": 63
+    },
+    {
+      "title": "Sustain",
+      "cc": 64
+    },
+    {
+      "title": "LFOs/Mod LFO1 Rate",
+      "cc": 67
+    },
+    {
+      "title": "LFOs/Mod LFO1 Shape",
+      "cc": 68
+    },
+    {
+      "title": "LFOs/Mod LFO1 Env Mode",
+      "cc": 69
+    },
+    {
+      "title": "LFOs/Mod LFO1 Mode Mono/Poly",
+      "cc": 70
+    },
+    {
+      "title": "LFOs/Mod LFO1 Contour",
+      "cc": 71
+    },
+    {
+      "title": "LFOs/Mod LFO1 Keyfollow",
+      "cc": 72
+    },
+    {
+      "title": "LFOs/Mod LFO1 Trig Phase",
+      "cc": 73
+    },
+    {
+      "title": "LFOs/Mod LFO2 Rate",
+      "cc": 79
+    },
+    {
+      "title": "LFOs/Mod LFO2 Shape",
+      "cc": 80
+    },
+    {
+      "title": "LFOs/Mod LFO2 Env Mode",
+      "cc": 81
+    },
+    {
+      "title": "LFOs/Mod LFO2 Mode Mono/Poly",
+      "cc": 82
+    },
+    {
+      "title": "LFOs/Mod LFO2 Contour",
+      "cc": 83
+    },
+    {
+      "title": "LFOs/Mod LFO2 Keyfollow",
+      "cc": 84
+    },
+    {
+      "title": "LFOs/Mod LFO2 Trig Phase",
+      "cc": 85
+    },
+    {
+      "title": "Patch Volume",
+      "cc": 91
+    },
+    {
+      "title": "Transpose",
+      "cc": 93
+    },
+    {
+      "title": "Key Mode",
+      "cc": 94
+    },
+    {
+      "title": "Unison Mode",
+      "cc": 97
+    },
+    {
+      "title": "Unison Detune",
+      "cc": 98
+    },
+    {
+      "title": "Unison Pad Spread",
+      "cc": 99
+    },
+    {
+      "title": "Unison LFO Phase",
+      "cc": 100
+    },
+    {
+      "title": "Effects Vocoder Input Mode",
+      "cc": 101
+    },
+    {
+      "title": "Effects Vocoder Input Select",
+      "cc": 102
+    },
+    {
+      "title": "Effects Type/Mix",
+      "cc": 103
+    },
+    {
+      "title": "Effects Chorus Rate",
+      "cc": 106
+    },
+    {
+      "title": "Effects Intensity",
+      "cc": 107
+    },
+    {
+      "title": "Effects Chorus Delay",
+      "cc": 108
+    },
+    {
+      "title": "Effects Chorus Feedback",
+      "cc": 109
+    },
+    {
+      "title": "Effects Chorus Shape",
+      "cc": 110
+    },
+    {
+      "title": "Effects Delay/Reverb Mode",
+      "cc": 112
+    },
+    {
+      "title": "Effects Send",
+      "cc": 113
+    },
+    {
+      "title": "Effects Feedback/Damping",
+      "cc": 115
+    },
+    {
+      "title": "Effects Delay Rate",
+      "cc": 116
+    },
+    {
+      "title": "Effects Delay Depth/Reverb Type",
+      "cc": 117
+    },
+    {
+      "title": "Effects Delay Shape",
+      "cc": 118
+    },
+    {
+      "title": "Effects Delay Color/Reverb Color",
+      "cc": 119
+    }
+  ]
+}

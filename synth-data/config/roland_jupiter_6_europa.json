@@ -1,0 +1,273 @@
+{
+  "id": 18,
+  "slug": "roland_jupiter_6_europa",
+  "manufacturer": "Roland",
+  "title": "Jupiter 6",
+  "subtitle": null,
+  "parameters": [
+    {
+      "title": "Mod wheel",
+      "cc": 1
+    },
+    {
+      "title": "GLIDE Time",
+      "cc": 5
+    },
+    {
+      "title": "Volume",
+      "cc": 7
+    },
+    {
+      "title": "SPLIT Balance",
+      "cc": 8
+    },
+    {
+      "title": "LFO 1 Rate",
+      "cc": 32
+    },
+    {
+      "title": "LFO 1 Delay",
+      "cc": 33
+    },
+    {
+      "title": "VCO MOD LFO",
+      "cc": 34
+    },
+    {
+      "title": "VCO MOD ENV 1",
+      "cc": 35
+    },
+    {
+      "title": "PWM Pulse width",
+      "cc": 36
+    },
+    {
+      "title": "PWM Pulse width source amount",
+      "cc": 37
+    },
+    {
+      "title": "XMOD Manual",
+      "cc": 38
+    },
+    {
+      "title": "XMOD ENV-1",
+      "cc": 39
+    },
+    {
+      "title": "VCO 1 Range",
+      "cc": 40
+    },
+    {
+      "title": "VCO 2 Range",
+      "cc": 41
+    },
+    {
+      "title": "VCO 2 Fine tune",
+      "cc": 42
+    },
+    {
+      "title": "VCO MIXER",
+      "cc": 43
+    },
+    {
+      "title": "VCF Frequency",
+      "cc": 44
+    },
+    {
+      "title": "VCF Resonance",
+      "cc": 45
+    },
+    {
+      "title": "VCF ENV mod",
+      "cc": 46
+    },
+    {
+      "title": "VCF LFO 1 mod",
+      "cc": 47
+    },
+    {
+      "title": "VCF Key mod",
+      "cc": 48
+    },
+    {
+      "title": "VCA ENV 2 Level",
+      "cc": 49
+    },
+    {
+      "title": "VCA LFO Mod",
+      "cc": 50
+    },
+    {
+      "title": "ENV 1 Attack",
+      "cc": 51
+    },
+    {
+      "title": "ENV 1 Decay",
+      "cc": 52
+    },
+    {
+      "title": "ENV 1 Sustain",
+      "cc": 53
+    },
+    {
+      "title": "ENV 1 Release",
+      "cc": 54
+    },
+    {
+      "title": "ENV 1 Key follow",
+      "cc": 55
+    },
+    {
+      "title": "ENV 2 Attack",
+      "cc": 56
+    },
+    {
+      "title": "ENV 2 Decay",
+      "cc": 57
+    },
+    {
+      "title": "ENV 2 Sustain",
+      "cc": 58
+    },
+    {
+      "title": "ENV 2 Release",
+      "cc": 59
+    },
+    {
+      "title": "ENV 2 Key follow",
+      "cc": 60
+    },
+    {
+      "title": "Arpeggiator rate",
+      "cc": 61
+    },
+    {
+      "title": "GLIDE Time",
+      "cc": 62
+    },
+    {
+      "title": "UNISON Detune",
+      "cc": 63
+    },
+    {
+      "title": "Sustain pedal",
+      "cc": 64
+    },
+    {
+      "title": "Portamento",
+      "cc": 65
+    },
+    {
+      "title": "LFO 1 Waveform",
+      "cc": 66
+    },
+    {
+      "title": "VCO Mod & PWM",
+      "cc": 67
+    },
+    {
+      "title": "VCO Modulation",
+      "cc": 68
+    },
+    {
+      "title": "VCO 1 Waveform",
+      "cc": 69
+    },
+    {
+      "title": "VCO 2 Waveform",
+      "cc": 70
+    },
+    {
+      "title": "Filter modes",
+      "cc": 71
+    },
+    {
+      "title": "Sync modes",
+      "cc": 72
+    },
+    {
+      "title": "VCF ENV Mod",
+      "cc": 73
+    },
+    {
+      "title": "ENV 1 Polarity",
+      "cc": 74
+    },
+    {
+      "title": "KEY MODE",
+      "cc": 75
+    },
+    {
+      "title": "LOWER/UPPER select",
+      "cc": 76
+    },
+    {
+      "title": "Voice assignment mode",
+      "cc": 77
+    },
+    {
+      "title": "Miscellaneous settings",
+      "cc": 78
+    },
+    {
+      "title": "Master tune",
+      "cc": 79
+    },
+    {
+      "title": "SPLIT Balance",
+      "cc": 80
+    },
+    {
+      "title": "Arpeggiator sync",
+      "cc": 81
+    },
+    {
+      "title": "Arpeggiator mode",
+      "cc": 82
+    },
+    {
+      "title": "Arpeggiator clock divider/multiplier",
+      "cc": 83
+    },
+    {
+      "title": "Arpeggiator direction",
+      "cc": 84
+    },
+    {
+      "title": "Arpeggiator range",
+      "cc": 85
+    },
+    {
+      "title": "Sequence record",
+      "cc": 86
+    },
+    {
+      "title": "Sequence rest note",
+      "cc": 87
+    },
+    {
+      "title": "Arpeggiator rhythm",
+      "cc": 88
+    },
+    {
+      "title": "Arpeggiator options",
+      "cc": 89
+    },
+    {
+      "title": "Europa soft switch options",
+      "cc": 90
+    },
+    {
+      "title": "MANUAL mode control",
+      "cc": 91
+    },
+    {
+      "title": "Preset mode control",
+      "cc": 92
+    },
+    {
+      "title": "SPLIT Point set",
+      "cc": 93
+    }
+  ]
+}

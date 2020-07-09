@@ -1,0 +1,137 @@
+{
+  "id": 12,
+  "slug": "roland_jx_3p_river",
+  "manufacturer": "Roland",
+  "title": "JX-3P",
+  "subtitle": "with River MIDI Expansion",
+  "parameters": [
+    {
+      "title": "Fine Tune",
+      "cc": 12
+    },
+    {
+      "title": "Tune",
+      "cc": 13
+    },
+    {
+      "title": "DCO Env Mod",
+      "cc": 14
+    },
+    {
+      "title": "DCO LFO Mod",
+      "cc": 15
+    },
+    {
+      "title": "Source Mix",
+      "cc": 16
+    },
+    {
+      "title": "High Pass",
+      "cc": 17
+    },
+    {
+      "title": "Resonance",
+      "cc": 18
+    },
+    {
+      "title": "Cutoff Frequency",
+      "cc": 19
+    },
+    {
+      "title": "VCF Env Mod",
+      "cc": 20
+    },
+    {
+      "title": "VCF LFO Mod",
+      "cc": 21
+    },
+    {
+      "title": "Pitch Follo",
+      "cc": 22
+    },
+    {
+      "title": "VCA Level",
+      "cc": 23
+    },
+    {
+      "title": "LFO Rate",
+      "cc": 24
+    },
+    {
+      "title": "LFO Delay",
+      "cc": 25
+    },
+    {
+      "title": "Attack",
+      "cc": 26
+    },
+    {
+      "title": "Decay",
+      "cc": 27
+    },
+    {
+      "title": "Sustain",
+      "cc": 28
+    },
+    {
+      "title": "Release",
+      "cc": 29
+    },
+    {
+      "title": "DCO 1 Range",
+      "cc": 72
+    },
+    {
+      "title": "DCO 1 Wave",
+      "cc": 73
+    },
+    {
+      "title": "DCO 2 Range",
+      "cc": 74
+    },
+    {
+      "title": "DCO 2 Wave",
+      "cc": 75
+    },
+    {
+      "title": "DCO 2 Cross Mod",
+      "cc": 76
+    },
+    {
+      "title": "VCF Env Polarity",
+      "cc": 77
+    },
+    {
+      "title": "VCA Mode",
+      "cc": 78
+    },
+    {
+      "title": "DCO 2 Env Mod",
+      "cc": 79
+    },
+    {
+      "title": "DCO 2 LFO Mod",
+      "cc": 80
+    },
+    {
+      "title": "DCO 1 Env Mod",
+      "cc": 81
+    },
+    {
+      "title": "DCO 1 LFO Mod",
+      "cc": 82
+    },
+    {
+      "title": "LFO Wave",
+      "cc": 83
+    },
+    {
+      "title": "DCO Env Polarity",
+      "cc": 84
+    },
+    {
+      "title": "Chorus",
+      "cc": 85
+    }
+  ]
+}

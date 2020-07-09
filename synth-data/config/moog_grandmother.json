@@ -1,0 +1,97 @@
+{
+  "id": 19,
+  "slug": "moog_grandmother",
+  "manufacturer": "Moog",
+  "title": "Grandmother",
+  "subtitle": null,
+  "parameters": [
+    {
+      "title": "Mod Wheel",
+      "cc": 1
+    },
+    {
+      "title": "Mod Rate",
+      "cc": 3
+    },
+    {
+      "title": "Glide Time",
+      "cc": 5
+    },
+    {
+      "title": "Glide On/Off",
+      "cc": 65
+    },
+    {
+      "title": "Glide Type",
+      "cc": 85
+    },
+    {
+      "title": "Legato Glide",
+      "cc": 94
+    },
+    {
+      "title": "Gated Glide",
+      "cc": 103
+    },
+    {
+      "title": "Arp/Sequencer Rate",
+      "cc": 8
+    },
+    {
+      "title": "Arp/Sequencer Hold",
+      "cc": 69
+    },
+    {
+      "title": "Arp/Sequencer Play",
+      "cc": 73
+    },
+    {
+      "title": "Arp/Sequencer Clock Division",
+      "cc": 90
+    },
+    {
+      "title": "Arp/Sequencer Mode",
+      "cc": 91
+    },
+    {
+      "title": "Arp/Sequencer Pattern",
+      "cc": 92
+    },
+    {
+      "title": "Arp/Sequencer Number",
+      "cc": 93
+    },
+    {
+      "title": "Osc 2 Freq",
+      "cc": 12
+    },
+    {
+      "title": "Osc 1 Octave",
+      "cc": 74
+    },
+    {
+      "title": "Osc 2 Octave",
+      "cc": 75
+    },
+    {
+      "title": "Osc 2 Sync",
+      "cc": 77
+    },
+    {
+      "title": "Keyboard Octave",
+      "cc": 89
+    },
+    {
+      "title": "Pitch bend up amount",
+      "cc": 107
+    },
+    {
+      "title": "Pitch bend down amount",
+      "cc": 108
+    },
+    {
+      "title": "Keyboard Transpose Semitones",
+      "cc": 119
+    }
+  ]
+}

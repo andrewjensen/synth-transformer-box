@@ -1,0 +1,241 @@
+{
+  "id": 13,
+  "slug": "roland_se_02",
+  "manufacturer": "Roland",
+  "title": "SE-02",
+  "subtitle": null,
+  "parameters": [
+    {
+      "title": "Control Glide",
+      "cc": 5
+    },
+    {
+      "title": "Control Glide Type",
+      "cc": 9
+    },
+    {
+      "title": "Control WHL",
+      "cc": 13
+    },
+    {
+      "title": "Octave Shift",
+      "cc": 112
+    },
+    {
+      "title": "Transpose",
+      "cc": 113
+    },
+    {
+      "title": "Transpose SW",
+      "cc": 114
+    },
+    {
+      "title": "Patch Volume",
+      "cc": 115
+    },
+    {
+      "title": "Mod Sens",
+      "cc": 80
+    },
+    {
+      "title": "Dynamics",
+      "cc": 81
+    },
+    {
+      "title": "Aftertouch Sensitivity 1",
+      "cc": 84
+    },
+    {
+      "title": "Aftertouch Sensitivity 2",
+      "cc": 85
+    },
+    {
+      "title": "Bend Range",
+      "cc": 87
+    },
+    {
+      "title": "Xmod 02FLT",
+      "cc": 16
+    },
+    {
+      "title": "Xmod 03TO",
+      "cc": 17
+    },
+    {
+      "title": "Xmod 03PW",
+      "cc": 18
+    },
+    {
+      "title": "Osc 1 Range",
+      "cc": 22
+    },
+    {
+      "title": "Osc 1 Waveform",
+      "cc": 24
+    },
+    {
+      "title": "Osc 1 Fine",
+      "cc": 27
+    },
+    {
+      "title": "Osc 1 Env",
+      "cc": 29
+    },
+    {
+      "title": "Osc 2 Range",
+      "cc": 19
+    },
+    {
+      "title": "Osc 2 Waveform",
+      "cc": 20
+    },
+    {
+      "title": "Osc 2 Fine",
+      "cc": 28
+    },
+    {
+      "title": "Osc 3 Range",
+      "cc": 25
+    },
+    {
+      "title": "Osc 3 Waveform",
+      "cc": 26
+    },
+    {
+      "title": "Osc Sync",
+      "cc": 21
+    },
+    {
+      "title": "Osc Keyboard",
+      "cc": 30
+    },
+    {
+      "title": "Osc Xmod to Mod Wheel",
+      "cc": 31
+    },
+    {
+      "title": "Osc Mix 1",
+      "cc": 48
+    },
+    {
+      "title": "Osc Mix 2",
+      "cc": 4
+    },
+    {
+      "title": "Osc Mix 3",
+      "cc": 50
+    },
+    {
+      "title": "Noise Mix",
+      "cc": 41
+    },
+    {
+      "title": "Mix Feedback",
+      "cc": 51
+    },
+    {
+      "title": "Filter 1 Attack",
+      "cc": 47
+    },
+    {
+      "title": "Filter 1 Sustain",
+      "cc": 53
+    },
+    {
+      "title": "Filter 1 Decay",
+      "cc": 5
+    },
+    {
+      "title": "Filter 2 Attack",
+      "cc": 73
+    },
+    {
+      "title": "Filter 2 Sustain",
+      "cc": 56
+    },
+    {
+      "title": "Filter 2 Decay",
+      "cc": 75
+    },
+    {
+      "title": "Filter Cutoff",
+      "cc": 74
+    },
+    {
+      "title": "Filter Keytrack 13",
+      "cc": 57
+    },
+    {
+      "title": "Filter Keytrack 23",
+      "cc": 58
+    },
+    {
+      "title": "Filter Contour",
+      "cc": 59
+    },
+    {
+      "title": "Filter MTrig",
+      "cc": 60
+    },
+    {
+      "title": "Filter Normal/Invert",
+      "cc": 61
+    },
+    {
+      "title": "Filter REL",
+      "cc": 62
+    },
+    {
+      "title": "Filter Gate/LFO",
+      "cc": 63
+    },
+    {
+      "title": "Filter Emphasis",
+      "cc": 71
+    },
+    {
+      "title": "Delay Time",
+      "cc": 82
+    },
+    {
+      "title": "Delay Regen",
+      "cc": 83
+    },
+    {
+      "title": "Delay Amount",
+      "cc": 91
+    },
+    {
+      "title": "LFO Rate",
+      "cc": 102
+    },
+    {
+      "title": "LFO Osc",
+      "cc": 103
+    },
+    {
+      "title": "LFO Wave",
+      "cc": 104
+    },
+    {
+      "title": "LFO Filter",
+      "cc": 105
+    },
+    {
+      "title": "LFO Modwheel Osc SW",
+      "cc": 106
+    },
+    {
+      "title": "LFO Modwheel Osc FLT SW",
+      "cc": 107
+    },
+    {
+      "title": "LFO Mode SW",
+      "cc": 108
+    },
+    {
+      "title": "LFO Sync SW",
+      "cc": 109
+    }
+  ]
+}

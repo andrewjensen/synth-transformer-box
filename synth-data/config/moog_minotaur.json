@@ -1,0 +1,101 @@
+{
+  "id": 14,
+  "slug": "moog_minotaur",
+  "manufacturer": "Moog",
+  "title": "Minotaur",
+  "subtitle": null,
+  "parameters": [
+    {
+      "title": "vco 2 level",
+      "cc": 16
+    },
+    {
+      "title": "external in level",
+      "cc": 27
+    },
+    {
+      "title": "filter cutoff",
+      "cc": 19
+    },
+    {
+      "title": "filter resonance",
+      "cc": 21
+    },
+    {
+      "title": "filter EG amount",
+      "cc": 22
+    },
+    {
+      "title": "filter kb track",
+      "cc": 20
+    },
+    {
+      "title": "filter velocity sensitivity",
+      "cc": 89
+    },
+    {
+      "title": "vfc attack",
+      "cc": 23
+    },
+    {
+      "title": "vfc delay/release",
+      "cc": 24
+    },
+    {
+      "title": "vfc sustain",
+      "cc": 25
+    },
+    {
+      "title": "vca attack",
+      "cc": 28
+    },
+    {
+      "title": "vca decay/release",
+      "cc": 29
+    },
+    {
+      "title": "vca sustain",
+      "cc": 30
+    },
+    {
+      "title": "release switch",
+      "cc": 72
+    },
+    {
+      "title": "trigger mode",
+      "cc": 73
+    },
+    {
+      "title": "vca output level",
+      "cc": 7
+    },
+    {
+      "title": "volume velocity sensitivty",
+      "cc": 90
+    },
+    {
+      "title": "key priority",
+      "cc": 91
+    },
+    {
+      "title": "mod wheel",
+      "cc": 1
+    },
+    {
+      "title": "bend up amount",
+      "cc": 107
+    },
+    {
+      "title": "bend down amount",
+      "cc": 108
+    },
+    {
+      "title": "local control off",
+      "cc": 122
+    },
+    {
+      "title": "midi panic message",
+      "cc": 123
+    }
+  ]
+}

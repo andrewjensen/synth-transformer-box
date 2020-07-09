@@ -1,0 +1,221 @@
+{
+  "id": 15,
+  "slug": "crumar_bit_one_tauntek",
+  "manufacturer": "Crumar",
+  "title": "Bit One",
+  "subtitle": "with Tauntek upgrade",
+  "parameters": [
+    {
+      "title": "DCO 1 Octave",
+      "cc": 14
+    },
+    {
+      "title": "DCO 1 Freq Offest",
+      "cc": 15
+    },
+    {
+      "title": "DCO 1 Tri Wave",
+      "cc": 16
+    },
+    {
+      "title": "DCO 1 Saw Wave",
+      "cc": 17
+    },
+    {
+      "title": "DCO 1 Pulse Wave",
+      "cc": 18
+    },
+    {
+      "title": "DCO 1 Pulse Width",
+      "cc": 19
+    },
+    {
+      "title": "DCO 1 Dyn PW",
+      "cc": 20
+    },
+    {
+      "title": "DCO 2 Octave",
+      "cc": 21
+    },
+    {
+      "title": "DCO 2 Freq Offest",
+      "cc": 22
+    },
+    {
+      "title": "DCO 2 Tri Wave",
+      "cc": 23
+    },
+    {
+      "title": "DCO 2 Saw Wave",
+      "cc": 24
+    },
+    {
+      "title": "DCO 2 Pulse Wave",
+      "cc": 25
+    },
+    {
+      "title": "DCO 2 Pulse Width",
+      "cc": 26
+    },
+    {
+      "title": "DCO 2 Dyn PW",
+      "cc": 27
+    },
+    {
+      "title": "DCO 1 ADSR",
+      "cc": 28
+    },
+    {
+      "title": "DCO 2 ADSR",
+      "cc": 29
+    },
+    {
+      "title": "VCF Attack",
+      "cc": 30
+    },
+    {
+      "title": "VCF Dyn Attack",
+      "cc": 31
+    },
+    {
+      "title": "VCF Decay",
+      "cc": 32
+    },
+    {
+      "title": "VCF Sustain",
+      "cc": 33
+    },
+    {
+      "title": "VCF Release",
+      "cc": 34
+    },
+    {
+      "title": "VCF Env Amount",
+      "cc": 35
+    },
+    {
+      "title": "VCF Dyn Env Amt",
+      "cc": 36
+    },
+    {
+      "title": "VCF Env Polarity",
+      "cc": 37
+    },
+    {
+      "title": "VCF Key Tracking",
+      "cc": 38
+    },
+    {
+      "title": "VCA Dyn Attack",
+      "cc": 39
+    },
+    {
+      "title": "VCA Decay",
+      "cc": 40
+    },
+    {
+      "title": "VCA Sustain",
+      "cc": 41
+    },
+    {
+      "title": "VCA Dyn Env Amt",
+      "cc": 42
+    },
+    {
+      "title": "LFO1 Mods DCO1",
+      "cc": 43
+    },
+    {
+      "title": "LFO1 Mods DCO2",
+      "cc": 44
+    },
+    {
+      "title": "LFO1 Mods VCF",
+      "cc": 45
+    },
+    {
+      "title": "LFO1 Mods VCA",
+      "cc": 46
+    },
+    {
+      "title": "LFO1 Waveform",
+      "cc": 47
+    },
+    {
+      "title": "LFO1 Rate",
+      "cc": 48
+    },
+    {
+      "title": "LFO1 Dyn Rate",
+      "cc": 49
+    },
+    {
+      "title": "LFO1 Delay",
+      "cc": 50
+    },
+    {
+      "title": "LFO1 Depth",
+      "cc": 51
+    },
+    {
+      "title": "LFO2 Mods DCO1",
+      "cc": 52
+    },
+    {
+      "title": "LFO2 Mods DCO2",
+      "cc": 53
+    },
+    {
+      "title": "LFO2 Mods VCF",
+      "cc": 54
+    },
+    {
+      "title": "LFO2 Mods VCA",
+      "cc": 55
+    },
+    {
+      "title": "LFO2 Waveform",
+      "cc": 56
+    },
+    {
+      "title": "LFO2 Rate",
+      "cc": 57
+    },
+    {
+      "title": "LFO2 Dynamic Rate",
+      "cc": 58
+    },
+    {
+      "title": "LFO2 Delay",
+      "cc": 59
+    },
+    {
+      "title": "LFO2 Depth",
+      "cc": 60
+    },
+    {
+      "title": "Sustain",
+      "cc": 64
+    },
+    {
+      "title": "VCF Resonance",
+      "cc": 71
+    },
+    {
+      "title": "VCA Release",
+      "cc": 72
+    },
+    {
+      "title": "VCA Attack",
+      "cc": 73
+    },
+    {
+      "title": "VCF Cutoff",
+      "cc": 74
+    },
+    {
+      "title": "All Notes Off",
+      "cc": 123
+    }
+  ]
+}

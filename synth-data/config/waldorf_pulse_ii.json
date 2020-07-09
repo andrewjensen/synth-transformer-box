@@ -1,0 +1,353 @@
+{
+  "id": 11,
+  "slug": "waldorf_pulse_ii",
+  "manufacturer": "Waldorf",
+  "title": "Pulse II",
+  "subtitle": null,
+  "parameters": [
+    {
+      "title": "Osc 1 Shape",
+      "cc": 34
+    },
+    {
+      "title": "Osc 1 Pulsewidth",
+      "cc": 35
+    },
+    {
+      "title": "Osc 1 Semitone",
+      "cc": 70
+    },
+    {
+      "title": "Osc 1 Detune",
+      "cc": 71
+    },
+    {
+      "title": "Osc 1 Keytrack",
+      "cc": 73
+    },
+    {
+      "title": "Osc 1 Level",
+      "cc": 45
+    },
+    {
+      "title": "Osc 2 Shape",
+      "cc": 38
+    },
+    {
+      "title": "Osc 2 Pulsewidth",
+      "cc": 39
+    },
+    {
+      "title": "Osc 2 Semitone",
+      "cc": 36
+    },
+    {
+      "title": "Osc 2 Detune",
+      "cc": 37
+    },
+    {
+      "title": "Osc 2 Keytrack",
+      "cc": 40
+    },
+    {
+      "title": "Osc 2 Level",
+      "cc": 46
+    },
+    {
+      "title": "Osc 3 Shape",
+      "cc": 44
+    },
+    {
+      "title": "Osc 3 Routing",
+      "cc": 73
+    },
+    {
+      "title": "Osc 3 Semitone",
+      "cc": 42
+    },
+    {
+      "title": "Osc 3 Detune",
+      "cc": 43
+    },
+    {
+      "title": "Osc 3 Sync",
+      "cc": 41
+    },
+    {
+      "title": "Osc 3 Level",
+      "cc": 47
+    },
+    {
+      "title": "LFO 1 Speed",
+      "cc": 24
+    },
+    {
+      "title": "LFO 1 Shape",
+      "cc": 25
+    },
+    {
+      "title": "LFO 2 Speed",
+      "cc": 26
+    },
+    {
+      "title": "LFO 2 Delay",
+      "cc": 27
+    },
+    {
+      "title": "Glide Rate",
+      "cc": 5
+    },
+    {
+      "title": "Glide Mode",
+      "cc": 62
+    },
+    {
+      "title": "Filter Env Attack",
+      "cc": 14
+    },
+    {
+      "title": "Filter Env Decay",
+      "cc": 15
+    },
+    {
+      "title": "Filter Env Sustain",
+      "cc": 16
+    },
+    {
+      "title": "Filter Env Release",
+      "cc": 17
+    },
+    {
+      "title": "Filter Env Loop",
+      "cc": 74
+    },
+    {
+      "title": "Filter Env Trigger",
+      "cc": 29
+    },
+    {
+      "title": "EnvA Attack",
+      "cc": 18
+    },
+    {
+      "title": "EnvA Decay",
+      "cc": 19
+    },
+    {
+      "title": "EnvA Sustain",
+      "cc": 20
+    },
+    {
+      "title": "EnvA Release",
+      "cc": 21
+    },
+    {
+      "title": "EnvA Loop",
+      "cc": 75
+    },
+    {
+      "title": "EnvA Trigger",
+      "cc": 31
+    },
+    {
+      "title": "Arp Active",
+      "cc": 79
+    },
+    {
+      "title": "Arp Range",
+      "cc": 80
+    },
+    {
+      "title": "Arp Tempo",
+      "cc": 81
+    },
+    {
+      "title": "Arp Clock",
+      "cc": 82
+    },
+    {
+      "title": "Arp Mode",
+      "cc": 83
+    },
+    {
+      "title": "Arp Step Duration",
+      "cc": 84
+    },
+    {
+      "title": "Arp Swing",
+      "cc": 85
+    },
+    {
+      "title": "Arp Delay",
+      "cc": 86
+    },
+    {
+      "title": "Arp Pattern Length",
+      "cc": 87
+    },
+    {
+      "title": "Arp Accent Control",
+      "cc": 88
+    },
+    {
+      "title": "VCF Cutoff",
+      "cc": 50
+    },
+    {
+      "title": "VCF Resonance",
+      "cc": 56
+    },
+    {
+      "title": "VCF Env Amount",
+      "cc": 52
+    },
+    {
+      "title": "VCF Type",
+      "cc": 49
+    },
+    {
+      "title": "VCF Keytrack",
+      "cc": 51
+    },
+    {
+      "title": "VCF Velocity",
+      "cc": 53
+    },
+    {
+      "title": "VCA Drive",
+      "cc": 76
+    },
+    {
+      "title": "VCA Drive Curve",
+      "cc": 77
+    },
+    {
+      "title": "VCA Panning",
+      "cc": 59
+    },
+    {
+      "title": "Noise Level",
+      "cc": 48
+    },
+    {
+      "title": "VCA Volume",
+      "cc": 57
+    },
+    {
+      "title": "VCA Velocity",
+      "cc": 58
+    },
+    {
+      "title": "Mod1 Source",
+      "cc": 108
+    },
+    {
+      "title": "Mod1 Amount",
+      "cc": 109
+    },
+    {
+      "title": "Mod1 Target",
+      "cc": 110
+    },
+    {
+      "title": "Mod2 Source",
+      "cc": 111
+    },
+    {
+      "title": "Mod2 Amount",
+      "cc": 112
+    },
+    {
+      "title": "Mod2 Target",
+      "cc": 113
+    },
+    {
+      "title": "Mod3 Source",
+      "cc": 114
+    },
+    {
+      "title": "Mod3 Amount",
+      "cc": 115
+    },
+    {
+      "title": "Mod3 Target",
+      "cc": 116
+    },
+    {
+      "title": "Mod4 Source",
+      "cc": 117
+    },
+    {
+      "title": "Mod4 Amount",
+      "cc": 118
+    },
+    {
+      "title": "Mod4 Target",
+      "cc": 119
+    },
+    {
+      "title": "Mod5 Source",
+      "cc": 90
+    },
+    {
+      "title": "Mod5 Amount",
+      "cc": 91
+    },
+    {
+      "title": "Mod5 Target",
+      "cc": 92
+    },
+    {
+      "title": "Mod6 Source",
+      "cc": 93
+    },
+    {
+      "title": "Mod6 Amount",
+      "cc": 94
+    },
+    {
+      "title": "Mod6 Target",
+      "cc": 95
+    },
+    {
+      "title": "Mod7 Source",
+      "cc": 96
+    },
+    {
+      "title": "Mod7 Amount",
+      "cc": 97
+    },
+    {
+      "title": "Mod7 Target",
+      "cc": 98
+    },
+    {
+      "title": "Unison Detune",
+      "cc": 102
+    },
+    {
+      "title": "Osc 1 EnvA Fade",
+      "cc": 103
+    },
+    {
+      "title": "Osc 2 EnvA Fade",
+      "cc": 104
+    },
+    {
+      "title": "Bend Upwards",
+      "cc": 105
+    },
+    {
+      "title": "Bend Down",
+      "cc": 106
+    },
+    {
+      "title": "Volume",
+      "cc": 7
+    },
+    {
+      "title": "Panning",
+      "cc": 10
+    }
+  ]
+}

@@ -1,0 +1,289 @@
+{
+  "id": 20,
+  "slug": "moog_sub_phatty",
+  "manufacturer": "Moog",
+  "title": "Sub Phatty",
+  "subtitle": null,
+  "parameters": [
+    {
+      "title": "Amp EG Attack",
+      "cc": 28
+    },
+    {
+      "title": "Amp EG Decay",
+      "cc": 29
+    },
+    {
+      "title": "Amp EG Sustain",
+      "cc": 30
+    },
+    {
+      "title": "Amp EG Release",
+      "cc": 31
+    },
+    {
+      "title": "Amp EG Velocity to amplitude",
+      "cc": 92
+    },
+    {
+      "title": "Amp EG Reset",
+      "cc": 83
+    },
+    {
+      "title": "Amp EG Delay",
+      "cc": 104
+    },
+    {
+      "title": "Amp EG Hold",
+      "cc": 106
+    },
+    {
+      "title": "Amp EG Repeat",
+      "cc": 113
+    },
+    {
+      "title": "Amp EG Velocity to Time",
+      "cc": 87
+    },
+    {
+      "title": "Amp EG KB Amount",
+      "cc": 80
+    },
+    {
+      "title": "Amp EG Trigger Mode",
+      "cc": 115
+    },
+    {
+      "title": "Filter EG Attack",
+      "cc": 23
+    },
+    {
+      "title": "Filter EG Decay",
+      "cc": 24
+    },
+    {
+      "title": "Filter EG Sustain",
+      "cc": 25
+    },
+    {
+      "title": "Filter EG Release",
+      "cc": 26
+    },
+    {
+      "title": "Filter EG Velocity to amplitude",
+      "cc": 110
+    },
+    {
+      "title": "Filter EG Reset",
+      "cc": 82
+    },
+    {
+      "title": "Filter EG Delay",
+      "cc": 103
+    },
+    {
+      "title": "Filter EG Hold",
+      "cc": 105
+    },
+    {
+      "title": "Filter EG Repeat",
+      "cc": 112
+    },
+    {
+      "title": "Filter EG Velocity to Time",
+      "cc": 86
+    },
+    {
+      "title": "Filter EG KB Amount",
+      "cc": 79
+    },
+    {
+      "title": "Filter EG Gate Source",
+      "cc": 90
+    },
+    {
+      "title": "Filter EG Trigger Amount",
+      "cc": 114
+    },
+    {
+      "title": "VCO 1 Level",
+      "cc": 15
+    },
+    {
+      "title": "VCO 2 Level",
+      "cc": 16
+    },
+    {
+      "title": "Noise Level",
+      "cc": 8
+    },
+    {
+      "title": "VCO 1 Sub Level",
+      "cc": 17
+    },
+    {
+      "title": "VCO 1 Wave",
+      "cc": 9
+    },
+    {
+      "title": "VCO 2 Wave",
+      "cc": 14
+    },
+    {
+      "title": "VCO 2 Freq",
+      "cc": 12
+    },
+    {
+      "title": "VCO 2 Beat Freq",
+      "cc": 13
+    },
+    {
+      "title": "VCO 2 Hard Sync",
+      "cc": 77
+    },
+    {
+      "title": "VCO Gate Reset",
+      "cc": 81
+    },
+    {
+      "title": "Pitch Mod, Osc 2 Only",
+      "cc": 70
+    },
+    {
+      "title": "VCO 1 Octave",
+      "cc": 74
+    },
+    {
+      "title": "VCO 2 Octave",
+      "cc": 75
+    },
+    {
+      "title": "Filter Cutoff Freq",
+      "cc": 19
+    },
+    {
+      "title": "Filter Resonance",
+      "cc": 21
+    },
+    {
+      "title": "Filter KB Tracking Amount",
+      "cc": 27
+    },
+    {
+      "title": "Filter EG Amount",
+      "cc": 22
+    },
+    {
+      "title": "Filter Poles",
+      "cc": 109
+    },
+    {
+      "title": "Multidrive Amount",
+      "cc": 18
+    },
+    {
+      "title": "Note Priority",
+      "cc": 111
+    },
+    {
+      "title": "Release on/off",
+      "cc": 88
+    },
+    {
+      "title": "Modulation Source",
+      "cc": 71
+    },
+    {
+      "title": "Filter Mod Amount",
+      "cc": 2
+    },
+    {
+      "title": "Pitch Mod Amount",
+      "cc": 4
+    },
+    {
+      "title": "Wave Mod Amount",
+      "cc": 20
+    },
+    {
+      "title": "Pitch Bend Up",
+      "cc": 107
+    },
+    {
+      "title": "Pitch Bend Down",
+      "cc": 108
+    },
+    {
+      "title": "Output Level",
+      "cc": 7
+    },
+    {
+      "title": "Keyboard Octave",
+      "cc": 89
+    },
+    {
+      "title": "External Input Level",
+      "cc": 116
+    },
+    {
+      "title": "Modulation Wheel",
+      "cc": 1
+    },
+    {
+      "title": "Wave Mod Destination",
+      "cc": 72
+    },
+    {
+      "title": "Legato",
+      "cc": 68
+    },
+    {
+      "title": "Keyboard Transpose",
+      "cc": 119
+    },
+    {
+      "title": "Volume EG Gate Source",
+      "cc": 91
+    },
+    {
+      "title": "LFO Rate",
+      "cc": 3
+    },
+    {
+      "title": "LFO Midi Sync",
+      "cc": 102
+    },
+    {
+      "title": "LFO Gate Reset",
+      "cc": 93
+    },
+    {
+      "title": "LFO KB Tracking Amount",
+      "cc": 78
+    },
+    {
+      "title": "LFO Range",
+      "cc": 76
+    },
+    {
+      "title": "Glide On/Off",
+      "cc": 65
+    },
+    {
+      "title": "Glide Legato",
+      "cc": 94
+    },
+    {
+      "title": "Glide Rate",
+      "cc": 5
+    },
+    {
+      "title": "Glide Type",
+      "cc": 85
+    },
+    {
+      "title": "Gate Glide",
+      "cc": 73
+    }
+  ]
+}

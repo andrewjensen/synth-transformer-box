@@ -1,0 +1,253 @@
+{
+  "id": 16,
+  "slug": "oberheim_ob_8_tauntek",
+  "manufacturer": "Oberheim",
+  "title": "OB-8",
+  "subtitle": "with Tauntek upgrade",
+  "parameters": [
+    {
+      "title": "Port Speed/Amt",
+      "cc": 5
+    },
+    {
+      "title": "Prog Volume",
+      "cc": 7
+    },
+    {
+      "title": "MIDI clk divider",
+      "cc": 9
+    },
+    {
+      "title": "Osc1 Waveform",
+      "cc": 14
+    },
+    {
+      "title": "Osc1 Freq",
+      "cc": 15
+    },
+    {
+      "title": "Osc1 On",
+      "cc": 16
+    },
+    {
+      "title": "Osc1 PW",
+      "cc": 17
+    },
+    {
+      "title": "Osc2 Waveform",
+      "cc": 18
+    },
+    {
+      "title": "Osc2 Freq",
+      "cc": 19
+    },
+    {
+      "title": "Osc2 Half/Full On",
+      "cc": 20
+    },
+    {
+      "title": "Osc2 PW",
+      "cc": 21
+    },
+    {
+      "title": "Osc2 Detune Amt",
+      "cc": 22
+    },
+    {
+      "title": "Osc2 Sync",
+      "cc": 23
+    },
+    {
+      "title": "F-Env to Osc2",
+      "cc": 24
+    },
+    {
+      "title": "Noise On",
+      "cc": 25
+    },
+    {
+      "title": "VCF 4P",
+      "cc": 26
+    },
+    {
+      "title": "VCF Modulation (Env)",
+      "cc": 27
+    },
+    {
+      "title": "VCF Keytrack",
+      "cc": 28
+    },
+    {
+      "title": "VCF Env Attack",
+      "cc": 29
+    },
+    {
+      "title": "VCF Env Decay",
+      "cc": 30
+    },
+    {
+      "title": "VCF Env Sustain",
+      "cc": 31
+    },
+    {
+      "title": "VCF Env Release",
+      "cc": 32
+    },
+    {
+      "title": "VCA Env Decay",
+      "cc": 33
+    },
+    {
+      "title": "VCA Env Sustain",
+      "cc": 34
+    },
+    {
+      "title": "LFO Freq",
+      "cc": 35
+    },
+    {
+      "title": "LFO Trig Point",
+      "cc": 36
+    },
+    {
+      "title": "LFO Waveform",
+      "cc": 37
+    },
+    {
+      "title": "LFO FM Amt/Mod Dpth 1",
+      "cc": 38
+    },
+    {
+      "title": "LFO PWM AmtMod Dpth 2",
+      "cc": 39
+    },
+    {
+      "title": "LFO to Osc1 Frq/Osc1 FM",
+      "cc": 40
+    },
+    {
+      "title": "LFO to Osc2 Frq/Osc2 FM",
+      "cc": 41
+    },
+    {
+      "title": "LFO to Filt/Filt FM",
+      "cc": 42
+    },
+    {
+      "title": "LFO to Osc1 PW",
+      "cc": 43
+    },
+    {
+      "title": "LFO to Osc2 PW",
+      "cc": 44
+    },
+    {
+      "title": "LFO to Ampl/VCA Mod",
+      "cc": 45
+    },
+    {
+      "title": "LFO Track",
+      "cc": 46
+    },
+    {
+      "title": "LFO Env Mod",
+      "cc": 47
+    },
+    {
+      "title": "LFO Wave Retrig",
+      "cc": 48
+    },
+    {
+      "title": "Attack Mod1",
+      "cc": 49
+    },
+    {
+      "title": "Attack Mod2",
+      "cc": 50
+    },
+    {
+      "title": "Delay Mod1",
+      "cc": 51
+    },
+    {
+      "title": "Delay Mod2",
+      "cc": 52
+    },
+    {
+      "title": "Invert1",
+      "cc": 53
+    },
+    {
+      "title": "Invert2",
+      "cc": 54
+    },
+    {
+      "title": "Quantize1 (FM)",
+      "cc": 55
+    },
+    {
+      "title": "Quantize2 (PWM)",
+      "cc": 56
+    },
+    {
+      "title": "Osc1 LFO PWM Mod Invert",
+      "cc": 57
+    },
+    {
+      "title": "Osc1 LFO Frq Mod Invert",
+      "cc": 58
+    },
+    {
+      "title": "Unison,Legato Port",
+      "cc": 59
+    },
+    {
+      "title": "Port Bend/Expo/Equal",
+      "cc": 60
+    },
+    {
+      "title": "Port Quantize",
+      "cc": 61
+    },
+    {
+      "title": "Port Match",
+      "cc": 62
+    },
+    {
+      "title": "Voice Detune",
+      "cc": 63
+    },
+    {
+      "title": "Damper Pedal (Sustain)",
+      "cc": 64
+    },
+    {
+      "title": "Port Bend Amount",
+      "cc": 65
+    },
+    {
+      "title": "LFO Phase 0/90/180",
+      "cc": 67
+    },
+    {
+      "title": "VCF Resonance",
+      "cc": 71
+    },
+    {
+      "title": "VCA Env Release",
+      "cc": 72
+    },
+    {
+      "title": "VCA Env Attack",
+      "cc": 73
+    },
+    {
+      "title": "VCF Cutoff",
+      "cc": 74
+    },
+    {
+      "title": "LFO FM Amt/Mod Dpth 1",
+      "cc": 75
+    }
+  ]
+}

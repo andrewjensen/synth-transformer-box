@@ -1,0 +1,149 @@
+{
+  "id": 17,
+  "slug": "akai_ax60_tauntek",
+  "manufacturer": "Akai",
+  "title": "AX60",
+  "subtitle": "with Tauntek upgrade",
+  "parameters": [
+    {
+      "title": "Mod wheel",
+      "cc": 1
+    },
+    {
+      "title": "Volume",
+      "cc": 7
+    },
+    {
+      "title": "VCO Waveform",
+      "cc": 14
+    },
+    {
+      "title": "VCO Octave",
+      "cc": 15
+    },
+    {
+      "title": "VCO Pulse Width",
+      "cc": 16
+    },
+    {
+      "title": "VCO PW Mod Speed",
+      "cc": 17
+    },
+    {
+      "title": "VCO EG Depth",
+      "cc": 18
+    },
+    {
+      "title": "Noise on/off",
+      "cc": 19
+    },
+    {
+      "title": "Sampler Enable",
+      "cc": 20
+    },
+    {
+      "title": "A/B Balance",
+      "cc": 21
+    },
+    {
+      "title": "VCF Key Follow",
+      "cc": 22
+    },
+    {
+      "title": "VCO Mod",
+      "cc": 23
+    },
+    {
+      "title": "HPF",
+      "cc": 24
+    },
+    {
+      "title": "VCF EG Polarity",
+      "cc": 25
+    },
+    {
+      "title": "VCA Gate",
+      "cc": 26
+    },
+    {
+      "title": "VCF Attack",
+      "cc": 27
+    },
+    {
+      "title": "VCF Decay",
+      "cc": 28
+    },
+    {
+      "title": "VCF Sustain",
+      "cc": 29
+    },
+    {
+      "title": "VCF Release",
+      "cc": 30
+    },
+    {
+      "title": "VCF EG Depth Level",
+      "cc": 31
+    },
+    {
+      "title": "VCA Decay",
+      "cc": 32
+    },
+    {
+      "title": "VCA Sustain",
+      "cc": 33
+    },
+    {
+      "title": "VCA EG Depth Level",
+      "cc": 34
+    },
+    {
+      "title": "LFO destination",
+      "cc": 39
+    },
+    {
+      "title": "LFO waveform",
+      "cc": 40
+    },
+    {
+      "title": "LFO depth",
+      "cc": 41
+    },
+    {
+      "title": "LFO speed",
+      "cc": 42
+    },
+    {
+      "title": "LFO delay",
+      "cc": 43
+    },
+    {
+      "title": "Chorus",
+      "cc": 44
+    },
+    {
+      "title": "Sustain",
+      "cc": 64
+    },
+    {
+      "title": "VCF Resonance",
+      "cc": 71
+    },
+    {
+      "title": "VCA Release",
+      "cc": 72
+    },
+    {
+      "title": "VCA Attack",
+      "cc": 73
+    },
+    {
+      "title": "VCF Cutoff",
+      "cc": 74
+    },
+    {
+      "title": "All notes off",
+      "cc": 123
+    }
+  ]
+}

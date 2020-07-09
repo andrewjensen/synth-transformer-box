@@ -1,0 +1,329 @@
+{
+  "id": 21,
+  "slug": "moog_sub_37",
+  "manufacturer": "Moog",
+  "title": "Sub 37",
+  "subtitle": null,
+  "parameters": [
+    {
+      "title": "Osc 1 Wave",
+      "cc": 9
+    },
+    {
+      "title": "Osc 2 Freq",
+      "cc": 12
+    },
+    {
+      "title": "Osc 2 Beat Freq",
+      "cc": 13
+    },
+    {
+      "title": "Osc 2 Wave",
+      "cc": 14
+    },
+    {
+      "title": "Osc 1 Octave",
+      "cc": 74
+    },
+    {
+      "title": "Osc 2 Octave",
+      "cc": 75
+    },
+    {
+      "title": "Osc 2 Hard Sync on/off",
+      "cc": 77
+    },
+    {
+      "title": "Osc Duo Mode on/off",
+      "cc": 110
+    },
+    {
+      "title": "Osc KB Reset on/off",
+      "cc": 81
+    },
+    {
+      "title": "LFO 1 Rate",
+      "cc": 3
+    },
+    {
+      "title": "LFO 2 Rate",
+      "cc": 8
+    },
+    {
+      "title": "LFO 1 Range",
+      "cc": 76
+    },
+    {
+      "title": "LFO 2 Range",
+      "cc": 78
+    },
+    {
+      "title": "LFO 1 KB Reset",
+      "cc": 93
+    },
+    {
+      "title": "LFO 2 KB Reset",
+      "cc": 95
+    },
+    {
+      "title": "Glide",
+      "cc": 65
+    },
+    {
+      "title": "Glide Type",
+      "cc": 85
+    },
+    {
+      "title": "Glide Legato",
+      "cc": 94
+    },
+    {
+      "title": "Glide Dest Osc 1/2/both",
+      "cc": 102
+    },
+    {
+      "title": "Mod 1 Source",
+      "cc": 71
+    },
+    {
+      "title": "Mod 1 Destination",
+      "cc": 91
+    },
+    {
+      "title": "Mod 1 PGM destination amount",
+      "cc": 20
+    },
+    {
+      "title": "Mod 1 Osc 1/2 Select",
+      "cc": 70
+    },
+    {
+      "title": "Mod 2 Pitch Amount",
+      "cc": 15
+    },
+    {
+      "title": "Mod 2 Filter Amount",
+      "cc": 16
+    },
+    {
+      "title": "Mod 2 PGM destination amount",
+      "cc": 17
+    },
+    {
+      "title": "Mod 2 Source",
+      "cc": 72
+    },
+    {
+      "title": "Mod 2 destination",
+      "cc": 92
+    },
+    {
+      "title": "Mod 2 Osc 1/2 Sel",
+      "cc": 88
+    },
+    {
+      "title": "Filter Multidrive",
+      "cc": 18
+    },
+    {
+      "title": "Filter Cutoff",
+      "cc": 19
+    },
+    {
+      "title": "Filter Resonance",
+      "cc": 21
+    },
+    {
+      "title": "Filter KB Amount",
+      "cc": 22
+    },
+    {
+      "title": "Filter Slope (poles)",
+      "cc": 109
+    },
+    {
+      "title": "Filter EG attack time",
+      "cc": 23
+    },
+    {
+      "title": "Filter EG decay time",
+      "cc": 24
+    },
+    {
+      "title": "Filter EG sustain time",
+      "cc": 25
+    },
+    {
+      "title": "Filter EG release time",
+      "cc": 26
+    },
+    {
+      "title": "Filter EG Amount",
+      "cc": 27
+    },
+    {
+      "title": "Filter EG KB Amount",
+      "cc": 79
+    },
+    {
+      "title": "Filter EG Reset",
+      "cc": 82
+    },
+    {
+      "title": "Filter EG Velocity Amount",
+      "cc": 86
+    },
+    {
+      "title": "Filter EG Delay",
+      "cc": 103
+    },
+    {
+      "title": "Filter EG Hold",
+      "cc": 105
+    },
+    {
+      "title": "Filter EG Multi Trig",
+      "cc": 112
+    },
+    {
+      "title": "Amp EG attack time",
+      "cc": 28
+    },
+    {
+      "title": "Amp EG decay time",
+      "cc": 29
+    },
+    {
+      "title": "Amp EG sustain time",
+      "cc": 30
+    },
+    {
+      "title": "Amp EG release time",
+      "cc": 31
+    },
+    {
+      "title": "Amp EG KB Amount",
+      "cc": 80
+    },
+    {
+      "title": "Amp EG Reset",
+      "cc": 83
+    },
+    {
+      "title": "Amp EG Velocity Amount",
+      "cc": 87
+    },
+    {
+      "title": "Amp EG Delay",
+      "cc": 104
+    },
+    {
+      "title": "Amp EG Hold",
+      "cc": 106
+    },
+    {
+      "title": "Amp EG multi trig",
+      "cc": 113
+    },
+    {
+      "title": "ARP latch",
+      "cc": 69
+    },
+    {
+      "title": "ARP of/off",
+      "cc": 73
+    },
+    {
+      "title": "Osc 1 Level",
+      "cc": 114
+    },
+    {
+      "title": "Osc 1 Sub Level",
+      "cc": 115
+    },
+    {
+      "title": "Osc 2 Level",
+      "cc": 116
+    },
+    {
+      "title": "Noise Level",
+      "cc": 117
+    },
+    {
+      "title": "Feedback ext/level",
+      "cc": 118
+    },
+    {
+      "title": "KB Transpose",
+      "cc": 119
+    },
+    {
+      "title": "Local Control on/off",
+      "cc": 122
+    },
+    {
+      "title": "Bank Select",
+      "cc": 0
+    },
+    {
+      "title": "Mod Wheel",
+      "cc": 1
+    },
+    {
+      "title": "MIDI Breath Control",
+      "cc": 2
+    },
+    {
+      "title": "Mod 1 Pitch Amount",
+      "cc": 4
+    },
+    {
+      "title": "Glide Time",
+      "cc": 5
+    },
+    {
+      "title": "Data Entry",
+      "cc": 6
+    },
+    {
+      "title": "Master Volume",
+      "cc": 7
+    },
+    {
+      "title": "MIDI Pan",
+      "cc": 10
+    },
+    {
+      "title": "Mod 1 Filter Amount",
+      "cc": 11
+    },
+    {
+      "title": "Hold pedal/sustain",
+      "cc": 64
+    },
+    {
+      "title": "Portamento Control",
+      "cc": 84
+    },
+    {
+      "title": "Data Decrement",
+      "cc": 97
+    },
+    {
+      "title": "KB Octave",
+      "cc": 89
+    },
+    {
+      "title": "Pitch bend up amount",
+      "cc": 107
+    },
+    {
+      "title": "Pitch bend down amount",
+      "cc": 108
+    },
+    {
+      "title": "KB Control lo/hi",
+      "cc": 111
+    }
+  ]
+}
