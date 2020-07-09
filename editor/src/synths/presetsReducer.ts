@@ -9,6 +9,7 @@ export interface PresetsState {
   currentPresetIdx: number | null
   addingPreset: boolean
   exporting: boolean
+  unsavedEdits: boolean
 }
 
 export type PresetsAction =
@@ -21,13 +22,15 @@ export type PresetsAction =
   | { type: 'REORDER_PRESET_DOWN' }
   | { type: 'DELETE' }
   | { type: 'IMPORT_SETTINGS', settings: Settings }
-  | { type: 'TOGGLE_EXPORTING' };
+  | { type: 'TOGGLE_EXPORTING' }
+  | { type: 'EXPORT_SETTINGS' }
 
 export const INITIAL_STATE: PresetsState = {
   presets: [],
   currentPresetIdx: null,
   addingPreset: false,
-  exporting: false
+  exporting: false,
+  unsavedEdits: false
 };
 
 export function presetsReducer(state: PresetsState, action: PresetsAction): PresetsState {
@@ -46,7 +49,8 @@ export function presetsReducer(state: PresetsState, action: PresetsAction): Pres
         ],
         // this is safe because we just added an element to the end
         currentPresetIdx: state.presets.length,
-        addingPreset: false
+        addingPreset: false,
+        unsavedEdits: true
       }
     case 'SELECT_PRESET':
       return {
@@ -72,13 +76,15 @@ export function presetsReducer(state: PresetsState, action: PresetsAction): Pres
       return {
         ...state,
         currentPresetIdx: state.currentPresetIdx! - 1,
-        presets: reorderPresets(state.presets, state.currentPresetIdx!, state.currentPresetIdx! - 1)
+        presets: reorderPresets(state.presets, state.currentPresetIdx!, state.currentPresetIdx! - 1),
+        unsavedEdits: true
       };
     case 'REORDER_PRESET_DOWN':
       return {
         ...state,
         currentPresetIdx: state.currentPresetIdx! + 1,
-        presets: reorderPresets(state.presets, state.currentPresetIdx!, state.currentPresetIdx! + 1)
+        presets: reorderPresets(state.presets, state.currentPresetIdx!, state.currentPresetIdx! + 1),
+        unsavedEdits: true
       };
     case 'DELETE':
       return {
@@ -86,14 +92,21 @@ export function presetsReducer(state: PresetsState, action: PresetsAction): Pres
         presets: state.presets.filter((preset, idx) =>
           idx !== state.currentPresetIdx
         ),
-        currentPresetIdx: null
+        currentPresetIdx: null,
+        unsavedEdits: true
       };
     case 'IMPORT_SETTINGS':
       return {
         presets: action.settings.presets,
         currentPresetIdx: action.settings.presets.length ? 0 : null,
         addingPreset: false,
-        exporting: false
+        exporting: false,
+        unsavedEdits: false
+      };
+    case 'EXPORT_SETTINGS':
+      return {
+        ...state,
+        unsavedEdits: false
       };
     case 'TOGGLE_EXPORTING':
       return {
@@ -115,7 +128,8 @@ function editCurrentPreset(state: PresetsState, editFn: PresetEditFn): PresetsSt
         idx === state.currentPresetIdx
           ? editFn(preset)
           : preset
-    )
+    ),
+    unsavedEdits: true
   };
 }
 

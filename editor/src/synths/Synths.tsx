@@ -51,6 +51,8 @@ const Synths = () => {
 
     const result = await ipcRenderer.invoke('save-settings', settings);
     console.log('Result:', result);
+
+    dispatch({ type: 'EXPORT_SETTINGS' });
   };
 
   const renderMainContent = () => {
@@ -93,10 +95,16 @@ const Synths = () => {
 
         <SerialControlsContainer>
           <SerialControl>
-            <button onClick={handleImport}>Import settings</button>
+            <SerialControlButton
+              hasWarning={false}
+              onClick={handleImport}
+            >Import settings</SerialControlButton>
           </SerialControl>
           <SerialControl>
-            <button onClick={handleExport}>Export settings</button>
+            <SerialControlButton
+              hasWarning={state.unsavedEdits}
+              onClick={handleExport}
+            >Export settings</SerialControlButton>
           </SerialControl>
         </SerialControlsContainer>
 
@@ -145,4 +153,19 @@ const SerialControlsContainer = styled.div`
 
 const SerialControl = styled.div`
   margin: 1rem;
+`;
+
+interface SerialControlButtonProps {
+  hasWarning: boolean
+}
+
+const SerialControlButton = styled.button<SerialControlButtonProps>`
+  border: 1px solid black;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+
+  ${(props) => props.hasWarning
+    ? `background-color: #ff0000;`
+    : `background-color: #dddddd;`
+  }
 `;
