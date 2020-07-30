@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { PresetsState, PresetsAction } from './presetsReducer';
+import { PresetsState, PresetsAction } from '../common/state/settingsReducer';
 
 interface ExportSettingsProps {
   state: PresetsState

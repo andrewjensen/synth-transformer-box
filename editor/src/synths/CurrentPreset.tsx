@@ -5,7 +5,7 @@ import { Preset, ControllerMapping } from '../common/types';
 import { printSynthTitle } from '../common/config/synths';
 import ChannelSetting from './ChannelSetting';
 import KnobSetting from './KnobSetting';
-import { PresetsAction } from './presetsReducer';
+import { PresetsAction } from '../common/state/settingsReducer';
 
 const CHUNK_SIZE = 4;
 

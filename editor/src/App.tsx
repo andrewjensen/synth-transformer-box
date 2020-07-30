@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import styled from 'styled-components';
 
 import TopBar from './topbar/TopBar';
 import Controller from './controller/Controller';
 import Synths from './synths/Synths';
+import SettingsContext from './common/state/SettingsContext';
+import {
+  settingsReducer,
+  INITIAL_STATE,
+} from './common/state/settingsReducer';
 
 export enum AppTab {
   Controller = "CONTROLLER",
@@ -11,7 +16,8 @@ export enum AppTab {
 }
 
 const App = () => {
-  const [tab, setTab] = useState<AppTab>(AppTab.Controller);
+  const [tab, setTab] = useState<AppTab>(AppTab.Synths);
+  const [state, dispatch] = useReducer(settingsReducer, INITIAL_STATE);
 
   const handleChangeTab = (tab: AppTab) => {
     console.log('handleChangeTab', tab);
@@ -28,15 +34,17 @@ const App = () => {
   };
 
   return (
-    <AppContainer>
-      <TopBar
-        activeTab={tab}
-        onChangeTab={handleChangeTab}
-      />
-      <BodyContainer>
-        {renderBody()}
-      </BodyContainer>
-    </AppContainer>
+    <SettingsContext.Provider value={{ state, dispatch }}>
+      <AppContainer>
+        <TopBar
+          activeTab={tab}
+          onChangeTab={handleChangeTab}
+        />
+        <BodyContainer>
+          {renderBody()}
+        </BodyContainer>
+      </AppContainer>
+    </SettingsContext.Provider>
   );
 }
 

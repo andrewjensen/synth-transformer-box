@@ -1,6 +1,6 @@
-import { Synth, Preset, ControllerMapping, Settings } from '../common/types';
-import { getSynthById } from '../common/config/synths';
-import { range } from '../common/helpers';
+import { Synth, Preset, ControllerMapping, Settings } from '../types';
+import { getSynthById } from '../config/synths';
+import { range } from '../helpers';
 
 const DEFAULT_MAPPINGS = 8;
 
@@ -33,7 +33,7 @@ export const INITIAL_STATE: PresetsState = {
   unsavedEdits: false
 };
 
-export function presetsReducer(state: PresetsState, action: PresetsAction): PresetsState {
+export function settingsReducer(state: PresetsState, action: PresetsAction): PresetsState {
   switch (action.type) {
     case 'ADD_PRESET':
       return {

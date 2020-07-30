@@ -1,19 +1,16 @@
-import React, { useReducer } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { ipcRenderer } from 'electron';
 
 import { Settings, Preset } from '../common/types';
 import { DeviceMenu, DeviceMenuItem } from '../common/components/DeviceMenu';
-import {
-  presetsReducer,
-  INITIAL_STATE,
-} from './presetsReducer';
+import SettingsContext from '../common/state/SettingsContext';
 import CurrentPreset from './CurrentPreset';
 import AddPreset from './AddPreset';
 import ExportSettings from './ExportSettings';
 
 const Synths = () => {
-  const [state, dispatch] = useReducer(presetsReducer, INITIAL_STATE);
+  const { state, dispatch } = useContext(SettingsContext);
 
   const currentPreset: Preset | null =
     state.currentPresetIdx === null
