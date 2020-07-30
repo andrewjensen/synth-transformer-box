@@ -13,9 +13,9 @@ const TopBar: React.FC<TopBarProps> = ({ activeTab, onChangeTab }) => {
     <Container>
       <Tabs>
         <Tab
-          title="Controllers"
-          active={activeTab === AppTab.Controllers}
-          onClick={() => onChangeTab(AppTab.Controllers)}
+          title="Controller"
+          active={activeTab === AppTab.Controller}
+          onClick={() => onChangeTab(AppTab.Controller)}
           />
         <Tab
           title="Synths"

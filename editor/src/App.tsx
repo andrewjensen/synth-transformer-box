@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import TopBar from './topbar/TopBar';
-import Controllers from './controllers/Controllers';
+import Controller from './controller/Controller';
 import Synths from './synths/Synths';
 
 export enum AppTab {
-  Controllers = "CONTROLLERS",
+  Controller = "CONTROLLER",
   Synths = "SYNTHS"
 }
 
 const App = () => {
-  const [tab, setTab] = useState<AppTab>(AppTab.Synths);
+  const [tab, setTab] = useState<AppTab>(AppTab.Controller);
 
   const handleChangeTab = (tab: AppTab) => {
     console.log('handleChangeTab', tab);
@@ -20,8 +20,8 @@ const App = () => {
 
   const renderBody = () => {
     switch (tab) {
-      case AppTab.Controllers:
-        return <Controllers />;
+      case AppTab.Controller:
+        return <Controller />;
       case AppTab.Synths:
         return <Synths />;
     }
