@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { PresetsState, PresetsAction } from '../common/state/settingsReducer';
+import { SettingsState, SettingsAction } from '../common/state/settingsReducer';
 
 interface ExportSettingsProps {
-  state: PresetsState
-  dispatch: React.Dispatch<PresetsAction>
+  state: SettingsState
+  dispatch: React.Dispatch<SettingsAction>
 }
 
 const ExportSettings: React.FC<ExportSettingsProps> = ({ state, dispatch }) => {

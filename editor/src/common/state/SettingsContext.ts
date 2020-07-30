@@ -1,9 +1,9 @@
 import React from 'react';
-import { INITIAL_STATE, PresetsState, PresetsAction } from './settingsReducer';
+import { INITIAL_STATE, SettingsState, SettingsAction } from './settingsReducer';
 
 interface SettingsContextState {
-  state: PresetsState
-  dispatch: React.Dispatch<PresetsAction>
+  state: SettingsState
+  dispatch: React.Dispatch<SettingsAction>
 }
 
 const SettingsContext = React.createContext<SettingsContextState>({

@@ -4,10 +4,10 @@ import styled from 'styled-components';
 import FormElement from '../common/components/form/FormElement';
 import SynthSetting from './SynthSetting';
 import ChannelSetting from './ChannelSetting';
-import { PresetsAction } from '../common/state/settingsReducer';
+import { SettingsAction } from '../common/state/settingsReducer';
 
 interface AddPresetProps {
-  dispatch: React.Dispatch<PresetsAction>
+  dispatch: React.Dispatch<SettingsAction>
 }
 
 const AddPreset: React.FC<AddPresetProps> = ({ dispatch }) => {

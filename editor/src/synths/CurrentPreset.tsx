@@ -5,14 +5,14 @@ import { Preset, ControllerMapping } from '../common/types';
 import { printSynthTitle } from '../common/config/synths';
 import ChannelSetting from './ChannelSetting';
 import KnobSetting from './KnobSetting';
-import { PresetsAction } from '../common/state/settingsReducer';
+import { SettingsAction } from '../common/state/settingsReducer';
 
 const CHUNK_SIZE = 4;
 
 interface CurrentPresetProps {
   preset: Preset
   allPresets: Preset[]
-  dispatch: React.Dispatch<PresetsAction>
+  dispatch: React.Dispatch<SettingsAction>
 }
 
 const CurrentPreset: React.FC<CurrentPresetProps> = ({ preset, allPresets, dispatch }) => {

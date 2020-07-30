@@ -16,15 +16,6 @@ interface KnobSettingProps {
 const KnobSetting: React.FC<KnobSettingProps> = ({ synthId, mapping, onChangeMapping }) => {
   const synth = useMemo(() => getSynthById(synthId), [synthId]);
 
-  const handleChangeInput = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const valueStr = event.target.value;
-    const value = parseInt(valueStr);
-    onChangeMapping({
-      ...mapping,
-      in: value
-    });
-  };
-
   const handleChangeOutput = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const valueStr = event.target.value;
     const value = parseInt(valueStr);
@@ -38,17 +29,7 @@ const KnobSetting: React.FC<KnobSettingProps> = ({ synthId, mapping, onChangeMap
     <Container>
       <Knob value={127} />
       <FormElement title="Input">
-        <select
-          value={mapping.in}
-          onChange={handleChangeInput}
-        >
-          {range(1, 128).map(n => (
-            <option
-              key={n}
-              value={n}
-            >CC #{n}</option>
-          ))}
-        </select>
+        <div>CC #555</div>
       </FormElement>
 
       <FormElement title="Output">
