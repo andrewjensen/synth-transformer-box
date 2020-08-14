@@ -1,4 +1,4 @@
-// For Teensy 4.0
+// For Teensy 4.1
 
 // "Bounce2", installed through the library manager
 // https://github.com/thomasfredericks/Bounce2
@@ -37,6 +37,7 @@ MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDI);
 
 Settings settings;
 Bounce buttonDebouncer = Bounce();
+ProgramStatus programStatus = ProgramStatus::Initializing;
 
 void setup() {
   Serial.begin(9600);
@@ -71,22 +72,45 @@ void setup() {
 
   bool success = settings.initializeFromMemory();
 
-  if (DEBUG_SERIAL) {
-    if (success) {
+  if (success) {
+    programStatus = ProgramStatus::Running;
+    if (DEBUG_SERIAL) {
       Serial.println("Successfully initialized.");
-    } else {
+      Serial.println("Current settings state in memory:");
+      settings.printState();
+    }
+    display.flashDigit(settings.getPresetCount());
+    display.showDigit(settings.getCurrentPresetId());
+  } else {
+    programStatus = ProgramStatus::FatalError;
+    if (DEBUG_SERIAL) {
       Serial.println("ERROR DURING INITIALIZATION!");
     }
-
-    Serial.println("Current settings state in memory:");
-    settings.printState();
   }
-
-  display.flashDigit(settings.getPresetCount());
-  display.showDigit(settings.getCurrentPresetId());
 }
 
 void loop() {
+  switch (programStatus) {
+    case ProgramStatus::Running:
+      loopRunning();
+      return;
+    case ProgramStatus::FatalError:
+    default:
+      loopFatalError();
+      return;
+  }
+}
+
+void loopFatalError() {
+  flash();
+  delay(100);
+  flash();
+  delay(100);
+  flash();
+  delay(800);
+}
+
+void loopRunning() {
   usbMIDI.read();
 
   buttonDebouncer.update();

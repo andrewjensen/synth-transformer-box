@@ -9,4 +9,10 @@ const byte COMMAND_ID_LOAD_SETTINGS_V1 = 0x21;
 
 const bool DEBUG_SERIAL = false;
 
+enum ProgramStatus {
+  Initializing = 1,
+  Running = 2,
+  FatalError = 3,
+};
+
 #endif
