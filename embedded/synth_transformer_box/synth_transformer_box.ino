@@ -61,31 +61,41 @@ void setup() {
   if (DEBUG_SERIAL) {
     Serial.println("Starting up!");
 
-    // Serial.println("EEPROM contents:");
-    // for (int address = 0; address < 100; address++) {
-    //   Serial.println(EEPROM.read(address));
-    // }
-    // Serial.println("...");
+    Serial.println("EEPROM contents:");
+    for (int address = 0; address < 100; address++) {
+      Serial.println(EEPROM.read(address));
+    }
+    Serial.println("...");
 
     Serial.println("Initializing from memory...");
   }
 
-  bool success = settings.initializeFromMemory();
+  int initResult = settings.initializeFromMemory();
 
-  if (success) {
-    programStatus = ProgramStatus::Running;
-    if (DEBUG_SERIAL) {
-      Serial.println("Successfully initialized.");
-      Serial.println("Current settings state in memory:");
-      settings.printState();
-    }
-    display.flashDigit(settings.getPresetCount());
-    display.showDigit(settings.getCurrentPresetId());
-  } else {
-    programStatus = ProgramStatus::FatalError;
-    if (DEBUG_SERIAL) {
-      Serial.println("ERROR DURING INITIALIZATION!");
-    }
+  switch (initResult) {
+    case InitSettingsResult::Success:
+      programStatus = ProgramStatus::Running;
+      if (DEBUG_SERIAL) {
+        Serial.println("Successfully initialized.");
+        Serial.println("Current settings state in memory:");
+        settings.printState();
+      }
+      display.flashDigit(settings.getPresetCount());
+      display.showDigit(settings.getCurrentPresetId());
+      return;
+    case InitSettingsResult::MemoryBlank:
+      programStatus = ProgramStatus::NoSettings;
+      if (DEBUG_SERIAL) {
+        Serial.println("Memory is blank - no settings!");
+      }
+      return;
+    case InitSettingsResult::Error:
+    default:
+      programStatus = ProgramStatus::FatalError;
+      if (DEBUG_SERIAL) {
+        Serial.println("ERROR DURING INITIALIZATION!");
+      }
+      return;
   }
 }
 
@@ -93,6 +103,9 @@ void loop() {
   switch (programStatus) {
     case ProgramStatus::Running:
       loopRunning();
+      return;
+    case ProgramStatus::NoSettings:
+      loopNoSettings();
       return;
     case ProgramStatus::FatalError:
     default:
@@ -131,6 +144,13 @@ void loopRunning() {
   if (Serial.available()) {
     handleSerialCommand();
   }
+}
+
+void loopNoSettings() {
+  if (Serial.available()) {
+    handleSerialCommand();
+  }
+  delay(250);
 }
 
 // Handling commands over serial

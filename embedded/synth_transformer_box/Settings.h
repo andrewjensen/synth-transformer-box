@@ -1,5 +1,11 @@
 #include "constants.h"
 
+enum InitSettingsResult {
+  Success = 1,
+  Error = 2,
+  MemoryBlank = 3,
+};
+
 class Preset {
   byte presetId;
   byte synthId;
@@ -83,7 +89,11 @@ public:
   Settings() {
   }
 
-  bool initializeFromMemory() {
+  int initializeFromMemory() {
+    if (isMemoryBlank()) {
+      return InitSettingsResult::MemoryBlank;
+    }
+
     int address = 0;
 
     byte version_number = EEPROM.read(address);
@@ -92,7 +102,7 @@ public:
       if (DEBUG_SERIAL) {
         Serial.println("Error: Protocol version does not match expected");
       }
-      return false;
+      return InitSettingsResult::Error;
     }
 
     presetCount = EEPROM.read(address);
@@ -154,7 +164,15 @@ public:
       }
     }
 
-    return true;
+    return InitSettingsResult::Success;
+  }
+
+  bool isMemoryBlank() {
+    return (
+      EEPROM.read(0) == 255 &&
+      EEPROM.read(1) == 255 &&
+      EEPROM.read(2) == 255 &&
+      EEPROM.read(3) == 255);
   }
 
   void triggerNextPreset() {

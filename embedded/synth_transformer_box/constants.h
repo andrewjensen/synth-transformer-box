@@ -11,8 +11,9 @@ const bool DEBUG_SERIAL = false;
 
 enum ProgramStatus {
   Initializing = 1,
-  Running = 2,
-  FatalError = 3,
+  FatalError = 2,
+  Running = 3,
+  NoSettings = 4,
 };
 
 #endif
