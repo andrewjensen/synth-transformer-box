@@ -5,30 +5,31 @@
 
 // From the library manager
 #include <Bounce2.h>
+#include <Wire.h>
+#include <LiquidCrystal.h>
 
 // From this project
 #include "constants.h"
 #include "Settings.h"
-#include "SegmentDisplay.h"
 
 #define PIN_BUTTON 3
 #define PIN_LED 13
-#define PIN_DISPLAY_A 14
-#define PIN_DISPLAY_B 15
-#define PIN_DISPLAY_C 16
-#define PIN_DISPLAY_D 17
-#define PIN_DISPLAY_E 18
-#define PIN_DISPLAY_F 19
-#define PIN_DISPLAY_G 20
 
-SegmentDisplay display = SegmentDisplay(
-  PIN_DISPLAY_A,
-  PIN_DISPLAY_B,
-  PIN_DISPLAY_C,
-  PIN_DISPLAY_D,
-  PIN_DISPLAY_E,
-  PIN_DISPLAY_F,
-  PIN_DISPLAY_G
+#define PIN_LCD_RS 33
+#define PIN_LCD_EN 34
+#define PIN_LCD_D4 36
+#define PIN_LCD_D5 37
+#define PIN_LCD_D6 38
+#define PIN_LCD_D7 39
+
+LiquidCrystal lcd = LiquidCrystal(
+  PIN_LCD_RS,
+  PIN_LCD_EN,
+
+  PIN_LCD_D4,
+  PIN_LCD_D5,
+  PIN_LCD_D6,
+  PIN_LCD_D7
 );
 
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDI);
@@ -107,8 +108,8 @@ void handleSaveSettingsCommand() {
 
   settings.initializeFromMemory();
 
-  display.flashDigit(settings.getPresetCount());
-  display.showDigit(settings.getCurrentPresetId());
+  // FIXME: flash a saved message with preset count: settings.getPresetCount()
+  // FIXME: show the current preset
 
   sendSaveSettingsSuccessful();
 }
@@ -170,7 +171,7 @@ void loopRunning() {
 
     byte presetId = settings.getCurrentPresetId();
 
-    display.showDigit(presetId);
+    // FIXME: show the current preset on the screen
 
     if (DEBUG_SERIAL) {
       Serial.print("Switched to preset ");
@@ -206,6 +207,14 @@ void setup() {
   usbMIDI.setHandleNoteOff(onNoteOff);
   usbMIDI.setHandleControlChange(onControlChange);
 
+  lcd.begin(16, 2);
+
+  // FIXME: remove debugging
+  lcd.home();
+  lcd.print("Hello");
+  lcd.setCursor(0, 1);
+  lcd.print("World");
+
   MIDI.begin();
 
   // Wait for the serial monitor during development
@@ -233,8 +242,8 @@ void setup() {
         Serial.println("Current settings state in memory:");
         settings.printState();
       }
-      display.flashDigit(settings.getPresetCount());
-      display.showDigit(settings.getCurrentPresetId());
+      // FIXME: flash initialization message
+      // FIXME: show current preset
       return;
     case InitSettingsResult::MemoryBlank:
       programStatus = ProgramStatus::NoSettings;
