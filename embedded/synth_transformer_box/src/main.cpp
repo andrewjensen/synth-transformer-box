@@ -5,14 +5,13 @@
 
 // From the library manager
 #include <Bounce2.h>
-#include <Wire.h>
-#include <LiquidCrystal.h>
 
 // From this project
 #include "constants.h"
+#include "Screen.h"
 #include "Settings.h"
 
-#define PIN_BUTTON 3
+#define PIN_BUTTON 4
 #define PIN_LED 13
 
 #define PIN_LCD_RS 33
@@ -22,7 +21,11 @@
 #define PIN_LCD_D6 38
 #define PIN_LCD_D7 39
 
-LiquidCrystal lcd = LiquidCrystal(
+#define STATUS_MESSAGE_TIME_MS 2000
+
+#define TEMP_PRESET_NAME_PLACEHOLDER "[Preset Name]"
+
+Screen screen = Screen(
   PIN_LCD_RS,
   PIN_LCD_EN,
 
@@ -108,8 +111,10 @@ void handleSaveSettingsCommand() {
 
   settings.initializeFromMemory();
 
-  // FIXME: flash a saved message with preset count: settings.getPresetCount()
-  // FIXME: show the current preset
+  screen.printSettingsSaved(settings.getPresetCount());
+  delay(STATUS_MESSAGE_TIME_MS);
+
+  screen.printPreset(settings.getCurrentPresetId(), TEMP_PRESET_NAME_PLACEHOLDER);
 
   sendSaveSettingsSuccessful();
 }
@@ -170,9 +175,7 @@ void loopRunning() {
     settings.triggerNextPreset();
 
     byte presetId = settings.getCurrentPresetId();
-
-    // FIXME: show the current preset on the screen
-
+    screen.printPreset(presetId, TEMP_PRESET_NAME_PLACEHOLDER);
     if (DEBUG_SERIAL) {
       Serial.print("Switched to preset ");
       Serial.println(presetId);
@@ -207,14 +210,6 @@ void setup() {
   usbMIDI.setHandleNoteOff(onNoteOff);
   usbMIDI.setHandleControlChange(onControlChange);
 
-  lcd.begin(16, 2);
-
-  // FIXME: remove debugging
-  lcd.home();
-  lcd.print("Hello");
-  lcd.setCursor(0, 1);
-  lcd.print("World");
-
   MIDI.begin();
 
   // Wait for the serial monitor during development
@@ -235,29 +230,36 @@ void setup() {
   int initResult = settings.initializeFromMemory();
 
   switch (initResult) {
-    case InitSettingsResult::Success:
+    case InitSettingsResult::Success: {
       programStatus = ProgramStatus::Running;
       if (DEBUG_SERIAL) {
         Serial.println("Successfully initialized.");
         Serial.println("Current settings state in memory:");
         settings.printState();
       }
-      // FIXME: flash initialization message
-      // FIXME: show current preset
+
+      int presetCount = settings.getPresetCount();
+      screen.printInitialized(presetCount);
+      delay(STATUS_MESSAGE_TIME_MS);
+
+      screen.printPreset(settings.getCurrentPresetId(), TEMP_PRESET_NAME_PLACEHOLDER);
       return;
-    case InitSettingsResult::MemoryBlank:
+    }
+    case InitSettingsResult::MemoryBlank: {
       programStatus = ProgramStatus::NoSettings;
       if (DEBUG_SERIAL) {
         Serial.println("Memory is blank - no settings!");
       }
       return;
+    }
     case InitSettingsResult::Error:
-    default:
+    default: {
       programStatus = ProgramStatus::FatalError;
       if (DEBUG_SERIAL) {
         Serial.println("ERROR DURING INITIALIZATION!");
       }
       return;
+    }
   }
 }
 
