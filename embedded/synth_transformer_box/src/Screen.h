@@ -40,14 +40,6 @@ public:
     printBottomLine(formatPresetCount(presetCount));
   }
 
-  String formatPresetCount(int presetCount) {
-    if (presetCount == 1) {
-      return "1 preset";
-    } else {
-      return String(presetCount) + " presets";
-    }
-  }
-
   void printPreset(int presetId, String presetName) {
     clear();
     printTopLine(String(presetId) + ":" + presetName);
@@ -67,6 +59,14 @@ private:
 
   void clear() {
     lcd->clear();
+  }
+
+  String formatPresetCount(int presetCount) {
+    if (presetCount == 1) {
+      return "1 preset";
+    } else {
+      return String(presetCount) + " presets";
+    }
   }
 };
 
