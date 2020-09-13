@@ -8,27 +8,31 @@
 
 // From this project
 #include "constants.h"
+#include "Screen.h"
 #include "Settings.h"
-#include "SegmentDisplay.h"
 
-#define PIN_BUTTON 3
+#define PIN_BUTTON 4
 #define PIN_LED 13
-#define PIN_DISPLAY_A 14
-#define PIN_DISPLAY_B 15
-#define PIN_DISPLAY_C 16
-#define PIN_DISPLAY_D 17
-#define PIN_DISPLAY_E 18
-#define PIN_DISPLAY_F 19
-#define PIN_DISPLAY_G 20
 
-SegmentDisplay display = SegmentDisplay(
-  PIN_DISPLAY_A,
-  PIN_DISPLAY_B,
-  PIN_DISPLAY_C,
-  PIN_DISPLAY_D,
-  PIN_DISPLAY_E,
-  PIN_DISPLAY_F,
-  PIN_DISPLAY_G
+#define PIN_LCD_RS 33
+#define PIN_LCD_EN 34
+#define PIN_LCD_D4 36
+#define PIN_LCD_D5 37
+#define PIN_LCD_D6 38
+#define PIN_LCD_D7 39
+
+#define STATUS_MESSAGE_TIME_MS 2000
+
+#define TEMP_PRESET_NAME_PLACEHOLDER "[Preset Name]"
+
+Screen screen = Screen(
+  PIN_LCD_RS,
+  PIN_LCD_EN,
+
+  PIN_LCD_D4,
+  PIN_LCD_D5,
+  PIN_LCD_D6,
+  PIN_LCD_D7
 );
 
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDI);
@@ -107,8 +111,10 @@ void handleSaveSettingsCommand() {
 
   settings.initializeFromMemory();
 
-  display.flashDigit(settings.getPresetCount());
-  display.showDigit(settings.getCurrentPresetId());
+  screen.printSettingsSaved(settings.getPresetCount());
+  delay(STATUS_MESSAGE_TIME_MS);
+
+  screen.printPreset(settings.getCurrentPresetId(), TEMP_PRESET_NAME_PLACEHOLDER);
 
   sendSaveSettingsSuccessful();
 }
@@ -169,9 +175,7 @@ void loopRunning() {
     settings.triggerNextPreset();
 
     byte presetId = settings.getCurrentPresetId();
-
-    display.showDigit(presetId);
-
+    screen.printPreset(presetId, TEMP_PRESET_NAME_PLACEHOLDER);
     if (DEBUG_SERIAL) {
       Serial.print("Switched to preset ");
       Serial.println(presetId);
@@ -226,29 +230,36 @@ void setup() {
   int initResult = settings.initializeFromMemory();
 
   switch (initResult) {
-    case InitSettingsResult::Success:
+    case InitSettingsResult::Success: {
       programStatus = ProgramStatus::Running;
       if (DEBUG_SERIAL) {
         Serial.println("Successfully initialized.");
         Serial.println("Current settings state in memory:");
         settings.printState();
       }
-      display.flashDigit(settings.getPresetCount());
-      display.showDigit(settings.getCurrentPresetId());
+
+      int presetCount = settings.getPresetCount();
+      screen.printInitialized(presetCount);
+      delay(STATUS_MESSAGE_TIME_MS);
+
+      screen.printPreset(settings.getCurrentPresetId(), TEMP_PRESET_NAME_PLACEHOLDER);
       return;
-    case InitSettingsResult::MemoryBlank:
+    }
+    case InitSettingsResult::MemoryBlank: {
       programStatus = ProgramStatus::NoSettings;
       if (DEBUG_SERIAL) {
         Serial.println("Memory is blank - no settings!");
       }
       return;
+    }
     case InitSettingsResult::Error:
-    default:
+    default: {
       programStatus = ProgramStatus::FatalError;
       if (DEBUG_SERIAL) {
         Serial.println("ERROR DURING INITIALIZATION!");
       }
       return;
+    }
   }
 }
 
