@@ -9,6 +9,10 @@ const byte MESSAGE_ID_LOAD_SETTINGS_V1 = 0x21;
 
 const bool DEBUG_SERIAL = false;
 
+// TODO: figure out needed capacity
+const int DOCUMENT_ALLOC_SIZE_FULL = 8192;
+const int DOCUMENT_ALLOC_SIZE_ID_ONLY = 128;
+
 enum ProgramStatus {
   Initializing = 1,
   FatalError = 2,

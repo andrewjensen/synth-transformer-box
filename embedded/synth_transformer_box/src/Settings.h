@@ -106,47 +106,11 @@ public:
       return InitSettingsResult::MemoryBlank;
     }
 
-    int address = 0;
+    DynamicJsonDocument doc(DOCUMENT_ALLOC_SIZE_FULL);
 
-    byte version_number = EEPROM.read(address);
-    address++;
-    if (version_number != PROTOCOL_VERSION) {
-      if (DEBUG_SERIAL) {
-        Serial.println("Error: Protocol version does not match expected");
-      }
+    bool readJsonSuccessful = readJsonFromMemory(doc);
+    if (!readJsonSuccessful) {
       return InitSettingsResult::Error;
-    }
-
-    // Read serialized settings from EEPROM into memory
-    char serializedSettings [8192];
-    int outIdx = 0;
-    while (true) {
-      byte read = EEPROM.read(address);
-      if (read == 0) {
-        // We hit the terminating signal
-        // TODO: make this more robust
-        break;
-      }
-      serializedSettings[outIdx] = read;
-
-      outIdx++;
-      address++;
-    }
-
-    // Deserialize the JSON
-    // TODO: figure out capacity
-    DynamicJsonDocument doc(8192);
-    DeserializationError err = deserializeJson(doc, serializedSettings);
-    if (err) {
-      if (DEBUG_SERIAL) {
-        Serial.println("Error deserializing settings:");
-        Serial.println(err.c_str());
-      }
-      return InitSettingsResult::Error;
-    }
-
-    if (DEBUG_SERIAL) {
-      Serial.println("Successfully deserialized JSON");
     }
 
     // Parse the JSON into Settings
@@ -221,6 +185,51 @@ public:
     }
 
     return InitSettingsResult::Success;
+  }
+
+  bool readJsonFromMemory(DynamicJsonDocument& doc) {
+    int address = 0;
+
+    byte versionNumber = EEPROM.read(address);
+    address++;
+    if (versionNumber != PROTOCOL_VERSION) {
+      if (DEBUG_SERIAL) {
+        Serial.println("Error: Protocol version does not match expected");
+      }
+      return false;
+    }
+
+    // Read serialized settings from EEPROM into memory
+    char serializedSettings [DOCUMENT_ALLOC_SIZE_FULL];
+    int outIdx = 0;
+    while (true) {
+      byte read = EEPROM.read(address);
+      if (read == 0) {
+        // We hit the terminating signal
+        // TODO: make this more robust
+        break;
+      }
+      serializedSettings[outIdx] = read;
+
+      outIdx++;
+      address++;
+    }
+
+    // Deserialize the JSON
+    DeserializationError err = deserializeJson(doc, serializedSettings);
+    if (err) {
+      if (DEBUG_SERIAL) {
+        Serial.println("Error deserializing settings:");
+        Serial.println(err.c_str());
+      }
+      return false;
+    }
+
+    if (DEBUG_SERIAL) {
+      Serial.println("Successfully deserialized JSON");
+    }
+
+    return true;
   }
 
   bool isMemoryBlank() {

@@ -93,7 +93,7 @@ void storeTerminatingSignal(int address) {
 }
 
 void sendSaveSettingsSuccessful() {
-  DynamicJsonDocument doc(128);
+  DynamicJsonDocument doc(DOCUMENT_ALLOC_SIZE_ID_ONLY);
   doc["msg"] = MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1;
 
   serializeJson(doc, Serial);
@@ -125,32 +125,23 @@ void handleSaveSettingsCommand(DynamicJsonDocument doc) {
 }
 
 void handleRequestLoadSettingsCommand() {
-  Serial.write(MESSAGE_ID_LOAD_SETTINGS_V1);
+  DynamicJsonDocument doc(DOCUMENT_ALLOC_SIZE_FULL);
 
-  // TODO: check stored protocol version first
-
-  int address = 1;
-  int nullBytes = 0;
-
-  // Stop when we see four null bytes in a row
-  while (nullBytes < 4 && address < 1000) {
-    byte storedByte = EEPROM.read(address);
-    Serial.write(storedByte);
-    address++;
-
-    if (storedByte == 0x00) {
-      nullBytes++;
-    } else {
-      nullBytes = 0;
-    }
+  bool readJsonSuccessful = settings.readJsonFromMemory(doc);
+  if (!readJsonSuccessful) {
+    programStatus = ProgramStatus::FatalError;
+    return;
   }
+
+  doc["msg"] = MESSAGE_ID_LOAD_SETTINGS_V1;
+
+  serializeJson(doc, Serial);
 }
 
 void handleSerialCommand() {
   lightOn();
 
-  // TODO: figure out capacity
-  DynamicJsonDocument doc(8192);
+  DynamicJsonDocument doc(DOCUMENT_ALLOC_SIZE_FULL);
 
   DeserializationError err = deserializeJson(doc, Serial);
 
@@ -165,18 +156,12 @@ void handleSerialCommand() {
   byte messageId = doc["msg"];
   if (messageId == MESSAGE_ID_SAVE_SETTINGS_V1) {
     handleSaveSettingsCommand(doc);
+  } else if (messageId == MESSAGE_ID_REQUEST_LOAD_SETTINGS_V1) {
+    handleRequestLoadSettingsCommand();
   } else {
     // Unknown command!
     programStatus = ProgramStatus::FatalError;
   }
-
-  // TODO: implement other commands again
-
-  // else if (commandId == MESSAGE_ID_SAVE_SETTINGS_V1) {
-  //   handleSaveSettingsCommand();
-  // } else if (commandId == MESSAGE_ID_REQUEST_LOAD_SETTINGS_V1) {
-  //   handleRequestLoadSettingsCommand();
-  // }
 
   lightOff();
 }

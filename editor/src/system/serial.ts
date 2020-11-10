@@ -1,16 +1,30 @@
 import SerialPort from 'serialport';
 
-import { Settings, Preset, ControllerMapping } from '../common/types';
+import { Settings } from '../common/types';
 import { getSynthById } from '../common/config/synths';
 
 const MESSAGE_ID_SAVE_SETTINGS_V1 = 0x10;
 const MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1 = 0x11;
-const COMMAND_ID_REQUEST_LOAD_SETTINGS_V1 = 0x20;
-const COMMAND_ID_LOAD_SETTINGS_V1 = 0x21;
+const MESSAGE_ID_REQUEST_LOAD_SETTINGS_V1 = 0x20;
+const MESSAGE_ID_LOAD_SETTINGS_V1 = 0x21;
 
 let portInstance: SerialPort | null = null;
 
+interface MessageWithId {
+  msg: number
+}
+
 interface SaveSettingsMessage {
+  msg: number,
+  ctrl: {
+    rows: number,
+    cols: number,
+    ccs: number[]
+  },
+  outs: MessagePreset[]
+}
+
+interface LoadSettingsMessage {
   msg: number,
   ctrl: {
     rows: number,
@@ -34,7 +48,7 @@ interface MessagePresetCC {
   name: string
 }
 
-function serializeSaveCommand(settings: Settings): SaveSettingsMessage {
+function createSaveSettingsMessage(settings: Settings): SaveSettingsMessage {
   return {
     msg: MESSAGE_ID_SAVE_SETTINGS_V1,
     ctrl: {
@@ -62,20 +76,27 @@ function serializeSaveCommand(settings: Settings): SaveSettingsMessage {
         })
       };
     })
-  }
+  };
+}
+
+function createRequestLoadSettingsMessage(): MessageWithId {
+  return {
+    msg: MESSAGE_ID_REQUEST_LOAD_SETTINGS_V1
+  };
 }
 
 export async function saveSettings(settings: Settings): Promise<string> {
   try {
     const port = await connect();
-    const serialized = serializeSaveCommand(settings);
-    const json = Buffer.from(JSON.stringify(serialized));
-    const rawResponse = await sendCommand(json, port);
-    const responseJson = JSON.parse(rawResponse.toString());
-    if (responseJson.msg && responseJson.msg === MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1) {
+    const message = createSaveSettingsMessage(settings);
+    const rawMessage = serializeMessage(message);
+    const rawResponse = await sendMessage(rawMessage, port);
+    const response = deserializeMessage(rawResponse);
+
+    if (response.msg && response.msg === MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1) {
       return 'Saved settings!';
     } else {
-      throw new Error(`Received unexpected response: ${responseJson}`);
+      throw new Error(`Received unexpected response: ${response}`);
     }
   } catch (err) {
     throw new Error(`Failed to save settings: ${err}`);
@@ -85,95 +106,50 @@ export async function saveSettings(settings: Settings): Promise<string> {
 export async function loadSettings(): Promise<Settings> {
   try {
     const port = await connect();
-    const loadCommand = Buffer.from([COMMAND_ID_REQUEST_LOAD_SETTINGS_V1]);
-    const rawResponse = await sendCommand(loadCommand, port);
-    const settings = deserializeLoadSettingsMessage(rawResponse);
+    const message = createRequestLoadSettingsMessage();
+    const rawMessage = serializeMessage(message);
+    const rawResponse = await sendMessage(rawMessage, port);
+    const response = deserializeMessage(rawResponse);
 
-    return settings;
+    if (response.msg && response.msg === MESSAGE_ID_LOAD_SETTINGS_V1) {
+      const settings = parseLoadSettings(response);
+      return settings;
+    } else {
+      throw new Error(`Received unexpected response: ${response}`);
+    }
   } catch (err) {
     throw new Error(`Failed to load settings: ${err}`);
   }
 }
 
-function deserializeLoadSettingsMessage(rawSettings: Buffer): Settings {
-
-  // TODO: implement
-
-  debugger;
-
+function parseLoadSettings(rawSettings: LoadSettingsMessage): Settings {
   const settings: Settings = {
     presets: []
   };
 
-  let address = 0;
-  if (rawSettings[address] !== COMMAND_ID_LOAD_SETTINGS_V1) {
-    throw new Error(`Expected message ID ${COMMAND_ID_LOAD_SETTINGS_V1}, got ${rawSettings[address]}`);
-  }
-  address++;
+  const inputCCs = rawSettings.ctrl.ccs;
 
-  const presetCount = rawSettings[address];
-  address++;
-  console.log('presetCount', presetCount);
-
-  for (let presetIdx = 0; presetIdx < presetCount; presetIdx++) {
-    const presetId = rawSettings[address];
-    address++;
-    console.log('  preset ID:', presetId);
-
-    const synthId = rawSettings[address];
-    address++;
-    console.log('  Synth ID:', synthId);
-
-    const channel = rawSettings[address];
-    address++;
-    console.log('  Output MIDI channel:', channel);
-
-    const mappingCount = rawSettings[address];
-    address++;
-    console.log('  Mapping count:', mappingCount);
-
-    const mappings: ControllerMapping[] = [];
-
-    for (let mappingIdx = 0; mappingIdx < mappingCount; mappingIdx++) {
-      const mappingInput = rawSettings[address];
-      address++;
-      const mappingOutput = rawSettings[address];
-      address++;
-
-      const mapping: ControllerMapping = {
-        in: mappingInput,
-        out: mappingOutput
-      };
-      mappings.push(mapping);
-      console.log(`    Mapping: input ${mappingInput} output ${mappingOutput}`);
-    }
-
-    const preset: Preset = {
-      synthId,
-      channel,
-      mappings
-    };
-    settings.presets.push(preset);
-  }
-
-  expectNullByte(rawSettings[address]);
-  address++;
-  expectNullByte(rawSettings[address]);
-  address++;
-  expectNullByte(rawSettings[address]);
-  address++;
-  expectNullByte(rawSettings[address]);
+  settings.presets = rawSettings.outs.map(out => ({
+    synthId: out.sid,
+    channel: out.chn,
+    mappings: out.ccs.map((outCC, idx) => ({
+      in: inputCCs[idx],
+      out: outCC.num
+    }))
+  }));
 
   return settings;
 }
 
-function expectNullByte(byte: number) {
-  if (byte !== 0x00) {
-    throw new Error(`Expected null byte, got: ${byte}`);
-  }
+function serializeMessage(message: object): Buffer {
+  return Buffer.from(JSON.stringify(message));
 }
 
-async function sendCommand(commandBuffer: Buffer, port: SerialPort): Promise<Buffer> {
+function deserializeMessage(rawMessage: Buffer): any {
+  return JSON.parse(rawMessage.toString());
+}
+
+async function sendMessage(commandBuffer: Buffer, port: SerialPort): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     port.on('data', function (data) {
       console.log('Data, as utf8:', data.toString('utf8'));
