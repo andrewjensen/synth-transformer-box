@@ -4,6 +4,7 @@
 #include <EEPROM.h>
 
 // From the library manager
+#include <ArduinoJson.h>
 #include <Bounce2.h>
 
 // From this project
@@ -22,8 +23,6 @@
 #define PIN_LCD_D7 39
 
 #define STATUS_MESSAGE_TIME_MS 2000
-
-#define TEMP_PRESET_NAME_PLACEHOLDER "[Preset Name]"
 
 Screen screen = Screen(
   PIN_LCD_RS,
@@ -94,17 +93,20 @@ void storeTerminatingSignal(int address) {
 }
 
 void sendSaveSettingsSuccessful() {
-  Serial.write(COMMAND_ID_SAVE_SETTINGS_SUCCESSFUL_V1);
+  Serial.write(MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1);
 }
 
-void handleSaveSettingsCommand() {
-  // Read the settings data and save it into EEPROM
+void handleSaveSettingsCommand(DynamicJsonDocument doc) {
+  // re-serialize the JSON so we can save it
+  std::string output;
+  serializeJson(doc, output);
+
+  // Save the settings data into EEPROM
   int address = 0;
   EEPROM.write(address, PROTOCOL_VERSION);
   address++;
-  while (Serial.available()) {
-    byte received = Serial.read();
-    EEPROM.write(address, received);
+  for (std::string::size_type i = 0; i < output.size(); i++) {
+    EEPROM.write(address, output[i]);
     address++;
   }
   storeTerminatingSignal(address);
@@ -114,13 +116,13 @@ void handleSaveSettingsCommand() {
   screen.printSettingsSaved(settings.getPresetCount());
   delay(STATUS_MESSAGE_TIME_MS);
 
-  screen.printPreset(settings.getCurrentPresetId(), TEMP_PRESET_NAME_PLACEHOLDER);
+  screen.printPreset(settings.getCurrentPresetId(), settings.getCurrentSynthName());
 
   sendSaveSettingsSuccessful();
 }
 
 void handleRequestLoadSettingsCommand() {
-  Serial.write(COMMAND_ID_LOAD_SETTINGS_V1);
+  Serial.write(MESSAGE_ID_LOAD_SETTINGS_V1);
 
   // TODO: check stored protocol version first
 
@@ -144,13 +146,34 @@ void handleRequestLoadSettingsCommand() {
 void handleSerialCommand() {
   lightOn();
 
-  byte commandId = Serial.read();
+  // TODO: figure out capacity
+  DynamicJsonDocument doc(8192);
 
-  if (commandId == COMMAND_ID_SAVE_SETTINGS_V1) {
-    handleSaveSettingsCommand();
-  } else if (commandId == COMMAND_ID_REQUEST_LOAD_SETTINGS_V1) {
-    handleRequestLoadSettingsCommand();
+  DeserializationError err = deserializeJson(doc, Serial);
+
+  if (err) {
+    // Error deserializing
+    // err.c_str();
+
+    programStatus = ProgramStatus::FatalError;
+    return;
   }
+
+  byte messageId = doc["msg"];
+  if (messageId == MESSAGE_ID_SAVE_SETTINGS_V1) {
+    handleSaveSettingsCommand(doc);
+  } else {
+    // Unknown command!
+    programStatus = ProgramStatus::FatalError;
+  }
+
+  // TODO: implement other commands again
+
+  // else if (commandId == MESSAGE_ID_SAVE_SETTINGS_V1) {
+  //   handleSaveSettingsCommand();
+  // } else if (commandId == MESSAGE_ID_REQUEST_LOAD_SETTINGS_V1) {
+  //   handleRequestLoadSettingsCommand();
+  // }
 
   lightOff();
 }
@@ -175,7 +198,7 @@ void loopRunning() {
     settings.triggerNextPreset();
 
     byte presetId = settings.getCurrentPresetId();
-    screen.printPreset(presetId, TEMP_PRESET_NAME_PLACEHOLDER);
+    screen.printPreset(presetId, settings.getCurrentSynthName());
     if (DEBUG_SERIAL) {
       Serial.print("Switched to preset ");
       Serial.println(presetId);
@@ -242,7 +265,7 @@ void setup() {
       screen.printInitialized(presetCount);
       delay(STATUS_MESSAGE_TIME_MS);
 
-      screen.printPreset(settings.getCurrentPresetId(), TEMP_PRESET_NAME_PLACEHOLDER);
+      screen.printPreset(settings.getCurrentPresetId(), settings.getCurrentSynthName());
       return;
     }
     case InitSettingsResult::MemoryBlank: {
