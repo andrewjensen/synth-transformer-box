@@ -4,6 +4,7 @@ import { Settings, Preset, ControllerMapping } from '../common/types';
 import { getSynthById } from '../common/config/synths';
 
 const MESSAGE_ID_SAVE_SETTINGS_V1 = 0x10;
+const MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1 = 0x11;
 const COMMAND_ID_REQUEST_LOAD_SETTINGS_V1 = 0x20;
 const COMMAND_ID_LOAD_SETTINGS_V1 = 0x21;
 
@@ -70,10 +71,12 @@ export async function saveSettings(settings: Settings): Promise<string> {
     const serialized = serializeSaveCommand(settings);
     const json = Buffer.from(JSON.stringify(serialized));
     const rawResponse = await sendCommand(json, port);
-
-    // TODO: parse response, reject if represents a failure
-
-    return 'Saved settings!';
+    const responseJson = JSON.parse(rawResponse.toString());
+    if (responseJson.msg && responseJson.msg === MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1) {
+      return 'Saved settings!';
+    } else {
+      throw new Error(`Received unexpected response: ${responseJson}`);
+    }
   } catch (err) {
     throw new Error(`Failed to save settings: ${err}`);
   }

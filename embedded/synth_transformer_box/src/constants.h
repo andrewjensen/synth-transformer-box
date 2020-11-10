@@ -7,7 +7,7 @@ const byte MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1 = 0x11;
 const byte MESSAGE_ID_REQUEST_LOAD_SETTINGS_V1 = 0x20;
 const byte MESSAGE_ID_LOAD_SETTINGS_V1 = 0x21;
 
-const bool DEBUG_SERIAL = true;
+const bool DEBUG_SERIAL = false;
 
 enum ProgramStatus {
   Initializing = 1,

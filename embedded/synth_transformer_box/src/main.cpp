@@ -93,7 +93,10 @@ void storeTerminatingSignal(int address) {
 }
 
 void sendSaveSettingsSuccessful() {
-  Serial.write(MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1);
+  DynamicJsonDocument doc(128);
+  doc["msg"] = MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1;
+
+  serializeJson(doc, Serial);
 }
 
 void handleSaveSettingsCommand(DynamicJsonDocument doc) {
