@@ -1,22 +1,105 @@
 import SerialPort from 'serialport';
 
-import { Settings, Preset, ControllerMapping } from '../common/types';
+import { Settings } from '../common/types';
+import { getSynthById } from '../common/config/synths';
 
-const COMMAND_ID_SAVE_SETTINGS_V1 = 0x10;
-const COMMAND_ID_REQUEST_LOAD_SETTINGS_V1 = 0x20;
-const COMMAND_ID_LOAD_SETTINGS_V1 = 0x21;
+const MESSAGE_ID_SAVE_SETTINGS_V1 = 0x10;
+const MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1 = 0x11;
+const MESSAGE_ID_REQUEST_LOAD_SETTINGS_V1 = 0x20;
+const MESSAGE_ID_LOAD_SETTINGS_V1 = 0x21;
+
+const RESPONSE_BUFFER_TIMEOUT_MS = 500;
 
 let portInstance: SerialPort | null = null;
+
+interface MessageWithId {
+  msg: number
+}
+
+interface SaveSettingsMessage {
+  msg: number,
+  ctrl: {
+    rows: number,
+    cols: number,
+    ccs: number[]
+  },
+  outs: MessagePreset[]
+}
+
+interface LoadSettingsMessage {
+  msg: number,
+  ctrl: {
+    rows: number,
+    cols: number,
+    ccs: number[]
+  },
+  outs: MessagePreset[]
+}
+
+interface MessagePreset {
+  pid: number,
+  sid: number,
+  mfg: string,
+  syn: string,
+  chn: number,
+  ccs: MessagePresetCC[]
+}
+
+interface MessagePresetCC {
+  num: number,
+  name: string
+}
+
+function createSaveSettingsMessage(settings: Settings): SaveSettingsMessage {
+  return {
+    msg: MESSAGE_ID_SAVE_SETTINGS_V1,
+    ctrl: {
+      rows: 2,
+      cols: 4,
+      ccs: [1, 2, 3, 4, 5, 6, 7, 8]
+    },
+    outs: settings.presets.map((preset, idx) => {
+      const synth = getSynthById(preset.synthId);
+      return {
+        pid: idx + 1,
+        sid: preset.synthId,
+        mfg: synth.manufacturer,
+        syn: synth.title,
+        chn: preset.channel,
+        ccs: preset.mappings.map(mapping => {
+          const param = synth.parameters.find(param => param.cc === mapping.out);
+          if (!param) {
+            throw new Error(`Could not find parameter ${mapping.out} for synth ${preset.synthId}`);
+          }
+          return {
+            num: mapping.out,
+            name: param.title
+          };
+        })
+      };
+    })
+  };
+}
+
+function createRequestLoadSettingsMessage(): MessageWithId {
+  return {
+    msg: MESSAGE_ID_REQUEST_LOAD_SETTINGS_V1
+  };
+}
 
 export async function saveSettings(settings: Settings): Promise<string> {
   try {
     const port = await connect();
-    const saveCommand = serializeSaveCommand(settings);
-    const rawResponse = await sendCommand(saveCommand, port);
+    const message = createSaveSettingsMessage(settings);
+    const rawMessage = serializeMessage(message);
+    const rawResponse = await sendMessage(rawMessage, port);
+    const response = deserializeMessage(rawResponse);
 
-    // TODO: parse response, reject if represents a failure
-
-    return 'Saved settings!';
+    if (response.msg && response.msg === MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1) {
+      return 'Saved settings!';
+    } else {
+      throw new Error(`Received unexpected response:\n${JSON.stringify(response, null, 2)}`);
+    }
   } catch (err) {
     throw new Error(`Failed to save settings: ${err}`);
   }
@@ -25,139 +108,85 @@ export async function saveSettings(settings: Settings): Promise<string> {
 export async function loadSettings(): Promise<Settings> {
   try {
     const port = await connect();
-    const loadCommand = Buffer.from([COMMAND_ID_REQUEST_LOAD_SETTINGS_V1]);
-    const rawResponse = await sendCommand(loadCommand, port);
-    const settings = deserializeLoadSettingsMessage(rawResponse);
+    const message = createRequestLoadSettingsMessage();
+    const rawMessage = serializeMessage(message);
+    const rawResponse = await sendMessage(rawMessage, port);
+    const response = deserializeMessage(rawResponse);
 
-    return settings;
+    if (response.msg && response.msg === MESSAGE_ID_LOAD_SETTINGS_V1) {
+      const settings = parseLoadSettings(response);
+      return settings;
+    } else {
+      throw new Error(`Received unexpected response:\n${JSON.stringify(response, null, 2)}`);
+    }
   } catch (err) {
     throw new Error(`Failed to load settings: ${err}`);
   }
 }
 
-function serializeSaveCommand(settings: Settings): Buffer {
-  const bytes = [];
-
-  const { presets } = settings;
-
-  bytes.push(COMMAND_ID_SAVE_SETTINGS_V1);
-  bytes.push(presets.length);
-
-  for (let idx = 0; idx < presets.length; idx++) {
-    const preset = presets[idx];
-    const presetNumber = idx + 1;
-
-    bytes.push(presetNumber);
-    bytes.push(preset.synthId);
-    bytes.push(preset.channel);
-    bytes.push(preset.mappings.length);
-
-    for (let mapping of preset.mappings) {
-      bytes.push(mapping.in);
-      bytes.push(mapping.out);
-    }
-  }
-
-  const commandBuffer = Buffer.from(bytes);
-
-  return commandBuffer;
-}
-
-function deserializeLoadSettingsMessage(rawSettings: Buffer): Settings {
-
-  // TODO: implement
-
-  debugger;
-
+function parseLoadSettings(rawSettings: LoadSettingsMessage): Settings {
   const settings: Settings = {
     presets: []
   };
 
-  let address = 0;
-  if (rawSettings[address] !== COMMAND_ID_LOAD_SETTINGS_V1) {
-    throw new Error(`Expected message ID ${COMMAND_ID_LOAD_SETTINGS_V1}, got ${rawSettings[address]}`);
-  }
-  address++;
+  const inputCCs = rawSettings.ctrl.ccs;
 
-  const presetCount = rawSettings[address];
-  address++;
-  console.log('presetCount', presetCount);
-
-  for (let presetIdx = 0; presetIdx < presetCount; presetIdx++) {
-    const presetId = rawSettings[address];
-    address++;
-    console.log('  preset ID:', presetId);
-
-    const synthId = rawSettings[address];
-    address++;
-    console.log('  Synth ID:', synthId);
-
-    const channel = rawSettings[address];
-    address++;
-    console.log('  Output MIDI channel:', channel);
-
-    const mappingCount = rawSettings[address];
-    address++;
-    console.log('  Mapping count:', mappingCount);
-
-    const mappings: ControllerMapping[] = [];
-
-    for (let mappingIdx = 0; mappingIdx < mappingCount; mappingIdx++) {
-      const mappingInput = rawSettings[address];
-      address++;
-      const mappingOutput = rawSettings[address];
-      address++;
-
-      const mapping: ControllerMapping = {
-        in: mappingInput,
-        out: mappingOutput
-      };
-      mappings.push(mapping);
-      console.log(`    Mapping: input ${mappingInput} output ${mappingOutput}`);
-    }
-
-    const preset: Preset = {
-      synthId,
-      channel,
-      mappings
-    };
-    settings.presets.push(preset);
-  }
-
-  expectNullByte(rawSettings[address]);
-  address++;
-  expectNullByte(rawSettings[address]);
-  address++;
-  expectNullByte(rawSettings[address]);
-  address++;
-  expectNullByte(rawSettings[address]);
+  settings.presets = rawSettings.outs.map(out => ({
+    synthId: out.sid,
+    channel: out.chn,
+    mappings: out.ccs.map((outCC, idx) => ({
+      in: inputCCs[idx],
+      out: outCC.num
+    }))
+  }));
 
   return settings;
 }
 
-function expectNullByte(byte: number) {
-  if (byte !== 0x00) {
-    throw new Error(`Expected null byte, got: ${byte}`);
-  }
+function serializeMessage(message: object): Buffer {
+  return Buffer.from(JSON.stringify(message));
 }
 
-async function sendCommand(commandBuffer: Buffer, port: SerialPort): Promise<Buffer> {
+function deserializeMessage(rawMessage: Buffer): any {
+  return JSON.parse(rawMessage.toString());
+}
+
+async function sendMessage(commandBuffer: Buffer, port: SerialPort): Promise<Buffer> {
   return new Promise((resolve, reject) => {
-    port.on('data', function (data) {
-      console.log('Data, as utf8:', data.toString('utf8'));
-      console.log(`Data, as raw decimal bytes:`);
+    let response: Buffer = null;
+    let submitTimer: number = null;
 
-      let toLog = '';
-      for (let byte of data) {
-        toLog += byte + ' ';
-      }
-      console.log(toLog);
+    function addResponseData(data: any) {
+      resetSubmitTimer();
 
+      console.log('Received data, as utf8:', data.toString('utf8'));
+      console.log(`Received data, as raw decimal bytes:`);
+      logBytesAsDecimal(data);
       console.log('-------');
 
-      resolve(Buffer.from(data));
-    });
+      if (response) {
+        console.log('  Added to response...')
+        response = Buffer.concat([response, Buffer.from(data)]);
+      } else {
+        response = Buffer.from(data);
+      }
+    }
 
+    function resetSubmitTimer() {
+      if (submitTimer) {
+        clearTimeout(submitTimer);
+      }
+      submitTimer = setTimeout(submitResponse, RESPONSE_BUFFER_TIMEOUT_MS);
+    }
+
+    function submitResponse() {
+      console.log('  Submitting response after waiting');
+      port.off('data', addResponseData);
+
+      resolve(response);
+    }
+
+    port.on('data', addResponseData);
     port.write(commandBuffer);
   });
 }
@@ -181,6 +210,8 @@ async function connect(): Promise<SerialPort> {
     });
     await openPort(portInstance);
 
+    console.log('Connected.');
+
     return portInstance;
   } catch (err) {
     console.log('Failed to create serial port:', err);
@@ -192,8 +223,10 @@ async function openPort(port: SerialPort): Promise<void> {
   return new Promise((resolve, reject) => {
     port.open((err) => {
       if (err) {
+        console.log('Error opening port!');
         reject(err);
       } else {
+        console.log('Successfully opened port.');
         resolve();
       }
     });
@@ -202,7 +235,7 @@ async function openPort(port: SerialPort): Promise<void> {
 
 async function getPortPath(): Promise<string | null> {
   const ports = await SerialPort.list();
-  // console.log('ports:', ports);
+  console.log('ports:', ports);
 
   // TODO: is there a better thing to look for?
   const foundPort = ports.find(port => port.manufacturer === 'Teensyduino');
@@ -210,4 +243,12 @@ async function getPortPath(): Promise<string | null> {
   return foundPort
     ? foundPort.path
     : null;
+}
+
+function logBytesAsDecimal(data: any) {
+  let toLog = '';
+  for (let byte of data) {
+    toLog += byte + ' ';
+  }
+  console.log(toLog);
 }
