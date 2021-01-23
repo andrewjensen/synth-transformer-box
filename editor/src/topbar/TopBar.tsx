@@ -6,9 +6,13 @@ import { AppTab } from '../App';
 interface TopBarProps {
   activeTab: AppTab
   onChangeTab: (tab: AppTab) => void
+  onImport: () => void
+  onExport: () => void
 }
 
-const TopBar: React.FC<TopBarProps> = ({ activeTab, onChangeTab }) => {
+const TopBar: React.FC<TopBarProps> = ({ activeTab, onChangeTab, onImport, onExport }) => {
+  // TODO: connect hasWarning for export
+
   return (
     <Container>
       <Tabs>
@@ -23,6 +27,20 @@ const TopBar: React.FC<TopBarProps> = ({ activeTab, onChangeTab }) => {
           onClick={() => onChangeTab(AppTab.Synths)}
         />
       </Tabs>
+      <Controls>
+        <SerialControl>
+          <SerialControlButton
+            hasWarning={false}
+            onClick={onImport}
+          >Import settings</SerialControlButton>
+        </SerialControl>
+        <SerialControl>
+          <SerialControlButton
+            hasWarning={false}
+            onClick={onExport}
+          >Export settings</SerialControlButton>
+        </SerialControl>
+      </Controls>
     </Container>
   );
 }
@@ -52,6 +70,7 @@ const Container = styled.div`
 `;
 
 const Tabs = styled.div`
+  padding-left: 2rem;
   display: flex;
   flex-direction: row;
 `;
@@ -74,8 +93,33 @@ const TabContainer = styled.div<TabContainerProps>`
 
 const TabLink = styled.div`
   display: block;
-  padding: 10px;
+  padding: 1rem;
   color: white;
   text-decoration: none;
   font-weight: bold;
+`;
+
+const Controls = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const SerialControl = styled.div`
+  margin: 0.5rem;
+  margin-left: 0;
+`;
+
+interface SerialControlButtonProps {
+  hasWarning: boolean
+}
+
+const SerialControlButton = styled.button<SerialControlButtonProps>`
+  border: 1px solid black;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+
+  ${(props) => props.hasWarning
+    ? `background-color: #ff0000;`
+    : `background-color: #dddddd;`
+  }
 `;

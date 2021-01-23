@@ -1,6 +1,8 @@
 import React, { useState, useReducer } from 'react';
 import styled from 'styled-components';
+import { ipcRenderer } from 'electron';
 
+import { Settings } from './common/types';
 import TopBar from './topbar/TopBar';
 import Controller from './controller/Controller';
 import Synths from './synths/Synths';
@@ -24,6 +26,30 @@ const App = () => {
     setTab(tab);
   };
 
+  const handleImport = async () => {
+    console.log('Loading settings...');
+
+    const settings: Settings = await ipcRenderer.invoke('load-settings');
+    console.log('Got settings:', settings);
+
+    dispatch({
+      type: 'IMPORT_SETTINGS',
+      settings
+    });
+  };
+
+  const handleExport = async () => {
+    console.log('Saving settings...');
+    const settings: Settings = {
+      presets: state.presets
+    };
+
+    const result = await ipcRenderer.invoke('save-settings', settings);
+    console.log('Result:', result);
+
+    dispatch({ type: 'EXPORT_SETTINGS' });
+  };
+
   const renderBody = () => {
     switch (tab) {
       case AppTab.Controller:
@@ -39,6 +65,8 @@ const App = () => {
         <TopBar
           activeTab={tab}
           onChangeTab={handleChangeTab}
+          onImport={handleImport}
+          onExport={handleExport}
         />
         <BodyContainer>
           {renderBody()}

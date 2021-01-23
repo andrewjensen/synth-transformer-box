@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { ipcRenderer } from 'electron';
 
-import { Settings, Preset } from '../common/types';
+import { Preset } from '../common/types';
 import { DeviceMenu, DeviceMenuItem } from '../common/components/DeviceMenu';
 import SettingsContext from '../common/state/SettingsContext';
 import CurrentPreset from './CurrentPreset';
@@ -23,34 +22,6 @@ const Synths = () => {
     type: 'SELECT_PRESET',
     presetIdx
   });
-
-  // const handleExport = () => dispatch({
-  //   type: 'TOGGLE_EXPORTING'
-  // });
-
-  const handleImport = async () => {
-    console.log('Loading settings...');
-
-    const settings: Settings = await ipcRenderer.invoke('load-settings');
-    console.log('Got settings:', settings);
-
-    dispatch({
-      type: 'IMPORT_SETTINGS',
-      settings
-    });
-  };
-
-  const handleExport = async () => {
-    console.log('Saving settings...');
-    const settings: Settings = {
-      presets: state.presets
-    };
-
-    const result = await ipcRenderer.invoke('save-settings', settings);
-    console.log('Result:', result);
-
-    dispatch({ type: 'EXPORT_SETTINGS' });
-  };
 
   const renderMainContent = () => {
     if (state.addingPreset) {
@@ -90,21 +61,6 @@ const Synths = () => {
           </AddPresetContainer>
         </PresetsContainer>
 
-        <SerialControlsContainer>
-          <SerialControl>
-            <SerialControlButton
-              hasWarning={false}
-              onClick={handleImport}
-            >Import settings</SerialControlButton>
-          </SerialControl>
-          <SerialControl>
-            <SerialControlButton
-              hasWarning={state.unsavedEdits}
-              onClick={handleExport}
-            >Export settings</SerialControlButton>
-          </SerialControl>
-        </SerialControlsContainer>
-
       </Sidebar>
       <Main>
         {renderMainContent()}
@@ -142,27 +98,5 @@ const AddPresetContainer = styled.div`
 `;
 
 const PresetsContainer = styled.div`
-`;
-
-const SerialControlsContainer = styled.div`
-  text-align: center;
-`;
-
-const SerialControl = styled.div`
-  margin: 1rem;
-`;
-
-interface SerialControlButtonProps {
-  hasWarning: boolean
-}
-
-const SerialControlButton = styled.button<SerialControlButtonProps>`
-  border: 1px solid black;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-
-  ${(props) => props.hasWarning
-    ? `background-color: #ff0000;`
-    : `background-color: #dddddd;`
-  }
+  padding-top: 2rem;
 `;
