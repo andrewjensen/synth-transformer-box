@@ -116,12 +116,12 @@ void handleSaveSettingsCommand(DynamicJsonDocument doc) {
 
   settings.initializeFromMemory();
 
+  sendSaveSettingsSuccessful();
+
   screen.printSettingsSaved(settings.getPresetCount());
   delay(STATUS_MESSAGE_TIME_MS);
 
   screen.printPreset(settings.getCurrentPresetId(), settings.getCurrentSynthName());
-
-  sendSaveSettingsSuccessful();
 }
 
 void handleRequestLoadSettingsCommand() {

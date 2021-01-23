@@ -8,7 +8,7 @@ const MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1 = 0x11;
 const MESSAGE_ID_REQUEST_LOAD_SETTINGS_V1 = 0x20;
 const MESSAGE_ID_LOAD_SETTINGS_V1 = 0x21;
 
-const RESPONSE_BUFFER_TIMEOUT_MS = 100;
+const RESPONSE_BUFFER_TIMEOUT_MS = 500;
 
 let portInstance: SerialPort | null = null;
 
@@ -181,12 +181,11 @@ async function sendMessage(commandBuffer: Buffer, port: SerialPort): Promise<Buf
 
     function submitResponse() {
       console.log('  Submitting response after waiting');
-      port.on('data', () => {});
+      port.off('data', addResponseData);
 
       resolve(response);
     }
 
-    resetSubmitTimer();
     port.on('data', addResponseData);
     port.write(commandBuffer);
   });
