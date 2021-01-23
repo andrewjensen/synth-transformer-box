@@ -8,6 +8,8 @@ const MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1 = 0x11;
 const MESSAGE_ID_REQUEST_LOAD_SETTINGS_V1 = 0x20;
 const MESSAGE_ID_LOAD_SETTINGS_V1 = 0x21;
 
+const RESPONSE_BUFFER_TIMEOUT_MS = 100;
+
 let portInstance: SerialPort | null = null;
 
 interface MessageWithId {
@@ -96,7 +98,7 @@ export async function saveSettings(settings: Settings): Promise<string> {
     if (response.msg && response.msg === MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1) {
       return 'Saved settings!';
     } else {
-      throw new Error(`Received unexpected response: ${response}`);
+      throw new Error(`Received unexpected response:\n${JSON.stringify(response, null, 2)}`);
     }
   } catch (err) {
     throw new Error(`Failed to save settings: ${err}`);
@@ -115,7 +117,7 @@ export async function loadSettings(): Promise<Settings> {
       const settings = parseLoadSettings(response);
       return settings;
     } else {
-      throw new Error(`Received unexpected response: ${response}`);
+      throw new Error(`Received unexpected response:\n${JSON.stringify(response, null, 2)}`);
     }
   } catch (err) {
     throw new Error(`Failed to load settings: ${err}`);
@@ -151,21 +153,41 @@ function deserializeMessage(rawMessage: Buffer): any {
 
 async function sendMessage(commandBuffer: Buffer, port: SerialPort): Promise<Buffer> {
   return new Promise((resolve, reject) => {
-    port.on('data', function (data) {
-      console.log('Data, as utf8:', data.toString('utf8'));
-      console.log(`Data, as raw decimal bytes:`);
+    let response: Buffer = null;
+    let submitTimer: number = null;
 
-      let toLog = '';
-      for (let byte of data) {
-        toLog += byte + ' ';
-      }
-      console.log(toLog);
+    function addResponseData(data: any) {
+      resetSubmitTimer();
 
+      console.log('Received data, as utf8:', data.toString('utf8'));
+      console.log(`Received data, as raw decimal bytes:`);
+      logBytesAsDecimal(data);
       console.log('-------');
 
-      resolve(Buffer.from(data));
-    });
+      if (response) {
+        console.log('  Added to response...')
+        response = Buffer.concat([response, Buffer.from(data)]);
+      } else {
+        response = Buffer.from(data);
+      }
+    }
 
+    function resetSubmitTimer() {
+      if (submitTimer) {
+        clearTimeout(submitTimer);
+      }
+      submitTimer = setTimeout(submitResponse, RESPONSE_BUFFER_TIMEOUT_MS);
+    }
+
+    function submitResponse() {
+      console.log('  Submitting response after waiting');
+      port.on('data', () => {});
+
+      resolve(response);
+    }
+
+    resetSubmitTimer();
+    port.on('data', addResponseData);
     port.write(commandBuffer);
   });
 }
@@ -222,4 +244,12 @@ async function getPortPath(): Promise<string | null> {
   return foundPort
     ? foundPort.path
     : null;
+}
+
+function logBytesAsDecimal(data: any) {
+  let toLog = '';
+  for (let byte of data) {
+    toLog += byte + ' ';
+  }
+  console.log(toLog);
 }
