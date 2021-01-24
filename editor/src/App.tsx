@@ -39,9 +39,16 @@ const App = () => {
   };
 
   const handleExport = async () => {
-    console.log('Saving settings...');
+    console.log('Saving settings...', state);
+    const {
+      controllerRows,
+      controllerColumns,
+      presets
+    } = state;
     const settings: Settings = {
-      presets: state.presets
+      controllerRows,
+      controllerColumns,
+      presets
     };
 
     const result = await ipcRenderer.invoke('save-settings', settings);

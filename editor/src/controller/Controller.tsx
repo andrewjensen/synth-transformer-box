@@ -48,7 +48,7 @@ const Controller = () => {
   const renderCell = (inputIdx: number) => {
     const inputCC = inputCCs[inputIdx];
     return (
-      <ControlMappingContainer>
+      <ControlMappingContainer key={inputIdx}>
         <Knob value={127} />
         <select
           value={inputCC}
@@ -98,7 +98,7 @@ const Controller = () => {
 
       <FormElement title="Layout">
         {range(0, controllerRows).map(rowIdx => (
-          <ControlRow>
+          <ControlRow key={rowIdx}>
             {range(0, controllerColumns).map(colIdx => {
               const inputIdx = getCellIndex(rowIdx, colIdx, controllerColumns);
               return renderCell(inputIdx);

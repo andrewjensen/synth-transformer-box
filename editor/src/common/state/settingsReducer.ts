@@ -1,11 +1,9 @@
 import { Synth, Preset, ControllerMapping, Settings } from '../types';
 import { getSynthById } from '../config/synths';
-import { range } from '../helpers';
+import { max, range } from '../helpers';
 
 const INITIAL_ROW_COUNT = 2;
 const INITIAL_COL_COUNT = 4;
-
-const DEFAULT_MAPPINGS = 8;
 
 export interface SettingsState {
   controllerRows: number
@@ -48,17 +46,22 @@ export const INITIAL_STATE: SettingsState = {
 export function settingsReducer(state: SettingsState, action: SettingsAction): SettingsState {
   switch (action.type) {
     case 'CHANGE_CONTROLLER_ROWS':
-      return {
-        ...state,
-        controllerRows: action.rows,
-        inputCCs: getInitialCCs(action.rows, state.controllerColumns),
-        unsavedEdits: true
-      };
     case 'CHANGE_CONTROLLER_COLUMNS':
+      const updatedRows = action.type === 'CHANGE_CONTROLLER_ROWS'
+        ? action.rows
+        : state.controllerRows;
+      const updatedColumns = action.type === 'CHANGE_CONTROLLER_COLUMNS'
+        ? action.columns
+        : state.controllerColumns;
+      const newSize = updatedRows * updatedColumns;
+      const previousSize = state.controllerRows * state.controllerColumns;
+      const newInputCCs = updateInputCCs(state.inputCCs, newSize);
       return {
         ...state,
-        controllerColumns: action.columns,
-        inputCCs: getInitialCCs(state.controllerRows, action.columns),
+        controllerRows: updatedRows,
+        controllerColumns: updatedColumns,
+        inputCCs: newInputCCs,
+        presets: updatePresetMappings(state.presets, previousSize, newInputCCs),
         unsavedEdits: true
       };
     case 'CHANGE_INPUT_CC':
@@ -78,11 +81,12 @@ export function settingsReducer(state: SettingsState, action: SettingsAction): S
         addingPreset: true
       };
     case 'SUBMIT_NEW_PRESET':
+      const mappingCount = state.controllerRows * state.controllerColumns;
       return {
         ...state,
         presets: [
           ...state.presets,
-          createPreset(action.synthId, action.channel)
+          createPreset(action.synthId, action.channel, mappingCount)
         ],
         // this is safe because we just added an element to the end
         currentPresetIdx: state.presets.length,
@@ -133,15 +137,10 @@ export function settingsReducer(state: SettingsState, action: SettingsAction): S
         unsavedEdits: true
       };
     case 'IMPORT_SETTINGS':
-      const {
-        rows,
-        columns,
-        inputCCs
-      } = guessControllerSettings(action.settings.presets[0].mappings);
       return {
-        controllerRows: rows,
-        controllerColumns: columns,
-        inputCCs,
+        controllerRows: action.settings.controllerRows,
+        controllerColumns: action.settings.controllerColumns,
+        inputCCs: getInputCCs(action.settings),
         presets: action.settings.presets,
         currentPresetIdx: action.settings.presets.length ? 0 : null,
         addingPreset: false,
@@ -163,25 +162,28 @@ export function settingsReducer(state: SettingsState, action: SettingsAction): S
   }
 }
 
-function getInitialCCs(rowCount: number, colCount: number) {
+function getInitialCCs(rowCount: number, colCount: number): number[] {
   const totalControls = rowCount * colCount;
   return range(1, totalControls + 1);
 };
 
-// TODO: remove this guessing once we update the wire protocol
-function guessControllerSettings(mappings: ControllerMapping[]) {
-  const mappingCount = mappings.length;
-  for (let chosenRows = 2; chosenRows < 10; chosenRows++) {
-    let chosenColumns = mappingCount / chosenRows;
-    if (Math.floor(chosenColumns) === chosenColumns) {
-      return {
-        rows: chosenRows,
-        columns: chosenColumns,
-        inputCCs: mappings.map(mapping => mapping.in)
-      };
-    }
+function updateInputCCs(previousInputCCs: number[], newSize: number): number[] {
+  const previousSize = previousInputCCs.length;
+  if (newSize === previousSize) {
+    return previousInputCCs;
+  } else if (newSize > previousSize) {
+    // Bigger: append higher CC values onto the end
+    const newCCsCount = newSize - previousSize;
+    const ccsToAdd = getInputCCsToAdd(previousInputCCs, newCCsCount);
+    return [...previousInputCCs, ...ccsToAdd];
+  } else {
+    // Smaller: remove from the end
+    return previousInputCCs.slice(0, newSize);
   }
-  throw new Error('Could not guess controller settings!');
+}
+
+function getInputCCs(settings: Settings): number[] {
+  return settings.presets[0].mappings.map(mapping => mapping.in);
 }
 
 type PresetEditFn = (preset: Preset) => Preset;
@@ -199,23 +201,23 @@ function editCurrentPreset(state: SettingsState, editFn: PresetEditFn): Settings
   };
 }
 
-function createPreset(synthId: number, channel: number): Preset {
+function createPreset(synthId: number, channel: number, mappingCount: number): Preset {
   const synth = getSynthById(synthId);
 
   return {
     synthId,
     channel,
-    mappings: createInitialMappings(synth)
+    mappings: createInitialMappings(synth, mappingCount)
   };
 }
 
-function createInitialMappings(synth: Synth): ControllerMapping[] {
+function createInitialMappings(synth: Synth, mappingCount: number): ControllerMapping[] {
   const availableParams = synth.parameters;
   if (availableParams.length === 0) {
     return [];
   }
 
-  return range(1, DEFAULT_MAPPINGS + 1)
+  return range(1, mappingCount + 1)
     .map((inputCC, idx) => {
       const outputCC = availableParams.length >= idx + 1
         ? availableParams[idx].cc
@@ -226,6 +228,52 @@ function createInitialMappings(synth: Synth): ControllerMapping[] {
         out: outputCC
       };
     });
+}
+
+function updatePresetMappings(presets: Preset[], previousSize: number, inputCCs: number[]): Preset[] {
+  const newSize = inputCCs.length;
+  if (newSize === previousSize) {
+    return presets;
+  } else if (newSize > previousSize) {
+    // Bigger: append higher output CC values onto the end, based on the synth
+    const ccsToAdd = inputCCs.slice(previousSize);
+    return presets.map(preset => addMappings(preset, ccsToAdd));
+  } else {
+    // Smaller: remove from the end
+    return presets.map(preset => ({
+      ...preset,
+      mappings: preset.mappings.slice(0, newSize)
+    }));
+  }
+}
+
+function getInputCCsToAdd(previousInputCCs: number[], newCCsCount: number): number[] {
+  const maxCC = previousInputCCs.reduce(max, previousInputCCs[0]);
+  return range(maxCC + 1, maxCC + newCCsCount + 1);
+}
+
+function addMappings(preset: Preset, ccsToAdd: number[]): Preset {
+  const synth = getSynthById(preset.synthId);
+
+  const usedOutputCCs: Set<number> = new Set(preset.mappings.map(mapping => mapping.out));
+  const availableOuputCCs: number[] = synth.parameters
+    .filter(parameter => !usedOutputCCs.has(parameter.cc))
+    .map(parameter => parameter.cc);
+
+  if (availableOuputCCs.length < ccsToAdd.length) {
+    throw new Error('Not enough output CCs for new mappings');
+  }
+
+  const addedMappings: ControllerMapping[] = ccsToAdd
+    .map((inputCC, idx) => ({
+      in: inputCC,
+      out: availableOuputCCs[idx]
+    }));
+
+  return {
+    ...preset,
+    mappings: [...preset.mappings, ...addedMappings]
+  };
 }
 
 function reorderPresets(presets: Preset[], idxA: number, idxB: number): Preset[] {

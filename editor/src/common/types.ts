@@ -1,4 +1,6 @@
 export interface Settings {
+  controllerRows: number
+  controllerColumns: number
   presets: Preset[]
 }
 

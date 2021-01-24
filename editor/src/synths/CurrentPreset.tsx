@@ -7,16 +7,20 @@ import ChannelSetting from './ChannelSetting';
 import KnobSetting from './KnobSetting';
 import { SettingsAction } from '../common/state/settingsReducer';
 
-const CHUNK_SIZE = 4;
-
 interface CurrentPresetProps {
   preset: Preset
   allPresets: Preset[]
+  controllerColumns: number
   dispatch: React.Dispatch<SettingsAction>
 }
 
-const CurrentPreset: React.FC<CurrentPresetProps> = ({ preset, allPresets, dispatch }) => {
-  const mappingChunks = chunkEvery(preset.mappings, CHUNK_SIZE);
+const CurrentPreset: React.FC<CurrentPresetProps> = ({
+  preset,
+  allPresets,
+  controllerColumns,
+  dispatch
+}) => {
+  const mappingChunks = chunkEvery(preset.mappings, controllerColumns);
 
   const isFirstPreset = preset === allPresets[0];
   const isLastPreset = preset === allPresets[allPresets.length - 1];
@@ -83,7 +87,7 @@ const CurrentPreset: React.FC<CurrentPresetProps> = ({ preset, allPresets, dispa
                   synthId={preset.synthId}
                   mapping={mapping}
                   onChangeMapping={(changedMapping) => {
-                    const unchunkedIdx = (chunkIdx * CHUNK_SIZE) + idx;
+                    const unchunkedIdx = (chunkIdx * controllerColumns) + idx;
                     handleChangeMapping(changedMapping, unchunkedIdx);
                   }}
                 />

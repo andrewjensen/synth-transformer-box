@@ -20,3 +20,7 @@ export function chunkEvery<T>(arr: T[], chunkSize: number): T[][] {
 
   return results;
 }
+
+export function max(a: number, b: number): number {
+  return a > b ? a : b;
+}
