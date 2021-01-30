@@ -73,6 +73,14 @@ export function settingsReducer(state: SettingsState, action: SettingsAction): S
               ? action.cc
               : inputCC
         ),
+        presets: state.presets.map(preset => ({
+          ...preset,
+          mappings: preset.mappings.map((mapping, idx) =>
+            idx === action.inputIdx
+              ? ({ ...mapping, in: action.cc })
+              : mapping
+          )
+        })),
         unsavedEdits: true
       };
     case 'ADD_PRESET':

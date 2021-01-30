@@ -29,7 +29,7 @@ const KnobSetting: React.FC<KnobSettingProps> = ({ synthId, mapping, onChangeMap
     <Container>
       <Knob value={127} />
       <FormElement title="Input">
-        <div>CC #555</div>
+        <div>CC #{mapping.in}</div>
       </FormElement>
 
       <FormElement title="Output">

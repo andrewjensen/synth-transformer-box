@@ -213,5 +213,81 @@ describe('settingsReducer', () => {
         }
       ]);
     });
+
+    it('changes input CC on each preset when the controller changes', () => {
+      const previousState: SettingsState = {
+        controllerRows: 1,
+        controllerColumns: 6,
+        inputCCs: [2, 4, 6, 8, 10, 12],
+        presets: [
+          {
+            // roland_ju_06
+            synthId: 5,
+            channel: 7,
+            mappings: [
+              { in: 2, out: 74 },
+              { in: 4, out: 1 },
+              { in: 6, out: 3 },
+              { in: 8, out: 5 },
+              { in: 10, out: 9 },
+              { in: 12, out: 11 },
+            ]
+          },
+          {
+            // akai_ax80_tauntek
+            synthId: 4,
+            channel: 3,
+            mappings: [
+              { in: 2, out: 78 },
+              { in: 4, out: 65 },
+              { in: 6, out: 66 },
+              { in: 8, out: 67 },
+              { in: 10, out: 68 },
+              { in: 12, out: 69 },
+            ]
+          }
+        ],
+        currentPresetIdx: 0,
+        addingPreset: false,
+        exporting: false,
+        unsavedEdits: false
+      };
+      const action: SettingsAction = {
+        type: 'CHANGE_INPUT_CC',
+        inputIdx: 0,
+        cc: 100
+      };
+      const newState = settingsReducer(previousState, action);
+
+      expect(newState.inputCCs).toEqual([100, 4, 6, 8, 10, 12]);
+      expect(newState.presets).toEqual([
+        {
+          // roland_ju_06
+          synthId: 5,
+          channel: 7,
+          mappings: [
+            { in: 100, out: 74 },
+            { in: 4, out: 1 },
+            { in: 6, out: 3 },
+            { in: 8, out: 5 },
+            { in: 10, out: 9 },
+            { in: 12, out: 11 },
+          ]
+        },
+        {
+          // akai_ax80_tauntek
+          synthId: 4,
+          channel: 3,
+          mappings: [
+            { in: 100, out: 78 },
+            { in: 4, out: 65 },
+            { in: 6, out: 66 },
+            { in: 8, out: 67 },
+            { in: 10, out: 68 },
+            { in: 12, out: 69 },
+          ]
+        }
+      ]);
+    });
   });
 });
