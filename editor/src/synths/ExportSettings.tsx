@@ -27,7 +27,9 @@ const ExportSettings: React.FC<ExportSettingsProps> = ({ state, dispatch }) => {
 
 export default ExportSettings;
 
-const Container = styled.div``;
+const Container = styled.div`
+  margin: 2rem;
+`;
 
 const Title = styled.h1``;
 
@@ -36,7 +38,8 @@ const SerializedSettings = styled.pre`
   padding: 2rem;
   border: 5px solid black;
   background-color: #ccc;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: auto;
 `;
 
 const Controls = styled.div`

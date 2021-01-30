@@ -94,7 +94,7 @@ const Sidebar = styled.div`
 
 const Main = styled.div`
   flex-grow: 1;
-  margin: 2rem;
+  overflow: hidden;
 `;
 
 const AddPresetContainer = styled.div`

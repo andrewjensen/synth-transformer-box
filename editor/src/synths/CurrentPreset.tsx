@@ -78,35 +78,43 @@ const CurrentPreset: React.FC<CurrentPresetProps> = ({
           <Button onClick={handleConfirmDelete}>Delete Preset</Button>
         </HeaderControls>
       </Header>
-      <ControlSurface>
-        {mappingChunks.map((chunk, chunkIdx) => (
-          <ControlRow key={`mappingChunk${chunkIdx}`}>
-            {chunk.map((mapping, idx) => (
-              <ControlMappingContainer key={`mappingChunk${chunkIdx}controller${idx}`}>
-                <KnobSetting
-                  synthId={preset.synthId}
-                  mapping={mapping}
-                  onChangeMapping={(changedMapping) => {
-                    const unchunkedIdx = (chunkIdx * controllerColumns) + idx;
-                    handleChangeMapping(changedMapping, unchunkedIdx);
-                  }}
-                />
-              </ControlMappingContainer>
-            ))}
-          </ControlRow>
-        ))}
-      </ControlSurface>
+      <Content>
+        <ControlSurface>
+          {mappingChunks.map((chunk, chunkIdx) => (
+            <ControlRow key={`mappingChunk${chunkIdx}`}>
+              {chunk.map((mapping, idx) => (
+                <ControlMappingContainer key={`mappingChunk${chunkIdx}controller${idx}`}>
+                  <KnobSetting
+                    synthId={preset.synthId}
+                    mapping={mapping}
+                    onChangeMapping={(changedMapping) => {
+                      const unchunkedIdx = (chunkIdx * controllerColumns) + idx;
+                      handleChangeMapping(changedMapping, unchunkedIdx);
+                    }}
+                  />
+                </ControlMappingContainer>
+              ))}
+            </ControlRow>
+          ))}
+        </ControlSurface>
+      </Content>
     </Container>
   );
 };
 
 export default CurrentPreset;
 
-const Container = styled.div``;
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+`;
 
 const Header = styled.div`
   display: flex;
   flex-direction: row;
+  padding: 2rem;
 `;
 
 const HeaderControls = styled.div``;
@@ -114,19 +122,35 @@ const HeaderControls = styled.div``;
 const Title = styled.div`
   font-size: 24px;
   flex-grow: 1;
-  margin: 0 0 2rem;
 `;
 
 const Button = styled.button`
 `;
 
+const Content = styled.div`
+  flex-grow: 1;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  box-sizing: border-box;
+
+  padding: 0 2rem 2rem 2rem;
+`;
+
 const ControlSurface = styled.div`
+  width: fit-content;
+  height: fit-content;
 `;
 
 const ControlRow = styled.div`
   display: flex;
   flex-direction: row;
   margin-bottom: 1rem;
+  margin-right: 2rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 `;
 
 const ControlMappingContainer = styled.div`

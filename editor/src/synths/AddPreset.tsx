@@ -51,7 +51,9 @@ const AddPreset: React.FC<AddPresetProps> = ({ dispatch }) => {
 
 export default AddPreset;
 
-const Container = styled.div``;
+const Container = styled.div`
+  margin: 2rem;
+`;
 
 const Title = styled.h1``;
 

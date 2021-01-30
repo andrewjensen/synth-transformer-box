@@ -95,4 +95,5 @@ const AppContainer = styled.div`
 
 const BodyContainer = styled.div`
   flex-grow: 1;
+  overflow: hidden;
 `;
