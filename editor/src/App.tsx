@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useReducer, useEffect } from 'react';
 import styled from 'styled-components';
 import { ipcRenderer } from 'electron';
 
@@ -20,6 +20,7 @@ export enum AppTab {
 const App = () => {
   const [tab, setTab] = useState<AppTab>(AppTab.Synths);
   const [state, dispatch] = useReducer(settingsReducer, INITIAL_STATE);
+  const [initialized, setInitialized] = useState<boolean>(false);
 
   const handleChangeTab = (tab: AppTab) => {
     console.log('handleChangeTab', tab);
@@ -58,6 +59,14 @@ const App = () => {
 
     dispatch({ type: 'EXPORT_SETTINGS' });
   };
+
+  useEffect(() => {
+    if (!initialized) {
+      console.log('Initializing...');
+      handleImport();
+      setInitialized(true);
+    }
+  }, [initialized, setInitialized, handleImport]);
 
   const renderBody = () => {
     switch (tab) {
