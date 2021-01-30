@@ -41,11 +41,13 @@ const App = () => {
   const handleExport = async () => {
     console.log('Saving settings...', state);
     const {
+      inputCCs,
       controllerRows,
       controllerColumns,
       presets
     } = state;
     const settings: Settings = {
+      inputCCs,
       controllerRows,
       controllerColumns,
       presets

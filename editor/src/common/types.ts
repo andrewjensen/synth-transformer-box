@@ -1,4 +1,5 @@
 export interface Settings {
+  inputCCs: number[]
   controllerRows: number
   controllerColumns: number
   presets: Preset[]

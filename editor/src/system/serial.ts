@@ -56,7 +56,7 @@ function createSaveSettingsMessage(settings: Settings): SaveSettingsMessage {
     ctrl: {
       rows: settings.controllerRows,
       cols: settings.controllerColumns,
-      ccs: getInputCCs(settings)
+      ccs: settings.inputCCs
     },
     outs: settings.presets.map((preset, idx) => {
       const synth = getSynthById(preset.synthId);
@@ -79,10 +79,6 @@ function createSaveSettingsMessage(settings: Settings): SaveSettingsMessage {
       };
     })
   };
-}
-
-function getInputCCs(settings: Settings): number[] {
-  return settings.presets[0].mappings.map(mapping => mapping.in);
 }
 
 function createRequestLoadSettingsMessage(): MessageWithId {
@@ -129,13 +125,13 @@ export async function loadSettings(): Promise<Settings> {
 }
 
 function parseLoadSettings(rawSettings: LoadSettingsMessage): Settings {
+  const inputCCs = rawSettings.ctrl.ccs;
   const settings: Settings = {
+    inputCCs,
     controllerRows: rawSettings.ctrl.rows,
     controllerColumns: rawSettings.ctrl.cols,
     presets: []
   };
-
-  const inputCCs = rawSettings.ctrl.ccs;
 
   settings.presets = rawSettings.outs.map(out => ({
     synthId: out.sid,

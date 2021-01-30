@@ -16,6 +16,7 @@ describe('settingsReducer', () => {
       const action: SettingsAction = {
         type: 'IMPORT_SETTINGS',
         settings: {
+          inputCCs: [2, 4, 6, 8, 10, 12],
           controllerRows: 1,
           controllerColumns: 6,
           presets: [
@@ -54,6 +55,24 @@ describe('settingsReducer', () => {
           ]
         }
       ]);
+    });
+
+    it('imports settings if there are no presets', () => {
+      const action: SettingsAction = {
+        type: 'IMPORT_SETTINGS',
+        settings: {
+          inputCCs: [2, 4, 6, 8, 10, 12],
+          controllerRows: 1,
+          controllerColumns: 6,
+          presets: []
+        }
+      };
+      const newState = settingsReducer(INITIAL_STATE, action);
+
+      expect(newState.controllerRows).toBe(1);
+      expect(newState.controllerColumns).toBe(6);
+      expect(newState.inputCCs).toEqual([2, 4, 6, 8, 10, 12]);
+      expect(newState.presets).toEqual([]);
     });
   });
 

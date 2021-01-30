@@ -148,7 +148,7 @@ export function settingsReducer(state: SettingsState, action: SettingsAction): S
       return {
         controllerRows: action.settings.controllerRows,
         controllerColumns: action.settings.controllerColumns,
-        inputCCs: getInputCCs(action.settings),
+        inputCCs: action.settings.inputCCs,
         presets: action.settings.presets,
         currentPresetIdx: action.settings.presets.length ? 0 : null,
         addingPreset: false,
@@ -188,10 +188,6 @@ function updateInputCCs(previousInputCCs: number[], newSize: number): number[] {
     // Smaller: remove from the end
     return previousInputCCs.slice(0, newSize);
   }
-}
-
-function getInputCCs(settings: Settings): number[] {
-  return settings.presets[0].mappings.map(mapping => mapping.in);
 }
 
 type PresetEditFn = (preset: Preset) => Preset;
