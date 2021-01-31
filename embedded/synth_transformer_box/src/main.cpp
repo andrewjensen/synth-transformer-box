@@ -124,6 +124,18 @@ void handleSaveSettingsCommand(DynamicJsonDocument doc) {
   screen.printPreset(settings.getCurrentPresetId(), settings.getCurrentSynthName());
 }
 
+void sendSendSettingsSuccessful() {
+  DynamicJsonDocument doc(DOCUMENT_ALLOC_SIZE_ID_ONLY);
+  doc["msg"] = MESSAGE_ID_SEND_SETTINGS_SUCCESSFUL_V1;
+
+  serializeJson(doc, Serial);
+}
+
+void handleSendSettingsCommand(DynamicJsonDocument doc) {
+  // TODO: implement
+  sendSendSettingsSuccessful();
+}
+
 void handleRequestLoadSettingsCommand() {
   DynamicJsonDocument doc(DOCUMENT_ALLOC_SIZE_FULL);
 
@@ -169,6 +181,9 @@ void handleSerialCommand() {
   switch (messageId) {
     case MESSAGE_ID_SAVE_SETTINGS_V1:
       handleSaveSettingsCommand(doc);
+      break;
+    case MESSAGE_ID_SEND_SETTINGS_V1:
+      handleSendSettingsCommand(doc);
       break;
     case MESSAGE_ID_REQUEST_LOAD_SETTINGS_V1:
       handleRequestLoadSettingsCommand();

@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect } from 'react';
+import React, { useState, useReducer, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { ipcRenderer } from 'electron';
 
@@ -10,6 +10,7 @@ import SettingsContext from './common/state/SettingsContext';
 import {
   settingsReducer,
   INITIAL_STATE,
+  SettingsAction,
 } from './common/state/settingsReducer';
 
 export enum AppTab {
@@ -17,10 +18,35 @@ export enum AppTab {
   Synths = "SYNTHS"
 }
 
+const ACTIONS_TO_SYNC: string[] = [
+  'CHANGE_CONTROLLER_ROWS',
+  'CHANGE_CONTROLLER_COLUMNS',
+  'CHANGE_INPUT_CC',
+  // 'ADD_PRESET',
+  'SUBMIT_NEW_PRESET',
+  // 'SELECT_PRESET',
+  'CHANGE_MAPPING',
+  'CHANGE_CHANNEL',
+  'REORDER_PRESET_UP',
+  'REORDER_PRESET_DOWN',
+  'DELETE',
+  // 'IMPORT_SETTINGS',
+  // 'TOGGLE_EXPORTING',
+  // 'EXPORT_SETTINGS',
+];
+
 const App = () => {
   const [tab, setTab] = useState<AppTab>(AppTab.Synths);
   const [state, dispatch] = useReducer(settingsReducer, INITIAL_STATE);
   const [initialized, setInitialized] = useState<boolean>(false);
+
+  const wrappedDispatch = useCallback((action: SettingsAction) => {
+    dispatch(action);
+
+    if (ACTIONS_TO_SYNC.indexOf(action.type)) {
+      handleSendSettings();
+    }
+  }, [dispatch]);
 
   const handleChangeTab = (tab: AppTab) => {
     console.log('handleChangeTab', tab);
@@ -39,6 +65,26 @@ const App = () => {
     });
   };
 
+  const handleSendSettings = async () => {
+    console.log('Time to sync!!! Sending settings...', state);
+    const {
+      inputCCs,
+      controllerRows,
+      controllerColumns,
+      presets
+    } = state;
+    const settings: Settings = {
+      inputCCs,
+      controllerRows,
+      controllerColumns,
+      presets
+    };
+
+    const result = await ipcRenderer.invoke('send-settings', settings);
+    console.log('Result:', result);
+  };
+
+  // TODO: delete this
   const handleExport = async () => {
     console.log('Saving settings...', state);
     const {
@@ -78,7 +124,7 @@ const App = () => {
   };
 
   return (
-    <SettingsContext.Provider value={{ state, dispatch }}>
+    <SettingsContext.Provider value={{ state, dispatch: wrappedDispatch }}>
       <AppContainer>
         <TopBar
           activeTab={tab}
