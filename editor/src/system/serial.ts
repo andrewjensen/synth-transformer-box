@@ -7,6 +7,8 @@ const MESSAGE_ID_SAVE_SETTINGS_V1 = 0x10;
 const MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1 = 0x11;
 const MESSAGE_ID_REQUEST_LOAD_SETTINGS_V1 = 0x20;
 const MESSAGE_ID_LOAD_SETTINGS_V1 = 0x21;
+const MESSAGE_ID_COMMIT_SETTINGS_V1 = 0x30;
+const MESSAGE_ID_COMMIT_SETTINGS_SUCCESSFUL_V1 = 0x31;
 
 const RESPONSE_BUFFER_TIMEOUT_MS = 500;
 
@@ -17,20 +19,20 @@ interface MessageWithId {
 }
 
 interface SaveSettingsMessage {
-  msg: number,
+  msg: number
   ctrl: {
-    rows: number,
-    cols: number,
+    rows: number
+    cols: number
     ccs: number[]
   },
   outs: MessagePreset[]
 }
 
 interface LoadSettingsMessage {
-  msg: number,
+  msg: number
   ctrl: {
-    rows: number,
-    cols: number,
+    rows: number
+    cols: number
     ccs: number[]
   },
   outs: MessagePreset[]
@@ -87,6 +89,12 @@ function createRequestLoadSettingsMessage(): MessageWithId {
   };
 }
 
+function createCommitSettingsMessage(): MessageWithId {
+  return {
+    msg: MESSAGE_ID_COMMIT_SETTINGS_V1
+  };
+}
+
 export async function saveSettings(settings: Settings): Promise<string> {
   try {
     const port = await connect();
@@ -125,10 +133,22 @@ export async function loadSettings(): Promise<Settings> {
 }
 
 export async function commitSettings(): Promise<void> {
-  console.log('TODO: commit settings');
-  return new Promise(resolve => {
-    setTimeout(resolve, 1000);
-  });
+  try {
+    const port = await connect();
+    const message = createCommitSettingsMessage();
+    const rawMessage = serializeMessage(message);
+    const rawResponse = await sendMessage(rawMessage, port);
+    const response = deserializeMessage(rawResponse);
+
+    if (response.msg && response.msg === MESSAGE_ID_COMMIT_SETTINGS_SUCCESSFUL_V1) {
+      // Success
+      return;
+    } else {
+      throw new Error(`Received unexpected response:\n${JSON.stringify(response, null, 2)}`);
+    }
+  } catch (err) {
+    throw new Error(`Failed to commit settings: ${err}`);
+  }
 }
 
 function parseLoadSettings(rawSettings: LoadSettingsMessage): Settings {

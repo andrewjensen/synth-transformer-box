@@ -138,6 +138,18 @@ void handleRequestLoadSettingsCommand() {
   serializeJson(doc, Serial);
 }
 
+void sendCommitSettingsSuccessful() {
+  DynamicJsonDocument doc(DOCUMENT_ALLOC_SIZE_ID_ONLY);
+  doc["msg"] = MESSAGE_ID_COMMIT_SETTINGS_SUCCESSFUL_V1;
+
+  serializeJson(doc, Serial);
+}
+
+void handleCommitSettingsCommand() {
+  // TODO: Implement
+  sendCommitSettingsSuccessful();
+}
+
 void handleSerialCommand() {
   lightOn();
 
@@ -154,13 +166,20 @@ void handleSerialCommand() {
   }
 
   byte messageId = doc["msg"];
-  if (messageId == MESSAGE_ID_SAVE_SETTINGS_V1) {
-    handleSaveSettingsCommand(doc);
-  } else if (messageId == MESSAGE_ID_REQUEST_LOAD_SETTINGS_V1) {
-    handleRequestLoadSettingsCommand();
-  } else {
-    // Unknown command!
-    programStatus = ProgramStatus::FatalError;
+  switch (messageId) {
+    case MESSAGE_ID_SAVE_SETTINGS_V1:
+      handleSaveSettingsCommand(doc);
+      break;
+    case MESSAGE_ID_REQUEST_LOAD_SETTINGS_V1:
+      handleRequestLoadSettingsCommand();
+      break;
+    case MESSAGE_ID_COMMIT_SETTINGS_V1:
+      handleCommitSettingsCommand();
+      break;
+    default:
+      // Unknown command!
+      programStatus = ProgramStatus::FatalError;
+      break;
   }
 
   lightOff();
