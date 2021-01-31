@@ -124,6 +124,13 @@ export async function loadSettings(): Promise<Settings> {
   }
 }
 
+export async function commitSettings(): Promise<void> {
+  console.log('TODO: commit settings');
+  return new Promise(resolve => {
+    setTimeout(resolve, 1000);
+  });
+}
+
 function parseLoadSettings(rawSettings: LoadSettingsMessage): Settings {
   const inputCCs = rawSettings.ctrl.ccs;
   const settings: Settings = {

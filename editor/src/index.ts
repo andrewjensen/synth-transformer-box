@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from 'electron';
 
 import { setupIpcHandlers } from './system';
+import { commitSettings } from './system/serial';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 
@@ -35,7 +36,9 @@ app.on('ready', createWindow);
 app.on('window-all-closed', () => {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
+  if (process.platform === 'darwin') {
+    commitSettings();
+  } else {
     app.quit();
   }
 });
@@ -46,6 +49,13 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
+});
+
+app.on('before-quit', async (event) => {
+  event.preventDefault();
+
+  await commitSettings();
+  app.exit(0);
 });
 
 // In this file you can include the rest of your app's specific main process
