@@ -113,7 +113,7 @@ describe('settingsReducer', () => {
         currentPresetIdx: 0,
         addingPreset: false,
         exporting: false,
-        unsavedEdits: false
+        syncVersion: null
       };
       const action: SettingsAction = {
         type: 'CHANGE_CONTROLLER_COLUMNS',
@@ -195,7 +195,7 @@ describe('settingsReducer', () => {
         currentPresetIdx: 0,
         addingPreset: false,
         exporting: false,
-        unsavedEdits: false
+        syncVersion: null
       };
       const action: SettingsAction = {
         type: 'CHANGE_CONTROLLER_COLUMNS',
@@ -269,7 +269,7 @@ describe('settingsReducer', () => {
         currentPresetIdx: 0,
         addingPreset: false,
         exporting: false,
-        unsavedEdits: false
+        syncVersion: null
       };
       const action: SettingsAction = {
         type: 'CHANGE_INPUT_CC',

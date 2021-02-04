@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect, useCallback } from 'react';
+import React, { useState, useReducer, useEffect } from 'react';
 import styled from 'styled-components';
 import { ipcRenderer } from 'electron';
 
@@ -12,41 +12,17 @@ import {
   INITIAL_STATE,
   SettingsAction,
 } from './common/state/settingsReducer';
+import { sendSettings } from './system/serial';
 
 export enum AppTab {
   Controller = "CONTROLLER",
   Synths = "SYNTHS"
 }
 
-const ACTIONS_TO_SYNC: string[] = [
-  'CHANGE_CONTROLLER_ROWS',
-  'CHANGE_CONTROLLER_COLUMNS',
-  'CHANGE_INPUT_CC',
-  // 'ADD_PRESET',
-  'SUBMIT_NEW_PRESET',
-  // 'SELECT_PRESET',
-  'CHANGE_MAPPING',
-  'CHANGE_CHANNEL',
-  'REORDER_PRESET_UP',
-  'REORDER_PRESET_DOWN',
-  'DELETE',
-  // 'IMPORT_SETTINGS',
-  // 'TOGGLE_EXPORTING',
-  // 'EXPORT_SETTINGS',
-];
-
 const App = () => {
   const [tab, setTab] = useState<AppTab>(AppTab.Synths);
   const [state, dispatch] = useReducer(settingsReducer, INITIAL_STATE);
   const [initialized, setInitialized] = useState<boolean>(false);
-
-  const wrappedDispatch = useCallback((action: SettingsAction) => {
-    dispatch(action);
-
-    if (ACTIONS_TO_SYNC.indexOf(action.type)) {
-      handleSendSettings();
-    }
-  }, [dispatch]);
 
   const handleChangeTab = (tab: AppTab) => {
     console.log('handleChangeTab', tab);
@@ -114,6 +90,13 @@ const App = () => {
     }
   }, [initialized, setInitialized, handleImport]);
 
+  const { syncVersion } = state;
+  useEffect(() => {
+    if (syncVersion !== null) {
+      handleSendSettings();
+    }
+  }, [syncVersion]);
+
   const renderBody = () => {
     switch (tab) {
       case AppTab.Controller:
@@ -124,7 +107,7 @@ const App = () => {
   };
 
   return (
-    <SettingsContext.Provider value={{ state, dispatch: wrappedDispatch }}>
+    <SettingsContext.Provider value={{ state, dispatch }}>
       <AppContainer>
         <TopBar
           activeTab={tab}
