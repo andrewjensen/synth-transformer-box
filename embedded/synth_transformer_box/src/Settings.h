@@ -1,3 +1,6 @@
+#ifndef settings_h
+#define settings_h
+
 #include "constants.h"
 
 enum InitSettingsResult {
@@ -276,3 +279,5 @@ public:
     Serial.println("}");
   }
 };
+
+#endif

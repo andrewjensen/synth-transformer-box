@@ -1,6 +1,8 @@
 #ifndef constants_h
 #define constants_h
 
+#define STATUS_MESSAGE_TIME_MS 2000
+
 const byte PROTOCOL_VERSION = 0x01;
 
 // TODO: delete these
