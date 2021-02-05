@@ -56,8 +56,6 @@ void onControlChange(byte channel, byte inputCC, byte value) {
   MIDI.sendControlChange(outputCC, value, outputChannel);
 }
 
-// Handling commands over serial
-
 // Main loops
 
 void loopFatalError() {
@@ -130,7 +128,7 @@ void setup() {
     Serial.println("Initializing from memory...");
   }
 
-  int initResult = settings.initializeFromMemory();
+  int initResult = settings.initializeFromEEPROM();
 
   switch (initResult) {
     case InitSettingsResult::Success: {

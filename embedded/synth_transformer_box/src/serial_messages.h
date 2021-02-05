@@ -33,7 +33,7 @@ void handleSaveSettingsCommand(DynamicJsonDocument doc) {
   }
   storeTerminatingSignal(address);
 
-  settings.initializeFromMemory();
+  settings.initializeFromEEPROM();
 
   sendSaveSettingsSuccessful();
 
