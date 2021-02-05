@@ -51,8 +51,12 @@ void sendSendSettingsSuccessful() {
 }
 
 void handleSendSettingsCommand(DynamicJsonDocument doc) {
-  // TODO: implement
-  sendSendSettingsSuccessful();
+  InitSettingsResult result = settings.initializeFromDoc(doc);
+  if (result == InitSettingsResult::Success) {
+    sendSendSettingsSuccessful();
+  } else {
+    programStatus = ProgramStatus::FatalError;
+  }
 }
 
 void handleRequestLoadSettingsCommand() {

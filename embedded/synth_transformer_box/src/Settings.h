@@ -104,7 +104,7 @@ public:
   Settings() {
   }
 
-  int initializeFromEEPROM() {
+  InitSettingsResult initializeFromEEPROM() {
     if (isMemoryBlank()) {
       return InitSettingsResult::MemoryBlank;
     }
@@ -119,7 +119,7 @@ public:
     return initializeFromDoc(doc);
   }
 
-  int initializeFromDoc(DynamicJsonDocument doc) {
+  InitSettingsResult initializeFromDoc(DynamicJsonDocument doc) {
     JsonArray ccs = doc["ctrl"]["ccs"];
     byte inputCCs[ccs.size()];
     int inputCCIdx = 0;
