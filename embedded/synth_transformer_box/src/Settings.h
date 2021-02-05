@@ -12,7 +12,7 @@ enum InitSettingsResult {
 class Preset {
   byte presetId;
   byte synthId;
-  const char* synthName;
+  String synthName;
   byte channel;
   byte* mappings;
 
@@ -32,7 +32,7 @@ public:
     synthId = inSynthId;
   }
 
-  void setSynthName(const char* inSynthName) {
+  void setSynthName(String inSynthName) {
     synthName = inSynthName;
   }
 
@@ -146,8 +146,8 @@ public:
       byte presetId = rawPreset["pid"];
       byte synthId = rawPreset["sid"];
       byte channel = rawPreset["chn"];
-      const char* manufacturerName = rawPreset["mfg"];
-      const char* synthName = rawPreset["syn"];
+      String manufacturerName = rawPreset["mfg"];
+      String synthName = rawPreset["syn"];
 
       presets[presetIdx].setPresetId(presetId);
       presets[presetIdx].setSynthName(synthName);
@@ -157,8 +157,8 @@ public:
       if (DEBUG_SERIAL) {
         Serial.println("NEW OUTPUT");
         Serial.println("preset id: " + String(presetId));
-        Serial.println("synth id: " + String(synthId));
-        Serial.println("channel: " + String(channel));
+        Serial.println("synth id: " + synthId);
+        Serial.println("channel: " + channel);
         Serial.println(manufacturerName);
         Serial.println(synthName);
         Serial.println("Output CCs:");
@@ -171,7 +171,7 @@ public:
 
         JsonObject cc = ccRaw.as<JsonObject>();
         byte mappingOutput = cc["num"];
-        const char* ccName = cc["name"];
+        String ccName = cc["name"];
 
         presets[presetIdx].setMapping(mappingInput, mappingOutput);
 
