@@ -12,6 +12,7 @@ enum InitSettingsResult {
 class Preset {
   byte presetId;
   byte synthId;
+  String manufacturerName;
   String synthName;
   byte channel;
   byte* mappings;
@@ -30,6 +31,10 @@ public:
 
   void setSynthId(byte inSynthId) {
     synthId = inSynthId;
+  }
+
+  void setManufacturerName(String inManufacturerName) {
+    manufacturerName = inManufacturerName;
   }
 
   void setSynthName(String inSynthName) {
@@ -63,12 +68,11 @@ public:
 
     Serial.println("  Preset {");
 
-    Serial.print("    presetId: ");
-    Serial.println(presetId);
-    Serial.print("    synthId: ");
-    Serial.println(synthId);
-    Serial.print("    channel: ");
-    Serial.println(channel);
+    Serial.println("    presetId: " + String(presetId));
+    Serial.println("    synthId: " + String(synthId));
+    Serial.println("    manufacturerName: " + manufacturerName);
+    Serial.println("    synthName: " + synthName);
+    Serial.println("    channel: " + String(channel));
 
     Serial.println("    mappings: {");
     for (int inputCC = 1; inputCC < 128; inputCC++) {
@@ -96,6 +100,10 @@ public:
 };
 
 class Settings {
+  byte controllerRows;
+  byte controllerColumns;
+  byte inputCCCount;
+  byte* inputCCs;
   byte presetCount;
   byte activePresetIdx;
   Preset* presets;
@@ -120,17 +128,22 @@ public:
   }
 
   InitSettingsResult initializeFromDoc(DynamicJsonDocument doc) {
+    controllerRows = doc["ctrl"]["rows"];
+    controllerColumns = doc["ctrl"]["cols"];
+
     JsonArray ccs = doc["ctrl"]["ccs"];
-    byte inputCCs[ccs.size()];
+    inputCCCount = ccs.size();
+    byte inInputCCs[ccs.size()];
+    inputCCs = inInputCCs;
     int inputCCIdx = 0;
     for (JsonVariant ccRaw : ccs) {
       byte cc = ccRaw.as<byte>();
-      inputCCs[inputCCIdx] = cc;
+      inInputCCs[inputCCIdx] = cc;
       inputCCIdx++;
     }
     if (DEBUG_SERIAL) {
       Serial.println("Input CCs:");
-      for (byte cc : inputCCs) {
+      for (byte cc : inInputCCs) {
         Serial.println("  " + String(cc));
       }
     }
@@ -150,6 +163,7 @@ public:
       String synthName = rawPreset["syn"];
 
       presets[presetIdx].setPresetId(presetId);
+      presets[presetIdx].setManufacturerName(manufacturerName);
       presets[presetIdx].setSynthName(synthName);
       presets[presetIdx].setSynthId(synthId);
       presets[presetIdx].setChannel(channel);
@@ -275,9 +289,19 @@ public:
     }
 
     Serial.println("Settings {");
+
+    Serial.println("  controllerRows: " + String(controllerRows));
+    Serial.println("  controllerColumns: " + String(controllerColumns));
+    Serial.println("  inputCCs: [");
+    for (int ccIdx = 0; ccIdx < inputCCCount; ccIdx++) {
+      Serial.println("    " + String(inputCCs[ccIdx]));
+    }
+    Serial.println("  ]");
+
     for (uint presetIdx = 0; presetIdx < presetCount; presetIdx++) {
       presets[presetIdx].printState();
     }
+
     Serial.println("}");
   }
 };
