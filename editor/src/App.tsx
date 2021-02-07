@@ -7,12 +7,7 @@ import TopBar from './topbar/TopBar';
 import Controller from './controller/Controller';
 import Synths from './synths/Synths';
 import SettingsContext from './common/state/SettingsContext';
-import {
-  settingsReducer,
-  INITIAL_STATE,
-  SettingsAction,
-} from './common/state/settingsReducer';
-import { sendSettings } from './system/serial';
+import { settingsReducer, INITIAL_STATE } from './common/state/settingsReducer';
 
 export enum AppTab {
   Controller = "CONTROLLER",
@@ -60,28 +55,6 @@ const App = () => {
     console.log('Result:', result);
   };
 
-  // TODO: delete this
-  const handleExport = async () => {
-    console.log('Saving settings...', state);
-    const {
-      inputCCs,
-      controllerRows,
-      controllerColumns,
-      presets
-    } = state;
-    const settings: Settings = {
-      inputCCs,
-      controllerRows,
-      controllerColumns,
-      presets
-    };
-
-    const result = await ipcRenderer.invoke('save-settings', settings);
-    console.log('Result:', result);
-
-    dispatch({ type: 'EXPORT_SETTINGS' });
-  };
-
   useEffect(() => {
     if (!initialized) {
       console.log('Initializing...');
@@ -112,8 +85,6 @@ const App = () => {
         <TopBar
           activeTab={tab}
           onChangeTab={handleChangeTab}
-          onImport={handleImport}
-          onExport={handleExport}
         />
         <BodyContainer>
           {renderBody()}

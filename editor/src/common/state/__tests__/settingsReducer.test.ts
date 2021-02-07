@@ -112,7 +112,6 @@ describe('settingsReducer', () => {
         ],
         currentPresetIdx: 0,
         addingPreset: false,
-        exporting: false,
         syncVersion: null
       };
       const action: SettingsAction = {
@@ -194,7 +193,6 @@ describe('settingsReducer', () => {
         ],
         currentPresetIdx: 0,
         addingPreset: false,
-        exporting: false,
         syncVersion: null
       };
       const action: SettingsAction = {
@@ -268,7 +266,6 @@ describe('settingsReducer', () => {
         ],
         currentPresetIdx: 0,
         addingPreset: false,
-        exporting: false,
         syncVersion: null
       };
       const action: SettingsAction = {

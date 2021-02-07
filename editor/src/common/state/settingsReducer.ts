@@ -12,7 +12,6 @@ export interface SettingsState {
   presets: Preset[]
   currentPresetIdx: number | null
   addingPreset: boolean
-  exporting: boolean
   syncVersion: number | null
 }
 
@@ -29,8 +28,6 @@ export type SettingsAction =
   | { type: 'REORDER_PRESET_DOWN' }
   | { type: 'DELETE' }
   | { type: 'IMPORT_SETTINGS', settings: Settings }
-  | { type: 'TOGGLE_EXPORTING' }
-  | { type: 'EXPORT_SETTINGS' }
 
 export const INITIAL_STATE: SettingsState = {
   controllerRows: INITIAL_ROW_COUNT,
@@ -39,7 +36,6 @@ export const INITIAL_STATE: SettingsState = {
   presets: [],
   currentPresetIdx: null,
   addingPreset: false,
-  exporting: false,
   syncVersion: null
 };
 
@@ -152,18 +148,7 @@ export function settingsReducer(state: SettingsState, action: SettingsAction): S
         presets: action.settings.presets,
         currentPresetIdx: action.settings.presets.length ? 0 : null,
         addingPreset: false,
-        exporting: false,
         syncVersion: null
-      };
-    case 'EXPORT_SETTINGS':
-      return {
-        ...state,
-        syncVersion: null
-      };
-    case 'TOGGLE_EXPORTING':
-      return {
-        ...state,
-        exporting: !state.exporting
       };
     default:
       return state;

@@ -6,7 +6,6 @@ import { DeviceMenu, DeviceMenuItem } from '../common/components/DeviceMenu';
 import SettingsContext from '../common/state/SettingsContext';
 import CurrentPreset from './CurrentPreset';
 import AddPreset from './AddPreset';
-import ExportSettings from './ExportSettings';
 
 const Synths = () => {
   const { state, dispatch } = useContext(SettingsContext);
@@ -27,10 +26,6 @@ const Synths = () => {
     if (state.addingPreset) {
       return (
         <AddPreset dispatch={dispatch} />
-      );
-    } else if (state.exporting) {
-      return (
-        <ExportSettings state={state} dispatch={dispatch} />
       );
     } else if (currentPreset) {
       return (

@@ -3,10 +3,6 @@ import SerialPort from 'serialport';
 import { Settings } from '../common/types';
 import { getSynthById } from '../common/config/synths';
 
-// TODO: delete these
-const MESSAGE_ID_SAVE_SETTINGS_V1 = 0x10;
-const MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1 = 0x11;
-
 const MESSAGE_ID_REQUEST_LOAD_SETTINGS_V1 = 0x20;
 const MESSAGE_ID_LOAD_SETTINGS_V1 = 0x21;
 const MESSAGE_ID_SEND_SETTINGS_V1 = 0x30;
@@ -20,16 +16,6 @@ let portInstance: SerialPort | null = null;
 
 interface MessageWithId {
   msg: number
-}
-
-interface SaveSettingsMessage {
-  msg: number
-  ctrl: {
-    rows: number
-    cols: number
-    ccs: number[]
-  },
-  outs: MessagePreset[]
 }
 
 interface SendSettingsMessage {
@@ -64,38 +50,6 @@ interface MessagePreset {
 interface MessagePresetCC {
   num: number,
   name: string
-}
-
-// TODO: remove this
-function createSaveSettingsMessage(settings: Settings): SaveSettingsMessage {
-  return {
-    msg: MESSAGE_ID_SAVE_SETTINGS_V1,
-    ctrl: {
-      rows: settings.controllerRows,
-      cols: settings.controllerColumns,
-      ccs: settings.inputCCs
-    },
-    outs: settings.presets.map((preset, idx) => {
-      const synth = getSynthById(preset.synthId);
-      return {
-        pid: idx + 1,
-        sid: preset.synthId,
-        mfg: synth.manufacturer,
-        syn: synth.title,
-        chn: preset.channel,
-        ccs: preset.mappings.map(mapping => {
-          const param = synth.parameters.find(param => param.cc === mapping.out);
-          if (!param) {
-            throw new Error(`Could not find parameter ${mapping.out} for synth ${preset.synthId}`);
-          }
-          return {
-            num: mapping.out,
-            name: param.title
-          };
-        })
-      };
-    })
-  };
 }
 
 function createSendSettingsMessage(settings: Settings): SendSettingsMessage {
@@ -139,24 +93,6 @@ function createCommitSettingsMessage(): MessageWithId {
   return {
     msg: MESSAGE_ID_COMMIT_SETTINGS_V1
   };
-}
-
-export async function saveSettings(settings: Settings): Promise<string> {
-  try {
-    const port = await connect();
-    const message = createSaveSettingsMessage(settings);
-    const rawMessage = serializeMessage(message);
-    const rawResponse = await sendMessage(rawMessage, port);
-    const response = deserializeMessage(rawResponse);
-
-    if (response.msg && response.msg === MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1) {
-      return 'Saved settings!';
-    } else {
-      throw new Error(`Received unexpected response:\n${JSON.stringify(response, null, 2)}`);
-    }
-  } catch (err) {
-    throw new Error(`Failed to save settings: ${err}`);
-  }
 }
 
 export async function loadSettings(): Promise<Settings> {
