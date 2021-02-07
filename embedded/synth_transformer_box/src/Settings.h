@@ -15,13 +15,9 @@ enum InitSettingsResult {
 class Settings {
   byte controllerRows;
   byte controllerColumns;
-
   std::vector<byte> inputCCs;
-
-  // TODO: use vectors instead
-  byte presetCount;
+  std::vector<Preset> presets;
   byte activePresetIdx;
-  Preset* presets;
 
 public:
   Settings() {
@@ -59,11 +55,9 @@ public:
     }
 
     JsonArray outs = doc["outs"];
-    presetCount = outs.size();
-    presets = new Preset[presetCount];
+    presets = std::vector<Preset>();
     activePresetIdx = 0;
 
-    int presetIdx = 0;
     for (JsonVariant outRaw : outs) {
       JsonObject rawPreset = outRaw.as<JsonObject>();
       byte presetId = rawPreset["pid"];
@@ -72,17 +66,19 @@ public:
       String manufacturerName = rawPreset["mfg"];
       String synthName = rawPreset["syn"];
 
-      presets[presetIdx].setPresetId(presetId);
-      presets[presetIdx].setManufacturerName(manufacturerName);
-      presets[presetIdx].setSynthName(synthName);
-      presets[presetIdx].setSynthId(synthId);
-      presets[presetIdx].setChannel(channel);
+      Preset preset = Preset();
+
+      preset.setPresetId(presetId);
+      preset.setManufacturerName(manufacturerName);
+      preset.setSynthName(synthName);
+      preset.setSynthId(synthId);
+      preset.setChannel(channel);
 
       if (DEBUG_SERIAL) {
         Serial.println("NEW OUTPUT");
         Serial.println("preset id: " + String(presetId));
-        Serial.println("synth id: " + synthId);
-        Serial.println("channel: " + channel);
+        Serial.println("synth id: " + String(synthId));
+        Serial.println("channel: " + String(channel));
         Serial.println(manufacturerName);
         Serial.println(synthName);
         Serial.println("Output CCs:");
@@ -97,7 +93,7 @@ public:
         byte mappingOutput = cc["num"];
         String ccName = cc["name"];
 
-        presets[presetIdx].addMapping(mappingInput, mappingOutput, ccName);
+        preset.addMapping(mappingInput, mappingOutput, ccName);
 
         if (DEBUG_SERIAL) {
           Serial.println(String(mappingOutput) + ":" + ccName);
@@ -110,7 +106,7 @@ public:
         Serial.println("");
       }
 
-      presetIdx++;
+      presets.push_back(preset);
     }
 
     return InitSettingsResult::Success;
@@ -202,9 +198,9 @@ public:
     }
 
     JsonArray outs = doc.createNestedArray("outs");
-    for (int outIdx = 0; outIdx < presetCount; outIdx++) {
+    for (Preset preset : presets) {
       JsonObject out = outs.createNestedObject();
-      Preset preset = presets[outIdx];
+
       out["pid"] = preset.getPresetId();
       out["sid"] = preset.getSynthId();
       out["mfg"] = preset.getManufacturerName();
@@ -242,11 +238,12 @@ public:
       EEPROM.read(0) == 255 &&
       EEPROM.read(1) == 255 &&
       EEPROM.read(2) == 255 &&
-      EEPROM.read(3) == 255);
+      EEPROM.read(3) == 255
+    );
   }
 
   void triggerNextPreset() {
-    activePresetIdx = (activePresetIdx + 1) % presetCount;
+    activePresetIdx = (activePresetIdx + 1) % presets.size();
   }
 
   byte getCurrentPresetId() {
@@ -266,7 +263,7 @@ public:
   }
 
   byte getPresetCount() {
-    return presetCount;
+    return presets.size();
   }
 
   void printState() {
@@ -284,8 +281,8 @@ public:
     }
     Serial.println("  ]");
 
-    for (uint presetIdx = 0; presetIdx < presetCount; presetIdx++) {
-      presets[presetIdx].printState();
+    for (Preset preset : presets) {
+      preset.printState();
     }
 
     Serial.println("}");
