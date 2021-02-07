@@ -16,6 +16,8 @@ void handleSendSettingsCommand(DynamicJsonDocument doc) {
   InitSettingsResult result = settings.initializeFromDoc(doc);
   if (result == InitSettingsResult::Success) {
     sendSendSettingsSuccessful();
+
+    screen.printPreset(settings.getCurrentPresetId(), settings.getCurrentSynthName());
   } else {
     programStatus = ProgramStatus::FatalError;
   }
@@ -46,6 +48,11 @@ void handleCommitSettingsCommand() {
   bool saveSuccessful = settings.saveToEEPROM();
   if (saveSuccessful) {
     sendCommitSettingsSuccessful();
+
+    screen.printSettingsSaved(settings.getPresetCount());
+    delay(STATUS_MESSAGE_TIME_MS);
+
+    screen.printPreset(settings.getCurrentPresetId(), settings.getCurrentSynthName());
   } else {
     programStatus = ProgramStatus::FatalError;
   }

@@ -180,17 +180,10 @@ public:
     }
     storeTerminatingSignal(address);
 
-    // TODO: remove debugging
-    // Serial.println("Created this JSON:");
-    // serializeJson(doc, Serial);
-    // Serial.println("");
-
     return true;
   }
 
   bool serializeSettings(DynamicJsonDocument& doc) {
-    doc["msg"] = 0; // TODO: replace with something?
-
     JsonObject ctrl  = doc.createNestedObject("ctrl");
     ctrl["rows"] = controllerRows;
     ctrl["cols"] = controllerColumns;
