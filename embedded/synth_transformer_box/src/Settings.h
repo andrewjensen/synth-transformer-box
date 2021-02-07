@@ -1,7 +1,10 @@
 #ifndef settings_h
 #define settings_h
 
+#include <vector>
 #include "constants.h"
+#include "Mapping.h"
+#include "Preset.h"
 
 enum InitSettingsResult {
   Success = 1,
@@ -9,101 +12,13 @@ enum InitSettingsResult {
   MemoryBlank = 3,
 };
 
-class Preset {
-  byte presetId;
-  byte synthId;
-  String manufacturerName;
-  String synthName;
-  byte channel;
-  byte* mappings;
-
-public:
-  Preset() {
-    mappings = new byte[128];
-    for (int i = 0; i < 128; i++) {
-      mappings[i] = 0;
-    }
-  }
-
-  void setPresetId(byte inPresetId) {
-    presetId = inPresetId;
-  }
-
-  void setSynthId(byte inSynthId) {
-    synthId = inSynthId;
-  }
-
-  void setManufacturerName(String inManufacturerName) {
-    manufacturerName = inManufacturerName;
-  }
-
-  void setSynthName(String inSynthName) {
-    synthName = inSynthName;
-  }
-
-  void setChannel(byte inChannel) {
-    channel = inChannel;
-  }
-
-  void setMapping(byte inputCC, byte outputCC) {
-    mappings[inputCC] = outputCC;
-  }
-
-  byte getPresetId() {
-    return presetId;
-  }
-
-  String getSynthName() {
-    return String(synthName);
-  }
-
-  byte getChannel() {
-    return channel;
-  }
-
-  void printState() {
-    if (!DEBUG_SERIAL) {
-      return;
-    }
-
-    Serial.println("  Preset {");
-
-    Serial.println("    presetId: " + String(presetId));
-    Serial.println("    synthId: " + String(synthId));
-    Serial.println("    manufacturerName: " + manufacturerName);
-    Serial.println("    synthName: " + synthName);
-    Serial.println("    channel: " + String(channel));
-
-    Serial.println("    mappings: {");
-    for (int inputCC = 1; inputCC < 128; inputCC++) {
-      byte outputCC = mappings[inputCC];
-      if (outputCC != 0) {
-        Serial.print("      ");
-        Serial.print(inputCC);
-        Serial.print(" => ");
-        Serial.println(outputCC);
-      }
-    }
-    Serial.println("    }");
-
-    Serial.println("  }");
-  }
-
-  byte translateCC(byte inputCC) {
-    byte outputCC = mappings[inputCC];
-    if (outputCC) {
-      return outputCC;
-    } else {
-      return inputCC;
-    }
-  }
-};
-
 class Settings {
   byte controllerRows;
   byte controllerColumns;
-  byte inputCCCount;
-  byte* inputCCs;
+
+  std::vector<byte> inputCCs;
+
+  // TODO: use vectors instead
   byte presetCount;
   byte activePresetIdx;
   Preset* presets;
@@ -132,18 +47,13 @@ public:
     controllerColumns = doc["ctrl"]["cols"];
 
     JsonArray ccs = doc["ctrl"]["ccs"];
-    inputCCCount = ccs.size();
-    byte inInputCCs[ccs.size()];
-    inputCCs = inInputCCs;
-    int inputCCIdx = 0;
     for (JsonVariant ccRaw : ccs) {
       byte cc = ccRaw.as<byte>();
-      inInputCCs[inputCCIdx] = cc;
-      inputCCIdx++;
+      inputCCs.push_back(cc);
     }
     if (DEBUG_SERIAL) {
       Serial.println("Input CCs:");
-      for (byte cc : inInputCCs) {
+      for (byte cc : inputCCs) {
         Serial.println("  " + String(cc));
       }
     }
@@ -187,7 +97,7 @@ public:
         byte mappingOutput = cc["num"];
         String ccName = cc["name"];
 
-        presets[presetIdx].setMapping(mappingInput, mappingOutput);
+        presets[presetIdx].addMapping(mappingInput, mappingOutput, ccName);
 
         if (DEBUG_SERIAL) {
           Serial.println(String(mappingOutput) + ":" + ccName);
@@ -251,6 +161,82 @@ public:
     return true;
   }
 
+  bool saveToEEPROM() {
+    if (DEBUG_SERIAL) {
+      Serial.println("saveToEEPROM()");
+    }
+
+    // TODO:
+    //
+    // - [x] Store other fields on Settings class
+    // - [x] Create JSON with controller, presets, etc.
+    // - [x] Store CC names too, don't drop them
+    // - [ ] Data that we serialize needs to match what we see when we load
+    // - [x] Return successful or not
+
+    DynamicJsonDocument doc(DOCUMENT_ALLOC_SIZE_FULL);
+    if (!serializeSettings(doc)) {
+      return false;
+    }
+
+    // TODO: remove debugging
+    Serial.println("Created this JSON:");
+    serializeJson(doc, Serial);
+    Serial.println("");
+
+    // saveToEEPROM(doc);
+
+    return true;
+  }
+
+  bool serializeSettings(DynamicJsonDocument& doc) {
+    doc["msg"] = 0; // TODO: replace with something?
+
+    JsonObject ctrl  = doc.createNestedObject("ctrl");
+    ctrl["rows"] = controllerRows;
+    ctrl["cols"] = controllerColumns;
+
+    JsonArray ccs = ctrl.createNestedArray("ccs");
+    for (byte cc : inputCCs) {
+      ccs.add(cc);
+    }
+
+    JsonArray outs = doc.createNestedArray("outs");
+    for (int outIdx = 0; outIdx < presetCount; outIdx++) {
+      JsonObject out = outs.createNestedObject();
+      Preset preset = presets[outIdx];
+      out["pid"] = preset.getPresetId();
+      out["sid"] = preset.getSynthId();
+      out["mfg"] = preset.getManufacturerName();
+      out["syn"] = preset.getSynthName();
+      out["chn"] = preset.getChannel();
+
+      JsonArray outCCs = out.createNestedArray("ccs");
+      std::vector<Mapping> mappings = preset.getMappings();
+      for (Mapping m : mappings) {
+        JsonObject outCC = outCCs.createNestedObject();
+        outCC["num"] = m.getCCNumber();
+        outCC["name"] = m.getCCName();
+      }
+    }
+
+    return true;
+  }
+
+  void saveToEEPROM(DynamicJsonDocument& doc) {
+    std::string output;
+    serializeJson(doc, output);
+
+    int address = 0;
+    EEPROM.write(address, PROTOCOL_VERSION);
+    address++;
+    for (std::string::size_type i = 0; i < output.size(); i++) {
+      EEPROM.write(address, output[i]);
+      address++;
+    }
+    storeTerminatingSignal(address);
+  }
+
   bool isMemoryBlank() {
     return (
       EEPROM.read(0) == 255 &&
@@ -293,8 +279,8 @@ public:
     Serial.println("  controllerRows: " + String(controllerRows));
     Serial.println("  controllerColumns: " + String(controllerColumns));
     Serial.println("  inputCCs: [");
-    for (int ccIdx = 0; ccIdx < inputCCCount; ccIdx++) {
-      Serial.println("    " + String(inputCCs[ccIdx]));
+    for (byte inputCC : inputCCs) {
+      Serial.println("    " + String(inputCC));
     }
     Serial.println("  ]");
 
@@ -303,6 +289,13 @@ public:
     }
 
     Serial.println("}");
+  }
+
+private:
+  void storeTerminatingSignal(int address) {
+    for (int i = 0; i < 4; i++) {
+      EEPROM.write(address + i, 0x00);
+    }
   }
 };
 

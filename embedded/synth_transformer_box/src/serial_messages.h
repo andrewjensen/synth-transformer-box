@@ -23,6 +23,7 @@ void handleSaveSettingsCommand(DynamicJsonDocument doc) {
   std::string output;
   serializeJson(doc, output);
 
+  // TODO: move into Settings class, only it touches EEPROM
   // Save the settings data into EEPROM
   int address = 0;
   EEPROM.write(address, PROTOCOL_VERSION);
@@ -81,8 +82,12 @@ void sendCommitSettingsSuccessful() {
 }
 
 void handleCommitSettingsCommand() {
-  // TODO: Implement
-  sendCommitSettingsSuccessful();
+  bool saveSuccessful = settings.saveToEEPROM();
+  if (saveSuccessful) {
+    sendCommitSettingsSuccessful();
+  } else {
+    programStatus = ProgramStatus::FatalError;
+  }
 }
 
 void handleSerialCommand() {
