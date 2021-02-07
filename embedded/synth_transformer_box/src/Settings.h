@@ -43,6 +43,7 @@ public:
     controllerColumns = doc["ctrl"]["cols"];
 
     JsonArray ccs = doc["ctrl"]["ccs"];
+    inputCCs = std::vector<byte>();
     for (JsonVariant ccRaw : ccs) {
       byte cc = ccRaw.as<byte>();
       inputCCs.push_back(cc);
@@ -162,25 +163,27 @@ public:
       Serial.println("saveToEEPROM()");
     }
 
-    // TODO:
-    //
-    // - [x] Store other fields on Settings class
-    // - [x] Create JSON with controller, presets, etc.
-    // - [x] Store CC names too, don't drop them
-    // - [ ] Data that we serialize needs to match what we see when we load
-    // - [x] Return successful or not
-
     DynamicJsonDocument doc(DOCUMENT_ALLOC_SIZE_FULL);
     if (!serializeSettings(doc)) {
       return false;
     }
 
-    // TODO: remove debugging
-    Serial.println("Created this JSON:");
-    serializeJson(doc, Serial);
-    Serial.println("");
+    std::string output;
+    serializeJson(doc, output);
 
-    // saveToEEPROM(doc);
+    int address = 0;
+    EEPROM.write(address, PROTOCOL_VERSION);
+    address++;
+    for (std::string::size_type i = 0; i < output.size(); i++) {
+      EEPROM.write(address, output[i]);
+      address++;
+    }
+    storeTerminatingSignal(address);
+
+    // TODO: remove debugging
+    // Serial.println("Created this JSON:");
+    // serializeJson(doc, Serial);
+    // Serial.println("");
 
     return true;
   }
@@ -217,20 +220,6 @@ public:
     }
 
     return true;
-  }
-
-  void saveToEEPROM(DynamicJsonDocument& doc) {
-    std::string output;
-    serializeJson(doc, output);
-
-    int address = 0;
-    EEPROM.write(address, PROTOCOL_VERSION);
-    address++;
-    for (std::string::size_type i = 0; i < output.size(); i++) {
-      EEPROM.write(address, output[i]);
-      address++;
-    }
-    storeTerminatingSignal(address);
   }
 
   bool isMemoryBlank() {
