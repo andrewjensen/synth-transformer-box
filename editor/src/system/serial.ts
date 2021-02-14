@@ -3,34 +3,32 @@ import SerialPort from 'serialport';
 import { Settings } from '../common/types';
 import { getSynthById } from '../common/config/synths';
 
-const MESSAGE_ID_SAVE_SETTINGS_V1 = 0x10;
-const MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1 = 0x11;
 const MESSAGE_ID_REQUEST_LOAD_SETTINGS_V1 = 0x20;
 const MESSAGE_ID_LOAD_SETTINGS_V1 = 0x21;
-
-const RESPONSE_BUFFER_TIMEOUT_MS = 500;
-
-let portInstance: SerialPort | null = null;
+const MESSAGE_ID_SEND_SETTINGS_V1 = 0x30;
+const MESSAGE_ID_SEND_SETTINGS_SUCCESSFUL_V1 = 0x31;
+const MESSAGE_ID_COMMIT_SETTINGS_V1 = 0x40;
+const MESSAGE_ID_COMMIT_SETTINGS_SUCCESSFUL_V1 = 0x41;
 
 interface MessageWithId {
   msg: number
 }
 
-interface SaveSettingsMessage {
-  msg: number,
+interface SendSettingsMessage {
+  msg: number
   ctrl: {
-    rows: number,
-    cols: number,
+    rows: number
+    cols: number
     ccs: number[]
   },
   outs: MessagePreset[]
 }
 
 interface LoadSettingsMessage {
-  msg: number,
+  msg: number
   ctrl: {
-    rows: number,
-    cols: number,
+    rows: number
+    cols: number
     ccs: number[]
   },
   outs: MessagePreset[]
@@ -50,9 +48,19 @@ interface MessagePresetCC {
   name: string
 }
 
-function createSaveSettingsMessage(settings: Settings): SaveSettingsMessage {
+const RESPONSE_BUFFER_TIMEOUT_MS = 500;
+const SEND_POLL_INTERVAL = 100;
+
+let portInstance: SerialPort | null = null;
+
+// TODO: Make this poor man's queue more robust!!!
+let currentSendId: number = 0;
+let nextSendId: number = 0;
+let isCommunicating: boolean = false;
+
+function createSendSettingsMessage(settings: Settings): SendSettingsMessage {
   return {
-    msg: MESSAGE_ID_SAVE_SETTINGS_V1,
+    msg: MESSAGE_ID_SEND_SETTINGS_V1,
     ctrl: {
       rows: settings.controllerRows,
       cols: settings.controllerColumns,
@@ -87,22 +95,10 @@ function createRequestLoadSettingsMessage(): MessageWithId {
   };
 }
 
-export async function saveSettings(settings: Settings): Promise<string> {
-  try {
-    const port = await connect();
-    const message = createSaveSettingsMessage(settings);
-    const rawMessage = serializeMessage(message);
-    const rawResponse = await sendMessage(rawMessage, port);
-    const response = deserializeMessage(rawResponse);
-
-    if (response.msg && response.msg === MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1) {
-      return 'Saved settings!';
-    } else {
-      throw new Error(`Received unexpected response:\n${JSON.stringify(response, null, 2)}`);
-    }
-  } catch (err) {
-    throw new Error(`Failed to save settings: ${err}`);
-  }
+function createCommitSettingsMessage(): MessageWithId {
+  return {
+    msg: MESSAGE_ID_COMMIT_SETTINGS_V1
+  };
 }
 
 export async function loadSettings(): Promise<Settings> {
@@ -121,6 +117,70 @@ export async function loadSettings(): Promise<Settings> {
     }
   } catch (err) {
     throw new Error(`Failed to load settings: ${err}`);
+  }
+}
+
+export async function sendSettings(settings: Settings): Promise<void> {
+  const sendId = nextSendId;
+  nextSendId++;
+  await pollForSendId(sendId);
+
+  try {
+    const port = await connect();
+    const message = createSendSettingsMessage(settings);
+    const rawMessage = serializeMessage(message);
+    const rawResponse = await sendMessage(rawMessage, port);
+    const response = deserializeMessage(rawResponse);
+
+    if (response.msg && response.msg === MESSAGE_ID_SEND_SETTINGS_SUCCESSFUL_V1) {
+      // Success
+      currentSendId++;
+      return;
+    } else {
+      currentSendId++;
+      throw new Error(`Received unexpected response:\n${JSON.stringify(response, null, 2)}`);
+    }
+  } catch (err) {
+    currentSendId++;
+    throw new Error(`Failed to send settings: ${err}`);
+  }
+}
+
+async function pollForSendId(sendId: number): Promise<void> {
+  return new Promise(resolve => {
+    let pollTimer: number = null;
+
+    function poll() {
+      if (!isCommunicating && currentSendId === sendId) {
+        // console.log(`ready for send ID ${sendId}`);
+        clearInterval(pollTimer);
+        resolve();
+      } else {
+        // console.log(`Still waiting for ${sendId}...`);
+      }
+    }
+
+    // console.log(`polling for send ID ${sendId}...`);
+    pollTimer = setInterval(poll, SEND_POLL_INTERVAL);
+  });
+}
+
+export async function commitSettings(): Promise<void> {
+  try {
+    const port = await connect();
+    const message = createCommitSettingsMessage();
+    const rawMessage = serializeMessage(message);
+    const rawResponse = await sendMessage(rawMessage, port);
+    const response = deserializeMessage(rawResponse);
+
+    if (response.msg && response.msg === MESSAGE_ID_COMMIT_SETTINGS_SUCCESSFUL_V1) {
+      // Success
+      return;
+    } else {
+      throw new Error(`Received unexpected response:\n${JSON.stringify(response, null, 2)}`);
+    }
+  } catch (err) {
+    throw new Error(`Failed to commit settings: ${err}`);
   }
 }
 
@@ -155,6 +215,8 @@ function deserializeMessage(rawMessage: Buffer): any {
 
 async function sendMessage(commandBuffer: Buffer, port: SerialPort): Promise<Buffer> {
   return new Promise((resolve, reject) => {
+    isCommunicating = true;
+
     let response: Buffer = null;
     let submitTimer: number = null;
 
@@ -184,6 +246,7 @@ async function sendMessage(commandBuffer: Buffer, port: SerialPort): Promise<Buf
     function submitResponse() {
       console.log('  Submitting response after waiting');
       port.off('data', addResponseData);
+      isCommunicating = false;
 
       resolve(response);
     }

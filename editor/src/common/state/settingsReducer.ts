@@ -12,8 +12,7 @@ export interface SettingsState {
   presets: Preset[]
   currentPresetIdx: number | null
   addingPreset: boolean
-  exporting: boolean
-  unsavedEdits: boolean
+  syncVersion: number | null
 }
 
 export type SettingsAction =
@@ -29,8 +28,6 @@ export type SettingsAction =
   | { type: 'REORDER_PRESET_DOWN' }
   | { type: 'DELETE' }
   | { type: 'IMPORT_SETTINGS', settings: Settings }
-  | { type: 'TOGGLE_EXPORTING' }
-  | { type: 'EXPORT_SETTINGS' }
 
 export const INITIAL_STATE: SettingsState = {
   controllerRows: INITIAL_ROW_COUNT,
@@ -39,8 +36,7 @@ export const INITIAL_STATE: SettingsState = {
   presets: [],
   currentPresetIdx: null,
   addingPreset: false,
-  exporting: false,
-  unsavedEdits: false
+  syncVersion: null
 };
 
 export function settingsReducer(state: SettingsState, action: SettingsAction): SettingsState {
@@ -62,7 +58,7 @@ export function settingsReducer(state: SettingsState, action: SettingsAction): S
         controllerColumns: updatedColumns,
         inputCCs: newInputCCs,
         presets: updatePresetMappings(state.presets, previousSize, newInputCCs),
-        unsavedEdits: true
+        syncVersion: incrementSyncVersion(state)
       };
     case 'CHANGE_INPUT_CC':
       return {
@@ -81,7 +77,7 @@ export function settingsReducer(state: SettingsState, action: SettingsAction): S
               : mapping
           )
         })),
-        unsavedEdits: true
+        syncVersion: incrementSyncVersion(state)
       };
     case 'ADD_PRESET':
       return {
@@ -99,8 +95,8 @@ export function settingsReducer(state: SettingsState, action: SettingsAction): S
         // this is safe because we just added an element to the end
         currentPresetIdx: state.presets.length,
         addingPreset: false,
-        unsavedEdits: true
-      }
+        syncVersion: incrementSyncVersion(state)
+      };
     case 'SELECT_PRESET':
       return {
         ...state,
@@ -126,14 +122,14 @@ export function settingsReducer(state: SettingsState, action: SettingsAction): S
         ...state,
         currentPresetIdx: state.currentPresetIdx! - 1,
         presets: reorderPresets(state.presets, state.currentPresetIdx!, state.currentPresetIdx! - 1),
-        unsavedEdits: true
+        syncVersion: incrementSyncVersion(state)
       };
     case 'REORDER_PRESET_DOWN':
       return {
         ...state,
         currentPresetIdx: state.currentPresetIdx! + 1,
         presets: reorderPresets(state.presets, state.currentPresetIdx!, state.currentPresetIdx! + 1),
-        unsavedEdits: true
+        syncVersion: incrementSyncVersion(state)
       };
     case 'DELETE':
       return {
@@ -142,7 +138,7 @@ export function settingsReducer(state: SettingsState, action: SettingsAction): S
           idx !== state.currentPresetIdx
         ),
         currentPresetIdx: null,
-        unsavedEdits: true
+        syncVersion: incrementSyncVersion(state)
       };
     case 'IMPORT_SETTINGS':
       return {
@@ -152,21 +148,18 @@ export function settingsReducer(state: SettingsState, action: SettingsAction): S
         presets: action.settings.presets,
         currentPresetIdx: action.settings.presets.length ? 0 : null,
         addingPreset: false,
-        exporting: false,
-        unsavedEdits: false
-      };
-    case 'EXPORT_SETTINGS':
-      return {
-        ...state,
-        unsavedEdits: false
-      };
-    case 'TOGGLE_EXPORTING':
-      return {
-        ...state,
-        exporting: !state.exporting
+        syncVersion: null
       };
     default:
       return state;
+  }
+}
+
+function incrementSyncVersion(state: SettingsState): number {
+  if (state.syncVersion === null) {
+    return 0;
+  } else {
+    return state.syncVersion + 1;
   }
 }
 
@@ -201,7 +194,7 @@ function editCurrentPreset(state: SettingsState, editFn: PresetEditFn): Settings
           ? editFn(preset)
           : preset
     ),
-    unsavedEdits: true
+    syncVersion: incrementSyncVersion(state)
   };
 }
 

@@ -9,36 +9,8 @@
 
 // From this project
 #include "constants.h"
-#include "Screen.h"
-#include "Settings.h"
-
-#define PIN_BUTTON 4
-#define PIN_LED 13
-
-#define PIN_LCD_RS 33
-#define PIN_LCD_EN 34
-#define PIN_LCD_D4 36
-#define PIN_LCD_D5 37
-#define PIN_LCD_D6 38
-#define PIN_LCD_D7 39
-
-#define STATUS_MESSAGE_TIME_MS 2000
-
-Screen screen = Screen(
-  PIN_LCD_RS,
-  PIN_LCD_EN,
-
-  PIN_LCD_D4,
-  PIN_LCD_D5,
-  PIN_LCD_D6,
-  PIN_LCD_D7
-);
-
-MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDI);
-
-Settings settings;
-Bounce buttonDebouncer = Bounce();
-ProgramStatus programStatus = ProgramStatus::Initializing;
+#include "state.h"
+#include "serial_messages.h"
 
 // GPIO helpers
 
@@ -84,86 +56,12 @@ void onControlChange(byte channel, byte inputCC, byte value) {
   MIDI.sendControlChange(outputCC, value, outputChannel);
 }
 
-// Handling commands over serial
-
-void storeTerminatingSignal(int address) {
-  for (int i = 0; i < 4; i++) {
-    EEPROM.write(address + i, 0x00);
-  }
+void onPitchBend(byte channel, int pitch) {
+  MIDI.sendPitchBend(pitch, channel);
 }
 
-void sendSaveSettingsSuccessful() {
-  DynamicJsonDocument doc(DOCUMENT_ALLOC_SIZE_ID_ONLY);
-  doc["msg"] = MESSAGE_ID_SAVE_SETTINGS_SUCCESSFUL_V1;
-
-  serializeJson(doc, Serial);
-}
-
-void handleSaveSettingsCommand(DynamicJsonDocument doc) {
-  // re-serialize the JSON so we can save it
-  std::string output;
-  serializeJson(doc, output);
-
-  // Save the settings data into EEPROM
-  int address = 0;
-  EEPROM.write(address, PROTOCOL_VERSION);
-  address++;
-  for (std::string::size_type i = 0; i < output.size(); i++) {
-    EEPROM.write(address, output[i]);
-    address++;
-  }
-  storeTerminatingSignal(address);
-
-  settings.initializeFromMemory();
-
-  sendSaveSettingsSuccessful();
-
-  screen.printSettingsSaved(settings.getPresetCount());
-  delay(STATUS_MESSAGE_TIME_MS);
-
-  screen.printPreset(settings.getCurrentPresetId(), settings.getCurrentSynthName());
-}
-
-void handleRequestLoadSettingsCommand() {
-  DynamicJsonDocument doc(DOCUMENT_ALLOC_SIZE_FULL);
-
-  bool readJsonSuccessful = settings.readJsonFromMemory(doc);
-  if (!readJsonSuccessful) {
-    programStatus = ProgramStatus::FatalError;
-    return;
-  }
-
-  doc["msg"] = MESSAGE_ID_LOAD_SETTINGS_V1;
-
-  serializeJson(doc, Serial);
-}
-
-void handleSerialCommand() {
-  lightOn();
-
-  DynamicJsonDocument doc(DOCUMENT_ALLOC_SIZE_FULL);
-
-  DeserializationError err = deserializeJson(doc, Serial);
-
-  if (err) {
-    // Error deserializing
-    // err.c_str();
-
-    programStatus = ProgramStatus::FatalError;
-    return;
-  }
-
-  byte messageId = doc["msg"];
-  if (messageId == MESSAGE_ID_SAVE_SETTINGS_V1) {
-    handleSaveSettingsCommand(doc);
-  } else if (messageId == MESSAGE_ID_REQUEST_LOAD_SETTINGS_V1) {
-    handleRequestLoadSettingsCommand();
-  } else {
-    // Unknown command!
-    programStatus = ProgramStatus::FatalError;
-  }
-
-  lightOff();
+void onProgramChange(byte channel, byte program) {
+  MIDI.sendProgramChange(program, channel);
 }
 
 // Main loops
@@ -220,6 +118,8 @@ void setup() {
   usbMIDI.setHandleNoteOn(onNoteOn);
   usbMIDI.setHandleNoteOff(onNoteOff);
   usbMIDI.setHandleControlChange(onControlChange);
+  usbMIDI.setHandlePitchChange(onPitchBend);
+  usbMIDI.setHandleProgramChange(onProgramChange);
 
   MIDI.begin();
 
@@ -238,7 +138,7 @@ void setup() {
     Serial.println("Initializing from memory...");
   }
 
-  int initResult = settings.initializeFromMemory();
+  int initResult = settings.initializeFromEEPROM();
 
   switch (initResult) {
     case InitSettingsResult::Success: {

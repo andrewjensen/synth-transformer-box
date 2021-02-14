@@ -7,10 +7,7 @@ import TopBar from './topbar/TopBar';
 import Controller from './controller/Controller';
 import Synths from './synths/Synths';
 import SettingsContext from './common/state/SettingsContext';
-import {
-  settingsReducer,
-  INITIAL_STATE,
-} from './common/state/settingsReducer';
+import { settingsReducer, INITIAL_STATE } from './common/state/settingsReducer';
 
 export enum AppTab {
   Controller = "CONTROLLER",
@@ -39,8 +36,8 @@ const App = () => {
     });
   };
 
-  const handleExport = async () => {
-    console.log('Saving settings...', state);
+  const handleSendSettings = async () => {
+    console.log('Time to sync!!! Sending settings...', state);
     const {
       inputCCs,
       controllerRows,
@@ -54,10 +51,8 @@ const App = () => {
       presets
     };
 
-    const result = await ipcRenderer.invoke('save-settings', settings);
+    const result = await ipcRenderer.invoke('send-settings', settings);
     console.log('Result:', result);
-
-    dispatch({ type: 'EXPORT_SETTINGS' });
   };
 
   useEffect(() => {
@@ -67,6 +62,13 @@ const App = () => {
       setInitialized(true);
     }
   }, [initialized, setInitialized, handleImport]);
+
+  const { syncVersion } = state;
+  useEffect(() => {
+    if (syncVersion !== null) {
+      handleSendSettings();
+    }
+  }, [syncVersion]);
 
   const renderBody = () => {
     switch (tab) {
@@ -83,8 +85,6 @@ const App = () => {
         <TopBar
           activeTab={tab}
           onChangeTab={handleChangeTab}
-          onImport={handleImport}
-          onExport={handleExport}
         />
         <BodyContainer>
           {renderBody()}
