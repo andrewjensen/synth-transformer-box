@@ -10,10 +10,6 @@ const MESSAGE_ID_SEND_SETTINGS_SUCCESSFUL_V1 = 0x31;
 const MESSAGE_ID_COMMIT_SETTINGS_V1 = 0x40;
 const MESSAGE_ID_COMMIT_SETTINGS_SUCCESSFUL_V1 = 0x41;
 
-const RESPONSE_BUFFER_TIMEOUT_MS = 500;
-
-let portInstance: SerialPort | null = null;
-
 interface MessageWithId {
   msg: number
 }
@@ -51,6 +47,16 @@ interface MessagePresetCC {
   num: number,
   name: string
 }
+
+const RESPONSE_BUFFER_TIMEOUT_MS = 500;
+const SEND_POLL_INTERVAL = 100;
+
+let portInstance: SerialPort | null = null;
+
+// TODO: Make this poor man's queue more robust!!!
+let currentSendId: number = 0;
+let nextSendId: number = 0;
+let isCommunicating: boolean = false;
 
 function createSendSettingsMessage(settings: Settings): SendSettingsMessage {
   return {
@@ -115,6 +121,10 @@ export async function loadSettings(): Promise<Settings> {
 }
 
 export async function sendSettings(settings: Settings): Promise<void> {
+  const sendId = nextSendId;
+  nextSendId++;
+  await pollForSendId(sendId);
+
   try {
     const port = await connect();
     const message = createSendSettingsMessage(settings);
@@ -124,13 +134,35 @@ export async function sendSettings(settings: Settings): Promise<void> {
 
     if (response.msg && response.msg === MESSAGE_ID_SEND_SETTINGS_SUCCESSFUL_V1) {
       // Success
+      currentSendId++;
       return;
     } else {
+      currentSendId++;
       throw new Error(`Received unexpected response:\n${JSON.stringify(response, null, 2)}`);
     }
   } catch (err) {
+    currentSendId++;
     throw new Error(`Failed to send settings: ${err}`);
   }
+}
+
+async function pollForSendId(sendId: number): Promise<void> {
+  return new Promise(resolve => {
+    let pollTimer: number = null;
+
+    function poll() {
+      if (!isCommunicating && currentSendId === sendId) {
+        // console.log(`ready for send ID ${sendId}`);
+        clearInterval(pollTimer);
+        resolve();
+      } else {
+        // console.log(`Still waiting for ${sendId}...`);
+      }
+    }
+
+    // console.log(`polling for send ID ${sendId}...`);
+    pollTimer = setInterval(poll, SEND_POLL_INTERVAL);
+  });
 }
 
 export async function commitSettings(): Promise<void> {
@@ -183,6 +215,8 @@ function deserializeMessage(rawMessage: Buffer): any {
 
 async function sendMessage(commandBuffer: Buffer, port: SerialPort): Promise<Buffer> {
   return new Promise((resolve, reject) => {
+    isCommunicating = true;
+
     let response: Buffer = null;
     let submitTimer: number = null;
 
@@ -212,6 +246,7 @@ async function sendMessage(commandBuffer: Buffer, port: SerialPort): Promise<Buf
     function submitResponse() {
       console.log('  Submitting response after waiting');
       port.off('data', addResponseData);
+      isCommunicating = false;
 
       resolve(response);
     }
