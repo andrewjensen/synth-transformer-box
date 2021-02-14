@@ -56,6 +56,14 @@ void onControlChange(byte channel, byte inputCC, byte value) {
   MIDI.sendControlChange(outputCC, value, outputChannel);
 }
 
+void onPitchBend(byte channel, int pitch) {
+  MIDI.sendPitchBend(pitch, channel);
+}
+
+void onProgramChange(byte channel, byte program) {
+  MIDI.sendProgramChange(program, channel);
+}
+
 // Main loops
 
 void loopFatalError() {
@@ -110,6 +118,8 @@ void setup() {
   usbMIDI.setHandleNoteOn(onNoteOn);
   usbMIDI.setHandleNoteOff(onNoteOff);
   usbMIDI.setHandleControlChange(onControlChange);
+  usbMIDI.setHandlePitchChange(onPitchBend);
+  usbMIDI.setHandleProgramChange(onProgramChange);
 
   MIDI.begin();
 
