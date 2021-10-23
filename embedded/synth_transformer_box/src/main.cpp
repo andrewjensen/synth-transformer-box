@@ -64,9 +64,9 @@ void onProgramChange(byte channel, byte program) {
   MIDI.sendProgramChange(program, channel);
 }
 
-// Main loops
+// Top-level states
 
-void loopFatalError() {
+void stateFatalError() {
   flash();
   delay(100);
   flash();
@@ -75,7 +75,58 @@ void loopFatalError() {
   delay(800);
 }
 
-void loopRunning() {
+void stateInitializing() {
+  if (DEBUG_SERIAL) {
+    Serial.println("Starting up!");
+
+    Serial.println("EEPROM contents:");
+    for (int address = 0; address < 100; address++) {
+      Serial.println(EEPROM.read(address));
+    }
+    Serial.println("...");
+
+    Serial.println("Initializing from memory...");
+  }
+
+  int initResult = settings.initializeFromEEPROM();
+
+  switch (initResult) {
+    case InitSettingsResult::Success: {
+      programState = ProgramState::Running;
+      if (DEBUG_SERIAL) {
+        Serial.println("Successfully initialized.");
+        Serial.println("Current settings state in memory:");
+        settings.printState();
+      }
+
+      int presetCount = settings.getPresetCount();
+      screen.printInitialized(presetCount);
+      delay(STATUS_MESSAGE_TIME_MS);
+
+      screen.printPreset(settings.getCurrentPresetId(), settings.getCurrentSynthName());
+      return;
+    }
+    case InitSettingsResult::MemoryBlank: {
+      programState = ProgramState::NoSettings;
+      screen.printMemoryBlank();
+      if (DEBUG_SERIAL) {
+        Serial.println("Memory is blank - no settings!");
+      }
+      return;
+    }
+    case InitSettingsResult::Error:
+    default: {
+      programState = ProgramState::FatalError;
+      screen.printInitializationError();
+      if (DEBUG_SERIAL) {
+        Serial.println("ERROR DURING INITIALIZATION!");
+      }
+      return;
+    }
+  }
+}
+
+void stateRunning() {
   usbMIDI.read();
 
   buttonDebouncer.update();
@@ -96,11 +147,23 @@ void loopRunning() {
   }
 }
 
-void loopNoSettings() {
-  if (Serial.available()) {
-    handleSerialCommand();
+void stateNoSettings() {
+  if (DEBUG_SERIAL) {
+    Serial.println("Creating default settings...");
   }
-  delay(250);
+
+  bool createResult = settings.createDefaultSettings();
+  if (createResult) {
+    if (DEBUG_SERIAL) {
+      Serial.println("Successfully created default settings, initializing again...");
+    }
+    programState = ProgramState::Initializing;
+  } else {
+    if (DEBUG_SERIAL) {
+      Serial.println("Failed to create default settings.");
+    }
+    programState = ProgramState::FatalError;
+  }
 }
 
 // Teensy lifecycle functions
@@ -124,67 +187,23 @@ void setup() {
   MIDI.begin();
 
   // Wait for the serial monitor during development
-  delay(100);
-
-  if (DEBUG_SERIAL) {
-    Serial.println("Starting up!");
-
-    Serial.println("EEPROM contents:");
-    for (int address = 0; address < 100; address++) {
-      Serial.println(EEPROM.read(address));
-    }
-    Serial.println("...");
-
-    Serial.println("Initializing from memory...");
-  }
-
-  int initResult = settings.initializeFromEEPROM();
-
-  switch (initResult) {
-    case InitSettingsResult::Success: {
-      programStatus = ProgramStatus::Running;
-      if (DEBUG_SERIAL) {
-        Serial.println("Successfully initialized.");
-        Serial.println("Current settings state in memory:");
-        settings.printState();
-      }
-
-      int presetCount = settings.getPresetCount();
-      screen.printInitialized(presetCount);
-      delay(STATUS_MESSAGE_TIME_MS);
-
-      screen.printPreset(settings.getCurrentPresetId(), settings.getCurrentSynthName());
-      return;
-    }
-    case InitSettingsResult::MemoryBlank: {
-      programStatus = ProgramStatus::NoSettings;
-      if (DEBUG_SERIAL) {
-        Serial.println("Memory is blank - no settings!");
-      }
-      return;
-    }
-    case InitSettingsResult::Error:
-    default: {
-      programStatus = ProgramStatus::FatalError;
-      if (DEBUG_SERIAL) {
-        Serial.println("ERROR DURING INITIALIZATION!");
-      }
-      return;
-    }
-  }
+  delay(5000);
 }
 
 void loop() {
-  switch (programStatus) {
-    case ProgramStatus::Running:
-      loopRunning();
+  switch (programState) {
+    case ProgramState::Initializing:
+      stateInitializing();
       return;
-    case ProgramStatus::NoSettings:
-      loopNoSettings();
+    case ProgramState::Running:
+      stateRunning();
       return;
-    case ProgramStatus::FatalError:
+    case ProgramState::NoSettings:
+      stateNoSettings();
+      return;
+    case ProgramState::FatalError:
     default:
-      loopFatalError();
+      stateFatalError();
       return;
   }
 }

@@ -46,6 +46,16 @@ public:
     printBottomLine("[Details]");
   }
 
+  void printMemoryBlank() {
+    printTopLine("Error:");
+    printBottomLine("Memory Blank");
+  }
+
+  void printInitializationError() {
+    printTopLine("Error during");
+    printBottomLine("initialization");
+  }
+
 private:
   void printTopLine(String message) {
     lcd->home();

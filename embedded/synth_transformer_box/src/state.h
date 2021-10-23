@@ -1,5 +1,5 @@
-#ifndef messaging_h
-#define messaging_h
+#ifndef state_h
+#define state_h
 
 #include "Screen.h"
 #include "Settings.h"
@@ -28,6 +28,6 @@ MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDI);
 
 Settings settings;
 Bounce buttonDebouncer = Bounce();
-ProgramStatus programStatus = ProgramStatus::Initializing;
+ProgramState programState = ProgramState::Initializing;
 
 #endif

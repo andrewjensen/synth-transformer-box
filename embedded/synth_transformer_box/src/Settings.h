@@ -12,6 +12,18 @@ enum InitSettingsResult {
   MemoryBlank = 3,
 };
 
+const char* DEFAULT_SETTINGS = R"EOF(
+{
+  "msg": 1,
+  "ctrl": {
+    "rows": 2,
+    "cols": 4,
+    "ccs": [1, 2, 3, 4, 5, 6, 7, 8]
+  },
+  "outs": []
+}
+)EOF";
+
 class Settings {
   byte controllerRows;
   byte controllerColumns;
@@ -23,6 +35,33 @@ public:
   Settings() {
   }
 
+  /**
+   * Create default settings in memory and initialize from them.
+   *
+   * Returns true on success, false on failure.
+   */
+  bool createDefaultSettings() {
+    DynamicJsonDocument doc(DOCUMENT_ALLOC_SIZE_FULL);
+    DeserializationError err = deserializeJson(doc, DEFAULT_SETTINGS);
+    if (err) {
+      if (DEBUG_SERIAL) {
+        Serial.println("Error deserializing default settings:");
+        Serial.println(err.c_str());
+      }
+      return false;
+    }
+
+    InitSettingsResult result = initializeFromDoc(doc);
+    if (result != InitSettingsResult::Success) {
+      return false;
+    }
+
+    return saveToEEPROM();
+  }
+
+  /**
+   * Initialize this Settings instance from the serialized contents of EEPROM.
+   */
   InitSettingsResult initializeFromEEPROM() {
     if (isMemoryBlank()) {
       return InitSettingsResult::MemoryBlank;
@@ -38,6 +77,9 @@ public:
     return initializeFromDoc(doc);
   }
 
+  /**
+   * Initialize this Settings instance from a JSON document in memory.
+   */
   InitSettingsResult initializeFromDoc(DynamicJsonDocument doc) {
     controllerRows = doc["ctrl"]["rows"];
     controllerColumns = doc["ctrl"]["cols"];
@@ -113,6 +155,13 @@ public:
     return InitSettingsResult::Success;
   }
 
+  /**
+   * Read serialized JSON from memory and marshall into a
+   * `DynamicJsonDocument`.
+   *
+   * The first address stores the protocol version. This function will assert
+   * that the protocol versions match before continuing.
+   */
   bool readJsonFromMemory(DynamicJsonDocument& doc) {
     int address = 0;
 
@@ -158,6 +207,9 @@ public:
     return true;
   }
 
+  /**
+   * Serialize this Settings instance into JSON and persist to EEPROM.
+   */
   bool saveToEEPROM() {
     if (DEBUG_SERIAL) {
       Serial.println("saveToEEPROM()");
@@ -183,6 +235,9 @@ public:
     return true;
   }
 
+  /**
+   * Serialize these in-memory settings to a `DynamicJsonDocument`.
+   */
   bool serializeSettings(DynamicJsonDocument& doc) {
     JsonObject ctrl  = doc.createNestedObject("ctrl");
     ctrl["rows"] = controllerRows;

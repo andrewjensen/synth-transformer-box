@@ -19,7 +19,7 @@ void handleSendSettingsCommand(DynamicJsonDocument doc) {
 
     screen.printPreset(settings.getCurrentPresetId(), settings.getCurrentSynthName());
   } else {
-    programStatus = ProgramStatus::FatalError;
+    programState = ProgramState::FatalError;
   }
 }
 
@@ -28,7 +28,7 @@ void handleRequestLoadSettingsCommand() {
 
   bool readJsonSuccessful = settings.readJsonFromMemory(doc);
   if (!readJsonSuccessful) {
-    programStatus = ProgramStatus::FatalError;
+    programState = ProgramState::FatalError;
     return;
   }
 
@@ -54,7 +54,7 @@ void handleCommitSettingsCommand() {
 
     screen.printPreset(settings.getCurrentPresetId(), settings.getCurrentSynthName());
   } else {
-    programStatus = ProgramStatus::FatalError;
+    programState = ProgramState::FatalError;
   }
 }
 
@@ -69,7 +69,7 @@ void handleSerialCommand() {
     // Error deserializing
     // err.c_str();
 
-    programStatus = ProgramStatus::FatalError;
+    programState = ProgramState::FatalError;
     return;
   }
 
@@ -86,7 +86,7 @@ void handleSerialCommand() {
       break;
     default:
       // Unknown command!
-      programStatus = ProgramStatus::FatalError;
+      programState = ProgramState::FatalError;
       break;
   }
 
