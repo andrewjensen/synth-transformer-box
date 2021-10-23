@@ -6,6 +6,7 @@ const INITIAL_ROW_COUNT = 2;
 const INITIAL_COL_COUNT = 4;
 
 export interface SettingsState {
+  initialized: boolean
   controllerRows: number
   controllerColumns: number
   inputCCs: number[]
@@ -30,6 +31,7 @@ export type SettingsAction =
   | { type: 'IMPORT_SETTINGS', settings: Settings }
 
 export const INITIAL_STATE: SettingsState = {
+  initialized: false,
   controllerRows: INITIAL_ROW_COUNT,
   controllerColumns: INITIAL_COL_COUNT,
   inputCCs: getInitialCCs(INITIAL_ROW_COUNT, INITIAL_COL_COUNT),
@@ -142,6 +144,7 @@ export function settingsReducer(state: SettingsState, action: SettingsAction): S
       };
     case 'IMPORT_SETTINGS':
       return {
+        initialized: true,
         controllerRows: action.settings.controllerRows,
         controllerColumns: action.settings.controllerColumns,
         inputCCs: action.settings.inputCCs,

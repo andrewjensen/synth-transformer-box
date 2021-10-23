@@ -79,6 +79,7 @@ describe('settingsReducer', () => {
   describe('controller settings', () => {
     it('adds mappings to each preset when the controller size increases', () => {
       const previousState: SettingsState = {
+        initialized: true,
         controllerRows: 1,
         controllerColumns: 6,
         inputCCs: [2, 4, 6, 8, 10, 12],
@@ -160,6 +161,7 @@ describe('settingsReducer', () => {
 
     it('removes mappings from each preset when the controller size decreases', () => {
       const previousState: SettingsState = {
+        initialized: true,
         controllerRows: 1,
         controllerColumns: 6,
         inputCCs: [2, 4, 6, 8, 10, 12],
@@ -233,6 +235,7 @@ describe('settingsReducer', () => {
 
     it('changes input CC on each preset when the controller changes', () => {
       const previousState: SettingsState = {
+        initialized: true,
         controllerRows: 1,
         controllerColumns: 6,
         inputCCs: [2, 4, 6, 8, 10, 12],

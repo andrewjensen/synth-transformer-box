@@ -8,6 +8,7 @@ import Controller from './controller/Controller';
 import Synths from './synths/Synths';
 import SettingsContext from './common/state/SettingsContext';
 import { settingsReducer, INITIAL_STATE } from './common/state/settingsReducer';
+import LoadingSplashScreen from './splash/LoadingSplashScreen';
 
 export enum AppTab {
   Controller = "CONTROLLER",
@@ -78,6 +79,12 @@ const App = () => {
         return <Synths />;
     }
   };
+
+  if (!state.initialized) {
+    return (
+      <LoadingSplashScreen />
+    );
+  }
 
   return (
     <SettingsContext.Provider value={{ state, dispatch }}>
