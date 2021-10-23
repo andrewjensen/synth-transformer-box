@@ -28,6 +28,6 @@ MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, MIDI);
 
 Settings settings;
 Bounce buttonDebouncer = Bounce();
-ProgramState programState = ProgramState::Initializing;
+ProgramState programState = ProgramState::Welcome;
 
 #endif

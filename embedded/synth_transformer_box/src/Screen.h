@@ -28,6 +28,23 @@ public:
     lcd->begin(16, 2);
   }
 
+  void printWelcome() {
+    clear();
+    printTopLine("   Universal    ");
+    printBottomLine("   Traveler     ");
+  }
+
+  void printCreditsAndrew() {
+    clear();
+    printTopLine("Created by");
+    printBottomLine("Andrew Jensen");
+  }
+
+  void printCreditsEric() {
+    clear();
+    printTopLine("and");
+    printBottomLine("Eric Robertson");
+  }
   void printInitialized(int presetCount) {
     clear();
     printTopLine("Initialized");
@@ -47,13 +64,19 @@ public:
   }
 
   void printMemoryBlank() {
+    clear();
     printTopLine("Error:");
     printBottomLine("Memory Blank");
   }
 
   void printInitializationError() {
+    clear();
     printTopLine("Error during");
     printBottomLine("initialization");
+  }
+
+  void clear() {
+    lcd->clear();
   }
 
 private:
@@ -65,10 +88,6 @@ private:
   void printBottomLine(String message) {
     lcd->setCursor(0, 1);
     lcd->print(message);
-  }
-
-  void clear() {
-    lcd->clear();
   }
 
   String formatPresetCount(int presetCount) {

@@ -23,6 +23,7 @@ enum ProgramState {
   FatalError = 2,
   Running = 3,
   NoSettings = 4,
+  Welcome = 5,
 };
 
 #endif

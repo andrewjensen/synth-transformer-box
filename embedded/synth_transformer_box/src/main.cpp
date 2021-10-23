@@ -75,6 +75,25 @@ void stateFatalError() {
   delay(800);
 }
 
+void stateWelcome() {
+  screen.printWelcome();
+  delay(2000);
+
+  screen.clear();
+  delay(1000);
+
+  screen.printCreditsAndrew();
+  delay(1000);
+
+  screen.printCreditsEric();
+  delay(1000);
+
+  screen.clear();
+  delay(1000);
+
+  programState = ProgramState::Initializing;
+}
+
 void stateInitializing() {
   if (DEBUG_SERIAL) {
     Serial.println("Starting up!");
@@ -187,11 +206,14 @@ void setup() {
   MIDI.begin();
 
   // Wait for the serial monitor during development
-  delay(5000);
+  delay(1000);
 }
 
 void loop() {
   switch (programState) {
+    case ProgramState::Welcome:
+      stateWelcome();
+      return;
     case ProgramState::Initializing:
       stateInitializing();
       return;
