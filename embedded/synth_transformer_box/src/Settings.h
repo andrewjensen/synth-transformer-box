@@ -99,7 +99,6 @@ public:
 
     JsonArray outs = doc["outs"];
     presets = std::vector<Preset>();
-    activePresetIdx = 0;
 
     for (JsonVariant outRaw : outs) {
       JsonObject rawPreset = outRaw.as<JsonObject>();
@@ -150,6 +149,16 @@ public:
       }
 
       presets.push_back(preset);
+    }
+
+    if (presets.size() == 0) {
+      activePresetIdx = -1;
+    } else {
+      activePresetIdx = 0;
+    }
+
+    if (DEBUG_SERIAL) {
+      Serial.println("Initialized with " + String(presets.size()) + " presets");
     }
 
     return InitSettingsResult::Success;
@@ -279,23 +288,43 @@ public:
     );
   }
 
-  void triggerNextPreset() {
+  void activateNextPreset() {
+    if (presetsEmpty()) {
+      return;
+    }
+
     activePresetIdx = (activePresetIdx + 1) % presets.size();
   }
 
   byte getCurrentPresetId() {
+    if (presetsEmpty()) {
+      return -1;
+    }
+
     return presets[activePresetIdx].getPresetId();
   }
 
   String getCurrentSynthName() {
+    if (presetsEmpty()) {
+      return "";
+    }
+
     return presets[activePresetIdx].getSynthName();
   }
 
   byte getChannel() {
+    if (presetsEmpty()) {
+      return 1;
+    }
+
     return presets[activePresetIdx].getChannel();
   }
 
   byte translateCC(byte inputCC) {
+    if (presetsEmpty()) {
+      return inputCC;
+    }
+
     return presets[activePresetIdx].translateCC(inputCC);
   }
 
@@ -326,6 +355,10 @@ public:
   }
 
 private:
+  bool presetsEmpty() {
+    return activePresetIdx == -1;
+  }
+
   void storeTerminatingSignal(int address) {
     for (int i = 0; i < 4; i++) {
       EEPROM.write(address + i, 0x00);

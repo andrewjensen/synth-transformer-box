@@ -12,7 +12,7 @@ const byte MESSAGE_ID_SEND_SETTINGS_SUCCESSFUL_V1 = 0x31;
 const byte MESSAGE_ID_COMMIT_SETTINGS_V1 = 0x40;
 const byte MESSAGE_ID_COMMIT_SETTINGS_SUCCESSFUL_V1 = 0x41;
 
-const bool DEBUG_SERIAL = true;
+const bool DEBUG_SERIAL = false;
 
 // TODO: figure out needed capacity
 const int DOCUMENT_ALLOC_SIZE_FULL = 8192;

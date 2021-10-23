@@ -45,10 +45,16 @@ public:
     printTopLine("and");
     printBottomLine("Eric Robertson");
   }
+
   void printInitialized(int presetCount) {
     clear();
     printTopLine("Initialized");
     printBottomLine(formatPresetCount(presetCount));
+  }
+
+  void printNoPresetsYet() {
+    clear();
+    printTopLine("No presets yet");
   }
 
   void printSettingsSaved(int presetCount) {
@@ -58,15 +64,15 @@ public:
   }
 
   void printPreset(int presetId, String presetName) {
+    if (presetId == -1) {
+      return printNoPresetsYet();
+    }
+
     clear();
     printTopLine(String(presetId) + ":" + presetName);
-    printBottomLine("[Details]");
-  }
 
-  void printMemoryBlank() {
-    clear();
-    printTopLine("Error:");
-    printBottomLine("Memory Blank");
+    // TODO: show details about the synth
+    // printBottomLine("[Details]");
   }
 
   void printInitializationError() {

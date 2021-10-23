@@ -122,12 +122,15 @@ void stateInitializing() {
       screen.printInitialized(presetCount);
       delay(STATUS_MESSAGE_TIME_MS);
 
-      screen.printPreset(settings.getCurrentPresetId(), settings.getCurrentSynthName());
+      if (presetCount == 0) {
+        screen.printNoPresetsYet();
+      } else {
+        screen.printPreset(settings.getCurrentPresetId(), settings.getCurrentSynthName());
+      }
       return;
     }
     case InitSettingsResult::MemoryBlank: {
       programState = ProgramState::NoSettings;
-      screen.printMemoryBlank();
       if (DEBUG_SERIAL) {
         Serial.println("Memory is blank - no settings!");
       }
@@ -151,7 +154,7 @@ void stateRunning() {
   buttonDebouncer.update();
 
   if (buttonDebouncer.fell()) {
-    settings.triggerNextPreset();
+    settings.activateNextPreset();
 
     byte presetId = settings.getCurrentPresetId();
     screen.printPreset(presetId, settings.getCurrentSynthName());
